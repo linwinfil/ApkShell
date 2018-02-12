@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="exo_view_content_frame" type="id"/>
+
+    <item name="exo_view_controller_btn_play" type="id"/>
+    <item name="exo_view_controller_btn_pre" type="id"/>
+    <item name="exo_view_controller_buffer_seek_bar" type="id"/>
+</resources>
