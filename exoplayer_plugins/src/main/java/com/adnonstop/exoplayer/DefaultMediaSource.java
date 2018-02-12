@@ -20,4 +20,5 @@ public class DefaultMediaSource implements IMediaSource
     {
         this.mUri = path;
     }
+
 }
