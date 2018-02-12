@@ -49,19 +49,18 @@ public class ExoVideoPlayer implements IMediaController.MediaPlayerControl
 
     public ExoVideoPlayer(Context mContext, IDataSourceFactory mDataSourceFactory)
     {
+        this(mContext, new MediaSourceBuilder(mContext, mDataSourceFactory));
+    }
+
+    public ExoVideoPlayer(Context mContext, MediaSourceBuilder mediaSourceBuilder) {
         this.mContext = mContext;
-        this.mMediaSourceBuilder = new MediaSourceBuilder(mContext, mDataSourceFactory);
+        this.mMediaSourceBuilder = mediaSourceBuilder;
         this.mComponentListener = new ComponentListener();
         this.mWindow = new Timeline.Window();
         this.mPlayer = initPlayer();
         this.mPlayer.addVideoListener(mComponentListener);
         this.mPlayer.addListener(mComponentListener);
         clearResumePosition();
-    }
-
-    public ExoVideoPlayer(Context mContext, MediaSourceBuilder mediaSourceBuilder) {
-        this.mContext = mContext;
-        this.mMediaSourceBuilder = mediaSourceBuilder;
     }
 
     private SimpleExoPlayer initPlayer()
@@ -132,6 +131,10 @@ public class ExoVideoPlayer implements IMediaController.MediaPlayerControl
         {
             mPlayer.setVolume(volume);
         }
+    }
+
+    public SimpleExoPlayer getPlayer() {
+        return mPlayer;
     }
 
     public void prepare()

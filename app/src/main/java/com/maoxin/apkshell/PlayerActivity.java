@@ -1,6 +1,7 @@
 package com.maoxin.apkshell;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.adnonstop.exoplayer.DefaultMediaSource;
@@ -16,9 +17,10 @@ import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvicto
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
 
+import java.io.File;
 import java.util.ArrayList;
 
-public class PlayerActivity extends AppCompatActivity implements IDataSourceFactory
+public class PlayerActivity extends AppCompatActivity
 {
     MediaSourceBuilder mediaSourceBuilder;
     ExoVideoPlayer exoVideoPlayer;
@@ -32,20 +34,43 @@ public class PlayerActivity extends AppCompatActivity implements IDataSourceFact
 
         exoVideoView = findViewById(R.id.player_view);
 
-        mediaSourceBuilder = new MediaSourceBuilder(this, this);
+        mediaSourceBuilder = new MediaSourceBuilder(this, new IDataSourceFactory()
+        {
+            @Override
+            public DataSource.Factory getDataSourceFactory()
+            {
+                SimpleCache simpleCache = new SimpleCache(new File(Environment.getExternalStorageDirectory() + File.separator + "exoplayer"),
+                        new LeastRecentlyUsedCacheEvictor(50 * 1024 * 1024));
+                return new CacheDataSourceFactory(
+                        simpleCache,
+                        new DefaultDataSourceFactory(PlayerActivity.this, Util.getUserAgent(PlayerActivity.this, getApplicationContext().getPackageName()), new DefaultBandwidthMeter()));
+            }
+        });
         exoVideoPlayer = new ExoVideoPlayer(this, mediaSourceBuilder);
-
+        exoVideoView.setPlayer(exoVideoPlayer);
 
         ArrayList<DefaultMediaSource> list = new ArrayList<>();
-        mediaSourceBuilder.setMediaUri();
+        DefaultMediaSource mediaSource = new DefaultMediaSource();
+        mediaSource.setVideoUri("http://biz-zt-oss.adnonstop.com/ar_201802/20180208/22/020180208224311_5723_7811565338.mp4");
+        list.add(mediaSource);
+        mediaSourceBuilder.setMediaUri(list);
+        exoVideoPlayer.prepare();
+        exoVideoPlayer.start();
+    }
+
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
     }
 
     @Override
-    public DataSource.Factory getDataSourceFactory()
+    public void onBackPressed()
     {
-        SimpleCache simpleCache = new SimpleCache(null, new LeastRecentlyUsedCacheEvictor(50 * 1024 * 1024));
-        return new CacheDataSourceFactory(
-                simpleCache,
-                new DefaultDataSourceFactory(this, Util.getUserAgent(this, getApplicationContext().getPackageName()), new DefaultBandwidthMeter()));
+        super.onBackPressed();
+        if (exoVideoView != null) {
+            exoVideoView.onBackPressed();
+        }
     }
 }

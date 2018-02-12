@@ -2,8 +2,14 @@
 <resources>
 
     <item name="exo_view_content_frame" type="id"/>
+    <item name="exo_view_player_controller" type="id"/>
+    <item name="exo_view_player_controller_placeholder" type="id"/>
 
     <item name="exo_view_controller_btn_play" type="id"/>
+    <item name="exo_view_controller_btn_pause" type="id"/>
     <item name="exo_view_controller_btn_pre" type="id"/>
-    <item name="exo_view_controller_buffer_seek_bar" type="id"/>
+    <item name="exo_view_controller_txt_current_time" type="id"/>
+    <item name="exo_view_controller_txt_duration_time" type="id"/>
+    <item name="exo_view_controller_btn_fullscreen" type="id"/>
+    <item name="exo_view_controller_timeline_bar" type="id"/>
 </resources>

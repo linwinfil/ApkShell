@@ -10,4 +10,9 @@
         android:layout_gravity="center">
 
     </com.adnonstop.exoplayer.AspectRatioFrameLayout>
+
+    <View
+        android:id="@id/exo_view_player_controller_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </merge>

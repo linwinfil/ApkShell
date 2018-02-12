@@ -1,11 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_horizontal|bottom"
+              android:background="@android:color/black"
+              android:gravity="center"
+              android:orientation="horizontal">
 
-    <com.adnonstop.exoplayer.BufferSeekBar
-        android:id="@id/exo_view_controller_buffer_seek_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    <ImageView
+        android:id="@id/exo_view_controller_btn_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/exo_controls_play_description"
+        android:src="@drawable/ic_ar_video_play_controller_btn"/>
+
+    <ImageView
+        android:id="@id/exo_view_controller_btn_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/exo_controls_pause_description"
+        android:src="@drawable/ic_ar_video_pause_controller_btn"/>
+
+    <TextView
+        android:id="@id/exo_view_controller_txt_current_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        tools:text="00:11"/>
+
+    <com.adnonstop.exoplayer.DefaultTimeBar
+        android:id="@id/exo_view_controller_timeline_bar"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@id/exo_view_controller_txt_duration_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        tools:text="12:12"/>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@id/exo_view_controller_btn_fullscreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"/>
 </LinearLayout>
