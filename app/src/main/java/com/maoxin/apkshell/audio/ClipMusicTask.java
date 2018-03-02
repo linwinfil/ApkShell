@@ -76,9 +76,8 @@ public class ClipMusicTask implements Runnable
         mListener = listener;
     }
 
-    private void prepare()
+    private boolean prepare()
     {
-
         mPcmPath = FileUtils.getTempPath(FileUtils.PCM_FORMAT);
         try
         {
@@ -88,10 +87,12 @@ public class ClipMusicTask implements Runnable
         {
             e.printStackTrace();
             mErrorMessage = e.getMessage();
+            return false;
         }
 
         mAudioDecoder = new AudioDecoder(mMusicPath);
         mAudioDecoder.setOnDecoderListener(mOnDecoderListener);
+        return true;
     }
 
     @Override
@@ -101,7 +102,8 @@ public class ClipMusicTask implements Runnable
 
         onStart();
 
-        prepare();
+        boolean prepare = prepare();
+        if (!prepare)return;
 
         if (!TextUtils.isEmpty(mErrorMessage))
         {
@@ -155,13 +157,18 @@ public class ClipMusicTask implements Runnable
         {
             onError("fail to encode the audio");
         } else {
+            if (!FileUtils.isFileExists(mOutputPath)) return;
             MediaMetadataRetriever mmr = new MediaMetadataRetriever();
             try
             {
                 mmr.setDataSource(mOutputPath);
                 String duration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
                 Log.d("bbb", "ClipMusicTask --> encode: "+duration);
-            } finally
+            }
+            catch (Throwable e) {
+                e.printStackTrace();
+            }
+            finally
             {
                 mmr.release();
             }

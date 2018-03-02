@@ -42,7 +42,7 @@ public class AudioDecoder
         mOnDecoderListener = listener;
     }
 
-    private void prepare()
+    private boolean prepare()
     {
         mMediaExtractor = new MediaExtractor();
         try {
@@ -50,7 +50,7 @@ public class AudioDecoder
         }
         catch (IOException e) {
             e.printStackTrace();
-            return;
+            return false;
         }
 
         int trackIndex = -1;
@@ -72,7 +72,7 @@ public class AudioDecoder
             {
                 throw new RuntimeException("has not found audio track");
             }
-            return;
+            return false;
         }
 
         MediaFormat mediaFormat = mMediaExtractor.getTrackFormat(trackIndex);
@@ -101,10 +101,11 @@ public class AudioDecoder
             {
                 throw new RuntimeException("has not get the audio decoder");
             }
-            return;
+            return false;
         }
         mDecoder.configure(mediaFormat, null, null, 0);
         mDecoder.start();
+        return true;
     }
 
     /**
@@ -112,7 +113,8 @@ public class AudioDecoder
      */
     public void start()
     {
-        prepare();
+        boolean prepare = prepare();
+        if (!prepare) return;
 
         // ByteBuffer[] codecInputBuffers = mDecoder.getInputBuffers();
         // ByteBuffer[] codecOutputBuffers = mDecoder.getOutputBuffers();
