@@ -1,0 +1,35 @@
+[
+  {
+    "name":"6000Hz.wma"
+  },
+  {
+    "name":"8000Hz.mp3"
+  },
+  {
+    "name":"11025Hz.mp3"
+  },
+  {
+    "name":"22050Hz.mp3"
+  },
+  {
+    "name":"32000Hz.mp3"
+  },
+  {
+    "name":"44100Hz.mp3"
+  },
+  {
+    "name":"48000Hz.mp3"
+  },
+  {
+    "name":"88200Hz.wma"
+  },
+  {
+    "name":"96000Hz.wma"
+  },
+  {
+    "name":"176400Hz.wma"
+  },
+  {
+    "name": "192000Hz.wma"
+  }
+]
