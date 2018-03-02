@@ -1,1 +1,1 @@
-include ':app', ':rxjava_sample', ':exoplayer_plugins'
+include ':app', ':rxjava_sample', ':exoplayer_plugins', ':videoPluslibs'
