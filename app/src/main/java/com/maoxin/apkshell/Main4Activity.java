@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 public class Main4Activity extends AppCompatActivity
 {
@@ -43,8 +44,9 @@ public class Main4Activity extends AppCompatActivity
                         if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                                 || checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                         {
-                            if (shouldShowRequestPermissionRationale(Manifest.permission_group.STORAGE))
+                            if (!shouldShowRequestPermissionRationale(Manifest.permission_group.STORAGE))
                             {
+                                Toast.makeText(Main4Activity.this, "需要到设置中开启权限", Toast.LENGTH_SHORT).show();
                             }
                             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
                         }
@@ -55,7 +57,7 @@ public class Main4Activity extends AppCompatActivity
                         if (PermissionChecker.checkSelfPermission(Main4Activity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PermissionChecker.PERMISSION_GRANTED
                                 || PermissionChecker.checkSelfPermission(Main4Activity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PermissionChecker.PERMISSION_GRANTED)
                         {
-
+                            Toast.makeText(Main4Activity.this, "需要到设置中开启权限", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
