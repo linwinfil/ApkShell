@@ -105,7 +105,6 @@ public class Main3Activity extends AppCompatActivity
 
     public final class TestListLoader extends AsyncTask<Void, Void, ArrayList<String>>
     {
-
         @Override
         protected ArrayList<String> doInBackground(Void... voids)
         {
