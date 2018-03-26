@@ -47,8 +47,9 @@ public class Main4Activity extends AppCompatActivity
                             if (!shouldShowRequestPermissionRationale(Manifest.permission_group.STORAGE))
                             {
                                 Toast.makeText(Main4Activity.this, "需要到设置中开启权限", Toast.LENGTH_SHORT).show();
+                            } else {
+                                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
                             }
-                            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
                         }
                     }
                     else
