@@ -13,8 +13,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import junit.framework.Assert;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
