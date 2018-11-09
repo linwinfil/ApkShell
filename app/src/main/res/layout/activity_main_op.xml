@@ -22,4 +22,51 @@
         android:layout_height="wrap_content"
         android:text="权限"/>
 
+    <Button
+        android:id="@+id/button_mp4parser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="mp4_parser"/>
+
+    <Button
+        android:id="@+id/button_mp4parser_ex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="mp4_parser_ex"/>
+
+    <Button
+        android:id="@+id/button_clip_wav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="clip_wav"/>
+
+    <Button
+        android:id="@+id/button_gson_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="gson_test"/>
+
+    <Button
+        android:id="@+id/button_test_cmdproc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="cmd proc test"/>
+
+    <Button
+        android:id="@+id/button_test_animation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="animation test"/>
+
+    <Button
+        android:id="@+id/button_shape_utils"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="美颜美型工具"/>
+
+    <Button
+        android:id="@+id/concurrent_test"
+        android:text="并发测试"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

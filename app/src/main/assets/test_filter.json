@@ -1,0 +1,40 @@
+{
+  "id": "38977",
+  "pushID": "1340677",
+  "name": "高调",
+  "listThumb": "",
+  "alpha": "100",
+  "thumb": "684251501567933324259ba6b487859b.jpg",
+  "resType": "1",
+  "camera": true,
+  "watermark": false,
+  "watermark_pic": "",
+  "vignette": false,
+  "skipFace": false,
+  "res": [
+    {
+      "img": "1.png",
+      "params": [
+        0,
+        0,
+        45,
+        12,
+        13,
+        24
+      ],
+      "skipFace": false
+    },
+    {
+      "img": "2.png",
+      "params": [
+        1,
+        0,
+        31,
+        22,
+        13,
+        24
+      ],
+      "skipFace": true
+    }
+  ]
+}

@@ -63,15 +63,28 @@ public class Main3Activity extends AppCompatActivity
         {
             TextView textView = (TextView) v;
             String title = textView.getText().toString();
-            String path = FileUtils.GetAppPath() + "/audio/" + title;
+            final String path = FileUtils.GetAppPath() + "/audio/" + title;
 
             if (!FileUtils.isFileExists(path)) return;
 
             final String outTitle = title.split("\\.")[0] + "_test.aac";
-            String outputPath = FileUtils.GetAppPath() + File.separator + outTitle;
+            final String outputPath = FileUtils.GetAppPath() + "/audio" +File.separator + outTitle;
 
             if (FileUtils.isFileExists(outputPath)) {
                 FileUtils.delete(outputPath);
+            }
+
+            if (title.endsWith(FileUtils.WAV_FORMAT)) {
+                // new Thread(new Runnable()
+                // {
+                //     @Override
+                //     public void run()
+                //     {
+                //         int i = AudioUtils.wavToMp3(path, outputPath);
+                //         if (i >= 0);
+                //     }
+                // }).start();
+                // return;
             }
 
             ClipMusicTask clipMusicTask = new ClipMusicTask(path, 0, 60 * 1000L, outputPath);
@@ -159,6 +172,8 @@ public class Main3Activity extends AppCompatActivity
         {
             if (strings == null) throw new IllegalStateException("string is null");
             RCAdapter adapter = new RCAdapter(Main3Activity.this, clickListener);
+            strings.add("046_HD_Swipe1_SFX2.wav");
+            strings.add("my_way.wav");
             adapter.data = strings;
             recyclerView.setAdapter(adapter);
         }

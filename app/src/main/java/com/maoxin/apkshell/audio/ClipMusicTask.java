@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import cn.poco.audio.AacEnDecoder;
+import cn.poco.audio.MP3DeEncode;
 
 
 /**
@@ -152,7 +152,8 @@ public class ClipMusicTask implements Runnable
         }
 
         // 速度比硬编快
-        int result = AacEnDecoder.encodeAAC(mSampleRate, mChannelCount, 16, mPcmPath, mOutputPath);
+        // int result = AacEnDecoder.encodeAAC(mSampleRate, mChannelCount, 16, mPcmPath, mOutputPath);
+        int result = MP3DeEncode.encode(mPcmPath, mOutputPath, mSampleRate, mChannelCount);
         if (result < 0)
         {
             onError("fail to encode the audio");

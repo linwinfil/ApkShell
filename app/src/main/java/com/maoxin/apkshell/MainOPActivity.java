@@ -1,10 +1,16 @@
 package com.maoxin.apkshell;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 
 import java.util.HashMap;
 
@@ -13,18 +19,38 @@ public class MainOPActivity extends AppCompatActivity
 
     HashMap<String, Object> params = null;
 
+    Handler mHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_op);
 
+        mHandler = new Handler(new Handler.Callback()
+        {
+            @Override
+            public boolean handleMessage(Message msg)
+            {
+                if (msg.what == 1)
+                {
+                    Button button = (Button) msg.obj;
+                    button.setVisibility(View.VISIBLE);
+                    return true;
+                }
+                else if (msg.what == 2)
+                {
+
+                }
+                return false;
+            }
+        });
+
         findViewById(R.id.button6).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                test();
+                // TEST();
             }
         });
 
@@ -35,6 +61,96 @@ public class MainOPActivity extends AppCompatActivity
             {
                 Intent intent = new Intent(MainOPActivity.this, Main4Activity.class);
                 startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.button_mp4parser).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(MainOPActivity.this, Main5Activity.class));
+            }
+        });
+
+        findViewById(R.id.button_mp4parser_ex).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(MainOPActivity.this, Main5ExActivity.class));
+            }
+        });
+
+        findViewById(R.id.button_clip_wav).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(MainOPActivity.this, Main3Activity.class));
+            }
+        });
+
+        findViewById(R.id.button_gson_test).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(MainOPActivity.this, Main6Activity.class));
+            }
+        });
+
+        final Button button_test_cmdproc = findViewById(R.id.button_test_cmdproc);
+        button_test_cmdproc.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(MainOPActivity.this, Main7Activity.class));
+            }
+        });
+
+        findViewById(R.id.button_test_animation).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                final Button button = (Button) v;
+                ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(button, "alpha", 1, 0);
+                objectAnimator.setStartDelay(1000);
+                objectAnimator.setDuration(500);
+                objectAnimator.addListener(new AnimatorListenerAdapter()
+                {
+                    @Override
+                    public void onAnimationEnd(Animator animation)
+                    {
+                        super.onAnimationEnd(animation);
+                        button.setVisibility(View.GONE);
+                        Message message = mHandler.obtainMessage();
+                        message.what = 1;
+                        message.obj = button;
+                        mHandler.sendMessageDelayed(message, 1000);
+                    }
+                });
+                objectAnimator.start();
+            }
+        });
+
+        findViewById(R.id.button_shape_utils).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(MainOPActivity.this, MainShapeUtilsActivity.class));
+            }
+        });
+
+        findViewById(R.id.concurrent_test).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(MainOPActivity.this, Main8Activity.class));
             }
         });
     }
