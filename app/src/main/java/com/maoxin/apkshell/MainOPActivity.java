@@ -153,6 +153,25 @@ public class MainOPActivity extends AppCompatActivity
                 startActivity(new Intent(MainOPActivity.this, Main8Activity.class));
             }
         });
+
+        findViewById(R.id.action_test).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(MainOPActivity.this, Main9Activity.class));
+            }
+        });
+
+        findViewById(R.id.test_new_shape_args).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(MainOPActivity.this, Main10Activity.class));
+
+            }
+        });
     }
 
     private void test()

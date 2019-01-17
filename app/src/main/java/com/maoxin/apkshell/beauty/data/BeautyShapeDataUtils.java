@@ -15,11 +15,10 @@ public class BeautyShapeDataUtils
     private static final String TAG = "bbb";
 
     //美颜模块
-    public static final int COVER_UI_RATE_MAX = 10;
+    public static final float COVER_UI_RATE_MAX = 10f;
 
     //补妆模块
-    public static final int COVER_UI_RATE_MAX_MAKEUPS = 5;
-
+    public static final float COVER_UI_RATE_MAX_MAKEUPS = 5f;
 
 
     /**
@@ -43,6 +42,9 @@ public class BeautyShapeDataUtils
             //新增加 补妆
             //唇彩（双向）、腮红（双向）、眉毛（双向）、修容（单向）（多款）
 
+            //新增加 整体瘦脸 20181122
+            //整体瘦脸 单向
+
             //美颜类均为单向seek
             case ShapeDataType.THINFACE:
             case ShapeDataType.LITTLEFACE:
@@ -53,6 +55,8 @@ public class BeautyShapeDataUtils
             case ShapeDataType.EYEBRIGHT:
             case ShapeDataType.EYEBAGS:
             case ShapeDataType.NOSEFACESHADOW:
+            case ShapeDataType.SMILE:
+            case ShapeDataType.WHOLEFACE:
             case ShapeDataType.MAKEUP_SHADOW_GROUP:
             case ShapeDataType.MAKEUP_SHADOW_1:
             case ShapeDataType.MAKEUP_SHADOW_2:
@@ -78,7 +82,6 @@ public class BeautyShapeDataUtils
             case ShapeDataType.MAKEUP_EYEBROW:
                 return STag.SeekBarType.SEEK_TAG_BIDIRECTIONAL;
             case ShapeDataType.UNSET:
-            case ShapeDataType.SMILE:
             case ShapeDataType.SMOOTHSKIN:
             case ShapeDataType.TEETHWHITENING:
             case ShapeDataType.SKINWHITENING:
@@ -88,7 +91,7 @@ public class BeautyShapeDataUtils
         }
     }
 
-    private static float GetUIRate4Real(int cof, float real, boolean isBidirectional)
+    private static float GetUIRate4Real(float cof, float real, boolean isBidirectional)
     {
         float value;
         if (isBidirectional)
@@ -107,6 +110,7 @@ public class BeautyShapeDataUtils
      *
      * @param real
      */
+    @Deprecated
     public static float GetUIRate4Real(float real, @ShapeDataType int type)
     {
         boolean isBid = GetSeekbarType(type) == STag.SeekBarType.SEEK_TAG_BIDIRECTIONAL;
@@ -140,15 +144,20 @@ public class BeautyShapeDataUtils
      *                  0：左区间<br/>
      *                  1：右区间<br/>
      */
+    @Deprecated
     public static float GetUIRate4Real_MakeUps(float real, int areaIndex, @ShapeDataType int type)
     {
-        //TODO 目前彩妆的取值范围是0-100
-
         if (type == ShapeDataType.MAKEUP_LIP
                 || type == ShapeDataType.MAKEUP_EYEBROW
                 || type == ShapeDataType.MAKEUP_BLUSHER)
         {
-            float out = real / 100f * COVER_UI_RATE_MAX_MAKEUPS;
+            // float out = real / 100f * COVER_UI_RATE_MAX_MAKEUPS;
+            // if (type == ShapeDataType.MAKEUP_LIP) {
+            //     out = ((real - 0f) / (80f - 0f)) * COVER_UI_RATE_MAX_MAKEUPS;
+            // }
+            float[] area = GetCovertArea(type);
+            float out = (real - area[0]) / (area[1] - area[0]) * COVER_UI_RATE_MAX_MAKEUPS;
+
             if (areaIndex == 0) {
                 //左区间 0-100 UI 反过来换算
                 if (out != 0) {
@@ -156,6 +165,7 @@ public class BeautyShapeDataUtils
                 }
             }
             out = formatFloat(out, 1);
+            // LogUtils.i(TAG, "BeautyShapeDataUtils --> GetUIRate4Real_MakeUps: type:" + type + ", value:" + real + ", ui:" + out);
             return out;
         }
         else if (type == ShapeDataType.MAKEUP_SHADOW_1
@@ -167,6 +177,7 @@ public class BeautyShapeDataUtils
         {
             return formatFloat(real / 100f * COVER_UI_RATE_MAX, 1);
         }
+
         return 0f;
     }
 
@@ -216,8 +227,6 @@ public class BeautyShapeDataUtils
      */
     public static float GetReal4UIRate_MakeUps(float rate, @ShapeDataType int type)
     {
-        //TODO 目前彩妆的取值范围是0-100
-
         if (type == ShapeDataType.MAKEUP_LIP
                 || type == ShapeDataType.MAKEUP_EYEBROW
                 || type == ShapeDataType.MAKEUP_BLUSHER)
@@ -227,7 +236,14 @@ public class BeautyShapeDataUtils
                 rate *= -1;
             }
 
-            float value = rate / COVER_UI_RATE_MAX_MAKEUPS * 100.0f;
+            // float value = rate / COVER_UI_RATE_MAX_MAKEUPS * 100.0f;
+            // if (type == ShapeDataType.MAKEUP_LIP) {
+            //     value = (rate / COVER_UI_RATE_MAX_MAKEUPS * (80f - 0f)) + 0f;
+            // }
+            float[] area = GetCovertArea(type);
+            float value = ((rate / COVER_UI_RATE_MAX_MAKEUPS) * (area[1] - area[0])) + area[0];
+
+            // LogUtils.i(TAG, "BeautyShapeDataUtils --> GetReal4UIRate_MakeUps: type:" + type + ", value:" + value + ", ui:" + rate);
             return formatFloat(value, 1);
         }
         else if (type == ShapeDataType.MAKEUP_SHADOW_1
@@ -243,7 +259,7 @@ public class BeautyShapeDataUtils
         return 0f;
     }
 
-    private static float GetReal4UIRate(int cof, float rate, boolean isBidirectional)
+    private static float GetReal4UIRate(float cof, float rate, boolean isBidirectional)
     {
         float value;
         if (isBidirectional)
@@ -257,7 +273,7 @@ public class BeautyShapeDataUtils
         return formatFloat(value, 1);
     }
 
-    private static float formatFloat(float value, int newScale)
+    public static float formatFloat(float value, int newScale)
     {
         BigDecimal bg = new BigDecimal(value);
         return bg.setScale(newScale, BigDecimal.ROUND_HALF_UP).floatValue();
@@ -278,12 +294,12 @@ public class BeautyShapeDataUtils
             case ShapeDataType.THINFACE:
                 str = "瘦脸";
                 covertArea[0] = 0f;
-                covertArea[1] = 90f;
+                covertArea[1] = 65f;
                 break;
             case ShapeDataType.BIGEYE:
                 str = "椭眼";
                 covertArea[0] = 0f;
-                covertArea[1] = 100f;
+                covertArea[1] = 70f;
                 break;
             case ShapeDataType.CANTHUS:
                 str = "眼角";//（眼角）
@@ -293,7 +309,7 @@ public class BeautyShapeDataUtils
             case ShapeDataType.CHEEKBONES:
                 str = "颧骨";
                 covertArea[0] = 0f;
-                covertArea[1] = 100f;
+                covertArea[1] = 70f;
                 break;
             case ShapeDataType.CHIN:
                 str = "下巴";
@@ -348,40 +364,40 @@ public class BeautyShapeDataUtils
             case ShapeDataType.SMILE:
                 str = "微笑";
                 covertArea[0] = 0f;
-                covertArea[1] = 0f;
+                covertArea[1] = 100f;
                 break;
             case ShapeDataType.EYEBRIGHT:
                 str = "亮眼";
                 covertArea[0] = 0f;
                 covertArea[1] = 100f;
                 break;
-            case ShapeDataType.EYEBAGS:
-                str = "祛眼袋";
+             case ShapeDataType.EYEBAGS:
+                 str = "祛眼袋";
                 covertArea[0] = 0f;
                 covertArea[1] = 100f;
                 break;
-            case ShapeDataType.NOSETIP:
-                str = "鼻尖";
+             case ShapeDataType.NOSETIP:
+                 str = "鼻尖";
                 covertArea[0] = 20f;
                 covertArea[1] = 100f;
                 break;
-            case ShapeDataType.NOSEFACESHADOW:
-                str = "鼻子立体";
+             case ShapeDataType.NOSEFACESHADOW:
+                 str = "鼻子立体";
                 covertArea[0] = 0f;
                 covertArea[1] = 100f;
                 break;
-            case ShapeDataType.MOUTHTHICKNESS:
-                str = "丰唇";
+             case ShapeDataType.MOUTHTHICKNESS:
+                 str = "丰唇";
                 covertArea[0] = 20f;
                 covertArea[1] = 80f;
                 break;
-            case ShapeDataType.MOUTHWIDTH:
-                str = "嘴宽";
+             case ShapeDataType.MOUTHWIDTH:
+                 str = "嘴宽";
                 covertArea[0] = 20f;
                 covertArea[1] = 80f;
                 break;
-            case ShapeDataType.NOSERIDGE:
-                str = "鼻梁";
+             case ShapeDataType.NOSERIDGE:
+                 str = "鼻梁";
                 covertArea[0] = 30f;
                 covertArea[1] = 100f;
                 break;
@@ -402,6 +418,36 @@ public class BeautyShapeDataUtils
                 break;
             case ShapeDataType.TEETHWHITENING:
                 str = "美牙";
+                covertArea[0] = 0f;
+                covertArea[1] = 100f;
+                break;
+            case ShapeDataType.MAKEUP_BLUSHER:
+                str = "腮红";
+                covertArea[0] = 0f;
+                covertArea[1] = 35f;
+                break;
+            case ShapeDataType.MAKEUP_EYEBROW:
+                str = "眉毛";
+                covertArea[0] = 0f;
+                covertArea[1] = 100f;
+                break;
+            case ShapeDataType.MAKEUP_LIP:
+                str = "唇彩";
+                covertArea[0] = 0f;
+                covertArea[1] = 25f;
+                break;
+            case ShapeDataType.WHOLEFACE:
+                str = "整体瘦脸";
+                covertArea[0] = 0f;
+                covertArea[1] = 100f;
+                break;
+            case ShapeDataType.MAKEUP_SHADOW_1:
+            case ShapeDataType.MAKEUP_SHADOW_2:
+            case ShapeDataType.MAKEUP_SHADOW_3:
+            case ShapeDataType.MAKEUP_SHADOW_4:
+            case ShapeDataType.MAKEUP_SHADOW_NATIVE:
+            case ShapeDataType.MAKEUP_SHADOW_NONE:
+                str = "修容款式";
                 covertArea[0] = 0f;
                 covertArea[1] = 100f;
                 break;
@@ -461,6 +507,7 @@ public class BeautyShapeDataUtils
         return out;
     }
 
+    @Deprecated
     public static float CoverReal4UIRate(@NonNull @Size(2) float[] coverArea, float rate, boolean isBidirectional)
     {
         float out = 0;
@@ -504,7 +551,8 @@ public class BeautyShapeDataUtils
      * @param isBidirectional 是否双向
      * @return
      */
-    protected static float CoverUIRate4Real(@NonNull @Size(2) float[] coverArea, float value, boolean isBidirectional)
+    @Deprecated
+    public static float CoverUIRate4Real(@NonNull @Size(2) float[] coverArea, float value, boolean isBidirectional)
     {
         float out = 0f;
         float min = coverArea[0];
@@ -557,36 +605,6 @@ public class BeautyShapeDataUtils
             out = formatFloat(out, 1);
         }
         return out;
-    }
-
-    /**
-     * ui值转底层值
-     *
-     * @param nMin    底层最小值
-     * @param nMax    底层最大值
-     * @param uiMin   ui最小值
-     * @param uiMax   ui最大值
-     * @param uiValue 当前ui值
-     * @return
-     */
-    public static float ui2NativeValue(float nMin, float nMax, float uiMin, float uiMax, float uiValue)
-    {
-        return nMin + (uiValue - uiMin) / (uiMax - uiMin) * (nMax - nMin);
-    }
-
-    /**
-     * 底层值转ui值
-     *
-     * @param uiMin  ui最小值
-     * @param uiMax  ui最大值
-     * @param nMin   底层最小值
-     * @param nMax   底层最大值
-     * @param nValue 当前底层值
-     * @return
-     */
-    public static float native2UIValue(float uiMin, float uiMax, float nMin, float nMax, float nValue)
-    {
-        return uiMin + (nValue - nMin) / (nMax - nMin) * (uiMax - uiMin);
     }
 
 }

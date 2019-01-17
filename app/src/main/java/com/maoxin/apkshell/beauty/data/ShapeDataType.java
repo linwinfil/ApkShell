@@ -47,10 +47,22 @@ import java.lang.annotation.RetentionPolicy;
         ShapeDataType.MAKEUP_SHADOW_4,
         ShapeDataType.MAKEUP_SHADOW_NATIVE,
         ShapeDataType.MAKEUP_SHADOW_NONE,
+        ShapeDataType.MAKEUP_NONE,
+        ShapeDataType.WHOLEFACE,
+        ShapeDataType.FACE_NATURAL,
+        ShapeDataType.FACE_CIRCLE,
+        ShapeDataType.FACE_SLIM,
+        ShapeDataType.SHAPE_GROUP_THIN_FACE,
+        ShapeDataType.SHAPE_GROUP_EYE,
+        ShapeDataType.SHAPE_GROUP_NOSE,
+        ShapeDataType.SHAPE_GROUP_MOUTH,
 })
 @Retention(RetentionPolicy.SOURCE)
 public @interface ShapeDataType
 {
+
+    //NOTE 以下顺序不可变动
+
     int UNSET = -1;
 
     //以下脸型
@@ -77,10 +89,10 @@ public @interface ShapeDataType
     int CLARITYALPHA = 18;   //锐化（清晰）
 
     //以下 新增加 20180621
-    int EYEBRIGHT = 19;      //亮眼
-    int EYEBAGS = 20;        //祛眼袋
+    int EYEBRIGHT = 19;      //亮眼（美颜模块）
+    int EYEBAGS = 20;        //祛眼袋（美颜模块）
     int NOSETIP = 21;        //鼻尖（双向）
-    int NOSEFACESHADOW = 22;  //鼻子立体
+    int NOSEFACESHADOW = 22;  //鼻子立体（美颜模块）
     int MOUTHTHICKNESS = 23; //丰唇（双向）
     int MOUTHWIDTH = 24;     //嘴宽（双向）
     int NOSERIDGE = 25;      //鼻梁（双向）
@@ -96,4 +108,21 @@ public @interface ShapeDataType
     int MAKEUP_SHADOW_4 = 33;       //补妆 - 修容4（单向）
     int MAKEUP_SHADOW_NATIVE = 34;  //补妆 - 默认底层（单向）
     int MAKEUP_SHADOW_NONE = 35;    //补妆 - 无修容款（）
+
+    //以下 新增加 20181022
+    int MAKEUP_NONE = 36;           //补妆 - 全补妆无效果
+
+    //以下 新增加 20181122
+    int WHOLEFACE = 37;             //整体瘦脸
+
+    //以下 专属脸型 新增加 20181122
+    int FACE_NATURAL = 38;          //自然脸专属
+    int FACE_CIRCLE = 39;           //圆脸专属
+    int FACE_SLIM = 40;             //长脸专属
+
+
+    int SHAPE_GROUP_THIN_FACE = 100;    //瘦脸组
+    int SHAPE_GROUP_EYE =       101;    //眼镜组
+    int SHAPE_GROUP_NOSE = 102;         //鼻子组
+    int SHAPE_GROUP_MOUTH = 103;         //嘴巴组
 }
