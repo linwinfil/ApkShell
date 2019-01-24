@@ -87,5 +87,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="21_2.0.0_脸型数据的转换"/>
+
+        <Button
+            android:id="@+id/test_mmkv"
+            android:text="MMKV测试"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </ScrollView>

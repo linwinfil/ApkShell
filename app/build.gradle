@@ -1,11 +1,12 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.maoxin.apkshell"
-        minSdkVersion 18
-        targetSdkVersion 27
+        minSdkVersion 21
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -35,14 +36,24 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation project(':exoplayer_plugins')
     implementation project(':videoPluslibs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation "org.jetbrains.anko:anko:$anko_version"
     implementation group: 'com.googlecode.mp4parser', name: 'isoparser', version: '1.1.22'
-    implementation 'com.github.bumptech.glide:glide:3.8.0'
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    implementation project(':gsonlib')
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-}
+    implementation 'com.github.bumptech.glide:glide:4.0.0'
 
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+    implementation project(':gsonlib')
+    implementation project(':tencent')
+
+    //butterknife 组件
+    implementation 'com.jakewharton:butterknife:9.0.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0'
+
+    //kotlin 组件
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.anko:anko:$anko_version"
+
+    //Leakcanary 组件
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
+}
+repositories {
+    mavenCentral()
+}

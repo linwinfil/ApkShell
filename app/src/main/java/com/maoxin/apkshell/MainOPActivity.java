@@ -172,6 +172,15 @@ public class MainOPActivity extends AppCompatActivity
 
             }
         });
+
+        findViewById(R.id.test_mmkv).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(MainOPActivity.this, Main11Activity.class));
+            }
+        });
     }
 
     private void test()
