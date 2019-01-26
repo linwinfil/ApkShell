@@ -93,6 +93,10 @@
         </activity>
         <activity android:name=".Main11Activity">
         </activity>
+        <activity android:name=".viewmode.DemoViewModeActivity">
+        </activity>
+        <activity android:name=".lifecycle.DemoViewModeActivity">
+        </activity>
     </application>
 
 </manifest>
