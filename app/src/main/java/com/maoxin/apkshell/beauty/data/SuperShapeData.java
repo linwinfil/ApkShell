@@ -1,6 +1,5 @@
 package com.maoxin.apkshell.beauty.data;
 
-import android.support.annotation.IntDef;
 
 import com.maoxin.apkshell.beauty.data.base.StrengthArea;
 import com.maoxin.apkshell.beauty.data.base.UIArea;
@@ -8,10 +7,11 @@ import com.maoxin.apkshell.beauty.data.base.UIArea;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+import androidx.annotation.IntDef;
+
 /**
  * 1、官方默认脸型数据值，float取值范围[0f, 100f]<br/>
  * 2、以下预设数据由设计录入文档数据写入<br/>
- * 3、脸型数据变更，请更新{@link ShapeResMgr#NEW_JSON_VERSION} 和 {@link ShapeSyncResMgr#NEW_JSON_VERSION}
  *
  * @author lmx
  * Created by lmx on 2017-12-13.

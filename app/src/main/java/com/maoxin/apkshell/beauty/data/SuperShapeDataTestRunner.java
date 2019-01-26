@@ -1,6 +1,6 @@
 package com.maoxin.apkshell.beauty.data;
 
-import android.support.annotation.Nullable;
+
 import android.util.SparseArray;
 
 import com.maoxin.apkshell.beauty.data.base.ShapeArgs;
@@ -9,6 +9,8 @@ import com.maoxin.apkshell.beauty.data.base.StrengthArea;
 import com.maoxin.apkshell.beauty.data.base.UIArea;
 
 import java.util.ArrayList;
+
+import androidx.annotation.Nullable;
 
 
 /**

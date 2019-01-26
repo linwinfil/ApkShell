@@ -23,7 +23,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -61,6 +60,8 @@ import java.util.zip.ZipInputStream;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+
+import androidx.core.app.ActivityCompat;
 
 public class CommonUtils
 {

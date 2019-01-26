@@ -1,9 +1,9 @@
 package com.maoxin.apkshell.beauty.data;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Size;
-
 import java.math.BigDecimal;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Size;
 
 /**
  * @author lmx

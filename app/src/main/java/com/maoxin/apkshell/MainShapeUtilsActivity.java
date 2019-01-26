@@ -1,12 +1,13 @@
 package com.maoxin.apkshell;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.maoxin.apkshell.beauty.data.BeautyShapeDataUtils;
 import com.maoxin.apkshell.beauty.data.ShapeDataType;
 
 import java.util.ArrayList;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainShapeUtilsActivity extends AppCompatActivity
 {

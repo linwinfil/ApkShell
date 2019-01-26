@@ -1,7 +1,6 @@
 package com.maoxin.apkshell.audio;
 
 import android.os.Environment;
-import android.support.annotation.StringDef;
 import android.text.TextUtils;
 
 import java.io.File;
@@ -14,6 +13,9 @@ import java.io.OutputStream;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.UUID;
+
+import androidx.annotation.StringDef;
+
 /**
  * @author lmx
  *         Created by lmx on 2017/7/26.

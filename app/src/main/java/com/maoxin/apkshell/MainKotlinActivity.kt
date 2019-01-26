@@ -1,8 +1,8 @@
 package com.maoxin.apkshell
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import org.jetbrains.anko.toast
 
 class MainKotlinActivity : AppCompatActivity() {

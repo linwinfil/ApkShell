@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -25,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import androidx.appcompat.app.AppCompatActivity;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.poco.audio.CommonUtils;

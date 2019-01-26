@@ -1,9 +1,8 @@
 package com.maoxin.apkshell;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -11,6 +10,8 @@ import com.maoxin.apkshell.beauty.data.SuperShapeDataTestRunner;
 import com.maoxin.apkshell.beauty.data.base.ShapeArgs;
 
 import java.util.ArrayList;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Main10Activity extends AppCompatActivity
 {

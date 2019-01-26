@@ -2,11 +2,11 @@ package doupai.medialib.media.context;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
 import doupai.venus.venus.Venus;
 
 /**
@@ -15,7 +15,7 @@ import doupai.venus.venus.Venus;
  */
 public class NativeKits
 {
-    private static Set<String> UNSUPPORT = new HashSet();
+    private static Set<String> UNSUPPORT = new HashSet<>();
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
 

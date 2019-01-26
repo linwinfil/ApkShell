@@ -12,9 +12,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,6 +23,10 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 
 public class Main9Activity extends AppCompatActivity
 {

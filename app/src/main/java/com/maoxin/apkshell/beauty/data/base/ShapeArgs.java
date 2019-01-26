@@ -1,9 +1,10 @@
 package com.maoxin.apkshell.beauty.data.base;
 
-import android.support.annotation.Nullable;
 
 import com.maoxin.apkshell.beauty.data.BeautyShapeDataUtils;
 import com.maoxin.apkshell.beauty.data.ShapeDataType;
+
+import androidx.annotation.Nullable;
 
 
 /**

@@ -2,9 +2,10 @@ package com.maoxin.apkshell;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 
 import com.tencent.mmkv.MMKV;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Main11Activity extends AppCompatActivity
 {

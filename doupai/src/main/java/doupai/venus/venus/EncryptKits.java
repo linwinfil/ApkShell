@@ -1,6 +1,5 @@
 package doupai.venus.venus;
 
-import android.support.annotation.NonNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,6 +15,8 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+
+import androidx.annotation.NonNull;
 
 /**
  * @author lmx

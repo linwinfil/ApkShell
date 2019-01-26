@@ -2,13 +2,13 @@ package com.example.doupai;
 
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
 import java.util.ArrayList;
 
+import androidx.appcompat.app.AppCompatActivity;
 import doupai.venus.venus.Venus;
 
 public class MainActivity extends AppCompatActivity

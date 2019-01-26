@@ -2,10 +2,11 @@ package com.maoxin.apkshell;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.maoxin.apkshell.cmd.BannerCore3;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Main7Activity extends AppCompatActivity
 {

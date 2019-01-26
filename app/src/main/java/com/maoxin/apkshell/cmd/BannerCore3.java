@@ -2,10 +2,11 @@ package com.maoxin.apkshell.cmd;
 
 import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.annotation.Nullable;
 
 public class BannerCore3
 {
