@@ -17,7 +17,6 @@ package com.adnonstop.exoplayer;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.annotation.IntDef;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
@@ -25,6 +24,8 @@ import com.adnonstop.R;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import androidx.annotation.IntDef;
 
 /**
  * A {@link FrameLayout} that resizes itself to match a specified aspect ratio.

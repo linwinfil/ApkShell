@@ -1,8 +1,9 @@
 package com.adnonstop.exoplayer;
 
-import android.support.annotation.Nullable;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
+
+import androidx.annotation.Nullable;
 
 /**
  * @author lmx

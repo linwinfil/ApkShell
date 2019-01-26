@@ -329,8 +329,9 @@ public class ExoVideoPlayer implements IMediaController.MediaPlayerControl
         }
 
         @Override
-        public void onTimelineChanged(Timeline timeline, Object manifest)
+        public void onTimelineChanged(Timeline timeline, Object manifest, int reason)
         {
+
         }
 
         @Override

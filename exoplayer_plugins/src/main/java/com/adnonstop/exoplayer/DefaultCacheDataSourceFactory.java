@@ -1,7 +1,6 @@
 package com.adnonstop.exoplayer;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -14,6 +13,8 @@ import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvicto
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 
 import java.io.File;
+
+import androidx.annotation.NonNull;
 
 /**
  * 默认缓存缓存工厂类

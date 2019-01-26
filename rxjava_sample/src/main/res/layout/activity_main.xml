@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/layout_constraint"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,7 +9,7 @@
     tools:context="my.beautycamera.MainActivity">
 
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guide_line_ver"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -63,4 +63,4 @@
         app:layout_constraintStart_toStartOf="@+id/guide_line_ver"
         app:layout_constraintTop_toBottomOf="@+id/textView"/>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

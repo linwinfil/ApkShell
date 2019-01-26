@@ -3,9 +3,6 @@ package com.adnonstop.exoplayer;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.Size;
 import android.text.TextUtils;
 
 import com.google.android.exoplayer2.C;
@@ -21,6 +18,10 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.Size;
 
 /**
  * @author lmx
@@ -145,7 +146,7 @@ public class MediaSourceBuilder
 
     public void release()
     {
-        if (mMediaSource != null) mMediaSource.releaseSource();
+        if (mMediaSource != null) mMediaSource.releaseSource(null);
         if (mMainHandler != null) mMainHandler.removeCallbacksAndMessages(mContext);
         mMediaSource = null;
         mMainHandler = null;
