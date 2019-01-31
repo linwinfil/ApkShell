@@ -1,8 +1,12 @@
 package com.maoxin.apkshell
 
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.maoxin.apkshell.kotlin.KotlinInstance
+import com.maoxin.apkshell.kotlin.KotlinParams
+import com.maoxin.apkshell.kotlin.LazyKotlinInstance
 import org.jetbrains.anko.toast
 
 class MainKotlinActivity : AppCompatActivity() {
@@ -23,7 +27,20 @@ class MainKotlinActivity : AppCompatActivity() {
 //        Log.d(TAG, c!!.toString())
 
 
-        findViewById<Button>(R.id.button5).setOnClickListener { toast("click") }
+        toast(LazyKotlinInstance.instance.title());
+
+
+        val function: (View) -> Unit = {
+            val createKotlinParamsObject = createKotlinParamsObject()
+            toast("click,$createKotlinParamsObject")
+
+            toast("get instance:${KotlinInstance.getInstance()}")
+        }
+        findViewById<Button>(R.id.button5).setOnClickListener(function)
+    }
+
+    private fun createKotlinParamsObject(): KotlinParams {
+        return KotlinParams(width = 1920, height = 1080, maxSize = 2560, outSize = 2560.0f)
     }
 
 }

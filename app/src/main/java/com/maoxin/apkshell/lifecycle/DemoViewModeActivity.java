@@ -32,37 +32,37 @@ public class DemoViewModeActivity extends AppCompatActivity
         @Override
         public void onCreate(@NonNull LifecycleOwner owner)
         {
-
+            System.out.println("lifecycle onCreate");
         }
 
         @Override
         public void onStart(@NonNull LifecycleOwner owner)
         {
-
+            System.out.println("lifecycle onStart");
         }
 
         @Override
         public void onResume(@NonNull LifecycleOwner owner)
         {
-
+            System.out.println("lifecycle onResume");
         }
 
         @Override
         public void onPause(@NonNull LifecycleOwner owner)
         {
-
+            System.out.println("lifecycle onPause");
         }
 
         @Override
         public void onStop(@NonNull LifecycleOwner owner)
         {
-
+            System.out.println("lifecycle onStop");
         }
 
         @Override
         public void onDestroy(@NonNull LifecycleOwner owner)
         {
-
+            System.out.println("lifecycle onDestroy");
         }
     }
 
