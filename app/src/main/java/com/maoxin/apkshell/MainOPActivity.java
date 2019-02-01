@@ -46,70 +46,27 @@ public class MainOPActivity extends AppCompatActivity
             }
         });
 
-        findViewById(R.id.button6).setOnClickListener(new View.OnClickListener()
+        findViewById(R.id.button6).setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View v)
-            {
-                // TEST();
-            }
+            // TEST();
         });
 
-        findViewById(R.id.button7).setOnClickListener(new View.OnClickListener()
+        findViewById(R.id.button7).setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent = new Intent(MainOPActivity.this, Main4Activity.class);
-                startActivity(intent);
-            }
+            Intent intent = new Intent(MainOPActivity.this, Main4Activity.class);
+            startActivity(intent);
         });
 
-        findViewById(R.id.button_mp4parser).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(MainOPActivity.this, Main5Activity.class));
-            }
-        });
+        findViewById(R.id.button_mp4parser).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main5Activity.class)));
 
-        findViewById(R.id.button_mp4parser_ex).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(MainOPActivity.this, Main5ExActivity.class));
-            }
-        });
+        findViewById(R.id.button_mp4parser_ex).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main5ExActivity.class)));
 
-        findViewById(R.id.button_clip_wav).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(MainOPActivity.this, Main3Activity.class));
-            }
-        });
+        findViewById(R.id.button_clip_wav).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main3Activity.class)));
 
-        findViewById(R.id.button_gson_test).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(MainOPActivity.this, Main6Activity.class));
-            }
-        });
+        findViewById(R.id.button_gson_test).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main6Activity.class)));
 
         final Button button_test_cmdproc = findViewById(R.id.button_test_cmdproc);
-        button_test_cmdproc.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(MainOPActivity.this, Main7Activity.class));
-            }
-        });
+        button_test_cmdproc.setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main7Activity.class)));
 
         findViewById(R.id.button_test_animation).setOnClickListener(new View.OnClickListener()
         {
@@ -137,51 +94,17 @@ public class MainOPActivity extends AppCompatActivity
             }
         });
 
-        findViewById(R.id.button_shape_utils).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(MainOPActivity.this, MainShapeUtilsActivity.class));
-            }
-        });
+        findViewById(R.id.button_shape_utils).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, MainShapeUtilsActivity.class)));
 
-        findViewById(R.id.concurrent_test).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(MainOPActivity.this, Main8Activity.class));
-            }
-        });
+        findViewById(R.id.concurrent_test).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main8Activity.class)));
 
-        findViewById(R.id.action_test).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(MainOPActivity.this, Main9Activity.class));
-            }
-        });
+        findViewById(R.id.action_test).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main9Activity.class)));
 
-        findViewById(R.id.test_new_shape_args).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(MainOPActivity.this, Main10Activity.class));
+        findViewById(R.id.test_new_shape_args).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main10Activity.class)));
 
-            }
-        });
+        findViewById(R.id.test_mmkv).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main11Activity.class)));
 
-        findViewById(R.id.test_mmkv).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(MainOPActivity.this, Main11Activity.class));
-            }
-        });
+        findViewById(R.id.test_kotlin).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, MainKotlinActivity.class)));
     }
 
     private void test()

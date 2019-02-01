@@ -90,8 +90,14 @@
 
         <Button
             android:id="@+id/test_mmkv"
-            android:text="MMKV测试"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="MMKV测试"/>
+
+        <Button
+            android:id="@+id/test_kotlin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kotlin"/>
     </LinearLayout>
 </ScrollView>

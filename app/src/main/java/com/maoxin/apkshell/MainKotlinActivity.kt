@@ -27,7 +27,7 @@ class MainKotlinActivity : AppCompatActivity() {
 //        Log.d(TAG, c!!.toString())
 
 
-        toast(LazyKotlinInstance.instance.title());
+        toast(LazyKotlinInstance.instance.title())
 
 
         val function: (View) -> Unit = {
