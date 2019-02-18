@@ -184,8 +184,6 @@ class MainKotlinActivity : AppCompatActivity() {
             println(it)
         }
         println("asdfaijurebfdjfjk")
-
-
     }
 
 
