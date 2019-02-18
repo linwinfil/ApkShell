@@ -14,16 +14,24 @@ class KotlinClass {
 
     //主构造函数不能放任何代码，初始化的代码可以放在“init”关键字初始化块
     class ClassInitOrder(name: String) {
-        val first_str = "this is first str: $name".also { println(name) }
+        //also返回对象类型本身
+        val first_str = "this is first str: $name".also(::println)
 
         init {
             println("first init block that prints:$name")
         }
 
-        val second = "this is second str length: ${name.length}".also { println(this) }
+        val second = "this is second str length: ${name.length}".also(::println)
 
         init {
             println("second init block that prints:${name.length}")
+        }
+
+        init {
+            val aa = 5
+            aa.also{
+                println("is a $it")
+            }
         }
     }
 }
