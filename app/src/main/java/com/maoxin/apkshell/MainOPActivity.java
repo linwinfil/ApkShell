@@ -21,6 +21,7 @@ public class MainOPActivity extends AppCompatActivity
     HashMap<String, Object> params = null;
 
     Handler mHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -105,6 +106,8 @@ public class MainOPActivity extends AppCompatActivity
         findViewById(R.id.test_mmkv).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main11Activity.class)));
 
         findViewById(R.id.test_kotlin).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, MainKotlinActivity.class)));
+
+        findViewById(R.id.test_task_stack_builder).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main12Activity.class)));
     }
 
     private void test()
