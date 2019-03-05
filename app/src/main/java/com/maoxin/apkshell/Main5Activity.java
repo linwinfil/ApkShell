@@ -46,8 +46,9 @@ public class Main5Activity extends AppCompatActivity implements MLog.ILogTag
 
     private ArrayList<String> musicPaths = new ArrayList<>();
 
-    String video_basePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "apkshell" + VIDEO_SEPARATOR;
-    String audio_basePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "apkshell" + AUDIO_SEPARATOR;
+    String apk_basePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "apkshell";
+    String video_basePath = apk_basePath + VIDEO_SEPARATOR;
+    String audio_basePath = apk_basePath + AUDIO_SEPARATOR;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -142,6 +143,22 @@ public class Main5Activity extends AppCompatActivity implements MLog.ILogTag
         {
             Toast.makeText(this, "视频不在", Toast.LENGTH_SHORT).show();
             return;
+        }
+    }
+
+    @OnClick(R.id.muxer_audio_to_video)
+    public void onClickMuxer_audio_to_video() {
+
+        try
+        {
+            Mp4ParseUtils.appendAudio2Mp4(
+                    apk_basePath + File.separator + "test_record_voice.aac",
+                    apk_basePath + File.separator + "test_h264.h264",
+                    apk_basePath + File.separator + "test_muxer_video.mp4");
+        }
+        catch (Throwable throwable)
+        {
+            throwable.printStackTrace();
         }
     }
 

@@ -13,6 +13,15 @@
         android:orientation="vertical"
         tools:context="com.maoxin.apkshell.Main5Activity">
 
+
+        <Button
+            android:id="@+id/muxer_audio_to_video"
+            android:text="不同时段音频轨追加视频轨"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
         <Button
             android:id="@+id/ratio9_16"
             android:layout_width="wrap_content"

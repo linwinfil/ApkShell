@@ -4,11 +4,14 @@ import android.media.MediaMetadataRetriever;
 
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.boxes.Container;
+import com.googlecode.mp4parser.FileDataSourceImpl;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
 import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;
+import com.googlecode.mp4parser.authoring.tracks.AACTrackImpl;
 import com.googlecode.mp4parser.authoring.tracks.AppendTrack;
+import com.googlecode.mp4parser.authoring.tracks.h264.H264TrackImpl;
 import com.maoxin.apkshell.audio.FileUtils;
 
 import java.io.IOException;
@@ -19,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
 
 /**
  * @author lmx
@@ -29,6 +33,36 @@ public class Mp4ParseUtils
 {
     public static final String SOUN = "soun";
     public static final String VIDE = "vide";
+
+
+    public static void appendAudio2Mp4(@NonNull String audioPath, @NonNull String videoPath, @NonNull String outPutpath) throws Throwable {
+        if (!FileUtils.isFileExists(audioPath) || !FileUtils.isFileExists(videoPath)) {
+            throw new IllegalStateException("找不到文件");
+        }
+
+        LinkedList<Track> audioTracks = new LinkedList<>();
+        LinkedList<Track> videoTracks = new LinkedList<>();
+
+        AACTrackImpl aacTrack = new AACTrackImpl(new FileDataSourceImpl(audioPath));
+        audioTracks.add(aacTrack);
+
+        H264TrackImpl h264Track = new H264TrackImpl(new FileDataSourceImpl(videoPath));
+        videoTracks.add(h264Track);
+
+        Movie resultMovie = new Movie();
+        if (!audioTracks.isEmpty())
+        {
+            resultMovie.addTrack(new AppendTrack((Track[]) audioTracks.toArray(new Track[audioTracks.size()])));
+        }
+        if (!videoTracks.isEmpty())
+        {
+            resultMovie.addTrack(new AppendTrack((Track[]) videoTracks.toArray(new Track[videoTracks.size()])));
+        }
+        Container outContainer = new DefaultMp4Builder().build(resultMovie);
+        FileChannel fileChannel = new RandomAccessFile(outPutpath, "rw").getChannel();
+        outContainer.writeContainer(fileChannel);
+        fileChannel.close();
+    }
 
     /**
      * 对MP4文件集合进行追加合并(按照顺序拼接)
