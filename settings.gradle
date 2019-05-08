@@ -1,1 +1,1 @@
-include ':app', ':rxjava_sample', ':exoplayer_plugins', ':videoPluslibs', ':gsonlib', ':doupai', ':tencent'
+include ':app', ':rxjava_sample', ':exoplayer_plugins', ':tencent', ':opengl'
