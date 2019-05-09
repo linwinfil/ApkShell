@@ -47,6 +47,7 @@ public class GlUtils
             //根据以上指定的参数，生成一个2D纹理
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
             GlUtils.checkGlError("glGenTextures");
+            return textureId[0];
         }
         return NO_TEXTURE;
     }
