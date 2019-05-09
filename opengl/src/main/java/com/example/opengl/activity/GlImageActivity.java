@@ -4,8 +4,8 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 
 import com.example.opengl.R;
-import com.example.opengl.gl.GRenderer;
 import com.example.opengl.gl.GSurfaceView;
+import com.example.opengl.gl.filter.ImageFilter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,17 +20,16 @@ public class GlImageActivity extends AppCompatActivity
         setContentView(R.layout.activity_gl_image);
         glsurfaceView = findViewById(R.id.gl_surface_view);
 
-
     }
 
     @Override
     protected void onStart()
     {
         super.onStart();
-        GRenderer gRenderer = new GRenderer(this);
+        ImageFilter filter = new ImageFilter(this, null, null);
         glsurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         glsurfaceView.setEGLContextClientVersion(2);
-        glsurfaceView.setRenderer(gRenderer);
+        glsurfaceView.setRenderer(filter);
     }
 
     @Override

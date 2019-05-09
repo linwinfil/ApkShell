@@ -1,12 +1,11 @@
 package com.example.opengl.gl.filter;
 
 import android.content.Context;
-import android.opengl.GLES20;
 
 import com.example.opengl.gl.utils.GlMatrixTools;
-import com.example.opengl.gl.utils.GlUtils;
 
 import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
 
 /**
  * @author lmx
@@ -15,6 +14,9 @@ import javax.microedition.khronos.egl.EGLConfig;
 public abstract class AFilter implements IFilter
 {
     protected Context mContext;
+
+    protected int mSurfaceWidth;
+    protected int mSurfaceHeight;
 
     protected GlMatrixTools mGlMatrixTools;
 
@@ -46,66 +48,39 @@ public abstract class AFilter implements IFilter
     }
 
     @Override
-    public void onSurfaceCreated(EGLConfig eglConfig)
+    public void onSurfaceCreated(GL10 gl, EGLConfig config)
     {
-        if (GLES20.glIsProgram(mProgramHandle))
-        {
-            if (GLES20.glIsShader(mVertexShaderHandle)) {
-                GLES20.glDetachShader(mProgramHandle, mVertexShaderHandle);
-                GLES20.glDeleteShader(mVertexShaderHandle);
-                mVertexShaderHandle = 0;
-            }
-
-            if (GLES20.glIsShader(mFragmentShaderHandle)) {
-                GLES20.glDetachShader(mProgramHandle, mFragmentShaderHandle);
-                GLES20.glDeleteShader(mFragmentShaderHandle);
-                mFragmentShaderHandle = 0;
-            }
-
-            GLES20.glDeleteProgram(mProgramHandle);
-            mProgramHandle = 0;
-        }
-
-        mVertexShaderHandle = GlUtils.loadShader(mVertexShader, GLES20.GL_VERTEX_SHADER);
-        mFragmentShaderHandle = GlUtils.loadShader(mFragmentShader, GLES20.GL_FRAGMENT_SHADER);
-        mProgramHandle = GlUtils.loadProgram(mVertexShaderHandle, mFragmentShaderHandle);
-        onInitProgram();
+        onSurfaceCreatedInit(config);
+        mProgramHandle = onCreateProgram(config);
     }
 
     @Override
-    public void onSurfaceChanged(int width, int height)
+    public void onSurfaceChanged(GL10 gl, int width, int height)
     {
+        setSurfaceSize(width, height);
+        onSurfaceChangedInit(width, height);
+    }
 
+    private void setSurfaceSize(int width, int height)
+    {
+        mSurfaceWidth = width;
+        mSurfaceHeight = height;
+    }
+
+    public int getProgram() {
+        return mProgramHandle;
     }
 
     @Override
-    public void onDrawFrame(int textureId, float[] mvpMatrix, float[] texMatrix)
+    public void onDrawFrame(GL10 gl)
     {
-        //清屏颜色与深度
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-        //加载程序句柄
-        GLES20.glUseProgram(mProgramHandle);
-
-        //给视图矩阵赋值
-        GLES20.glUniformMatrix4fv(mMatrixHandle, 1, false, mvpMatrix, 0);
-
-        //启用顶点坐标句柄
-        GLES20.glEnableVertexAttribArray(mPositionHandle);
-        //启用纹理坐标句柄
-        GLES20.glEnableVertexAttribArray(mCoordinateHandle);
-
-        //给纹理单元分配一个默认值
-        GLES20.glUniform1i(mTextureHandle, 0);
-
+        onDraw();
     }
 
-
-    public void onInitProgram() {
-        mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "vPosition");
-        mCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "vCoordinate");
-        mMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "vMatrix");
-        mTextureHandle = GLES20.glGetUniformLocation(mProgramHandle, "vTexture");
-    }
+    public abstract void onSurfaceCreatedInit(EGLConfig eglConfig);
+    public abstract void onSurfaceChangedInit(int width, int height);
+    public abstract int onCreateProgram(EGLConfig eglConfig);
+    public abstract void onDraw();
 
 
 }
