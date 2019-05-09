@@ -1,4 +1,4 @@
-package com.maoxin.apkshell;
+package com.maoxin.apkshell.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,6 +13,8 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.coremedia.iso.IsoFile;
+import com.maoxin.apkshell.Mp4ParseUtils;
+import com.maoxin.apkshell.R;
 import com.maoxin.apkshell.audio.FileUtils;
 import com.maoxin.apkshell.utils.MLog;
 

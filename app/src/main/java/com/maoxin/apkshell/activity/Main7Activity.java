@@ -1,9 +1,10 @@
-package com.maoxin.apkshell;
+package com.maoxin.apkshell.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.maoxin.apkshell.R;
 import com.maoxin.apkshell.cmd.BannerCore3;
 
 import androidx.appcompat.app.AppCompatActivity;

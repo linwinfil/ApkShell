@@ -1,8 +1,10 @@
-package com.maoxin.apkshell;
+package com.maoxin.apkshell.activity;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+import com.maoxin.apkshell.R;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

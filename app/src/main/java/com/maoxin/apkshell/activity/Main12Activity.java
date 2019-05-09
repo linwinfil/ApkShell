@@ -1,4 +1,4 @@
-package com.maoxin.apkshell;
+package com.maoxin.apkshell.activity;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+
+import com.maoxin.apkshell.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;

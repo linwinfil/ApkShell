@@ -1,4 +1,4 @@
-package com.maoxin.apkshell;
+package com.maoxin.apkshell.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.maoxin.apkshell.R;
 import com.maoxin.apkshell.beauty.data.SuperShapeDataTestRunner;
 import com.maoxin.apkshell.beauty.data.base.ShapeArgs;
 

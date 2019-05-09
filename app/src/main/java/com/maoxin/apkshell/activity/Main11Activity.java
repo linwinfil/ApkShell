@@ -1,8 +1,9 @@
-package com.maoxin.apkshell;
+package com.maoxin.apkshell.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.maoxin.apkshell.R;
 import com.tencent.mmkv.MMKV;
 
 import androidx.appcompat.app.AppCompatActivity;

@@ -1,4 +1,4 @@
-package com.maoxin.apkshell;
+package com.maoxin.apkshell.activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.os.Environment;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.maoxin.apkshell.R;
 import com.maoxin.apkshell.gson.TeachLineLocalResDetial;
 import com.maoxin.apkshell.utils.Zip;
 

@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity
 
     void rxJavaTest()
     {
-        //被观察者
+        //被观察者被观察者
         Observable<String> observable = Observable.unsafeCreate(subscriber ->
         {
             subscriber.onNext("a");

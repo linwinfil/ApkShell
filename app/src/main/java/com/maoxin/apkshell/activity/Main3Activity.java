@@ -1,4 +1,4 @@
-package com.maoxin.apkshell;
+package com.maoxin.apkshell.activity;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.maoxin.apkshell.R;
 import com.maoxin.apkshell.audio.ClipMusicTask;
 import com.maoxin.apkshell.audio.FileUtils;
 import com.maoxin.apkshell.audio.OnProcessListener;

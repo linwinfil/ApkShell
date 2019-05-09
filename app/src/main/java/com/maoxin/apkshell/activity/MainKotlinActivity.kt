@@ -1,9 +1,10 @@
-package com.maoxin.apkshell
+package com.maoxin.apkshell.activity
 
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.maoxin.apkshell.R
 import com.maoxin.apkshell.kotlin.KotlinInstance
 import com.maoxin.apkshell.kotlin.KotlinParams
 import com.maoxin.apkshell.kotlin.LazyKotlinInstance

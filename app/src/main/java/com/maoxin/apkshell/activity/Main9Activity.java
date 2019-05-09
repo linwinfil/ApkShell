@@ -1,4 +1,4 @@
-package com.maoxin.apkshell;
+package com.maoxin.apkshell.activity;
 
 import android.Manifest;
 import android.content.Intent;
@@ -18,6 +18,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.VideoView;
+
+import com.maoxin.apkshell.R;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

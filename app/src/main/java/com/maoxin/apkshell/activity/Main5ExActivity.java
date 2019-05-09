@@ -1,4 +1,4 @@
-package com.maoxin.apkshell;
+package com.maoxin.apkshell.activity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -10,6 +10,9 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.maoxin.apkshell.Mp4ParseUtils;
+import com.maoxin.apkshell.R;
 
 import java.io.File;
 import java.util.ArrayList;

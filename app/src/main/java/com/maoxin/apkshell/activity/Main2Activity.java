@@ -1,4 +1,4 @@
-package com.maoxin.apkshell;
+package com.maoxin.apkshell.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.maoxin.apkshell.R;
 import com.maoxin.apkshell.audio.ClipMusicTask;
 import com.maoxin.apkshell.audio.JointMultiAudioTask;
 import com.maoxin.apkshell.audio.OnProcessListener;

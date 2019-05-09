@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.maoxin.apkshell"
+<manifest xmlns:tools="http://schemas.android.com/tools"
+          package="com.maoxin.apkshell"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -13,52 +14,53 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name="com.maoxin.apkshell.Main12Activity"
-            android:parentActivityName=".MainOPActivity">
+            android:name="com.maoxin.apkshell.activity.Main12Activity"
+            android:parentActivityName=".activity.MainOPActivity">
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
         </activity>
-        <activity android:name=".Main2Activity">
+        <activity android:name=".activity.Main2Activity">
 
         </activity>
-        <activity android:name=".Main3Activity">
+        <activity android:name=".activity.Main3Activity">
 
         </activity>
-        <activity android:name=".MainKotlinActivity">
+        <activity android:name=".activity.MainKotlinActivity">
 
         </activity>
-        <activity android:name=".MainOPActivity">
+        <activity android:name=".activity.MainOPActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Main4Activity">
+        <activity android:name=".activity.Main4Activity">
         </activity>
-        <activity android:name=".Main5Activity">
+        <activity android:name=".activity.Main5Activity">
         </activity>
-        <activity android:name=".Main6Activity">
+        <activity android:name=".activity.Main6Activity">
         </activity>
-        <activity android:name=".Main7Activity">
+        <activity android:name=".activity.Main7Activity">
         </activity>
-        <activity android:name=".MainShapeUtilsActivity">
+        <activity android:name=".activity.MainShapeUtilsActivity">
         </activity>
-        <activity android:name=".Main8Activity">
+        <activity android:name=".activity.Main8Activity">
         </activity>
-        <activity android:name=".Main5ExActivity">
+        <activity android:name=".activity.Main5ExActivity">
         </activity>
         <activity
-            android:name=".Main9Activity"
+            android:name=".activity.Main9Activity"
             android:label="@string/title_activity_main9"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <provider
-            android:name=".Main9Activity$MyFileProvider"
+            android:name=".activity.Main9Activity$MyFileProvider"
             android:authorities="${applicationId}.myfileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -67,9 +69,9 @@
                 android:resource="@xml/provider_path"/>
         </provider>
 
-        <activity android:name=".Main10Activity">
+        <activity android:name=".activity.Main10Activity">
         </activity>
-        <activity android:name=".Main11Activity">
+        <activity android:name=".activity.Main11Activity">
         </activity>
         <activity android:name=".lifecycle.DemoViewModeActivity">
         </activity>

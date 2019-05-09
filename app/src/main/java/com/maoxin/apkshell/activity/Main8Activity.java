@@ -1,9 +1,11 @@
-package com.maoxin.apkshell;
+package com.maoxin.apkshell.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+
+import com.maoxin.apkshell.R;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;

@@ -1,7 +1,8 @@
-package com.maoxin.apkshell;
+package com.maoxin.apkshell.activity;
 
 import android.os.Bundle;
 
+import com.maoxin.apkshell.R;
 import com.maoxin.apkshell.beauty.data.BeautyShapeDataUtils;
 import com.maoxin.apkshell.beauty.data.ShapeDataType;
 
