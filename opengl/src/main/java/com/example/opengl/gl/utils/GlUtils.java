@@ -1,12 +1,19 @@
 package com.example.opengl.gl.utils;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.RawRes;
 
 /**
  * @author lmx
@@ -24,7 +31,7 @@ public class GlUtils
         if (bitmap != null && !bitmap.isRecycled())
         {
             //生成纹理
-            GLES20.glGenTextures(GLES20.GL_TEXTURE_2D, textureId, 0);
+            GLES20.glGenTextures(1, textureId, 0);
             //绑定纹理
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId[0]);
 
@@ -50,6 +57,29 @@ public class GlUtils
             return textureId[0];
         }
         return NO_TEXTURE;
+    }
+
+    public static String loadShaderRawResource(@NonNull Context context, @RawRes int resourceId)
+    {
+        final InputStream inputStream = context.getResources().openRawResource(resourceId);
+        final InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        final BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        String nextLine;
+        final StringBuilder body = new StringBuilder();
+        try
+        {
+            while ((nextLine = bufferedReader.readLine()) != null)
+            {
+                body.append(nextLine);
+                body.append('\n');
+            }
+        }
+        catch (IOException e)
+        {
+            return null;
+        }
+
+        return body.toString();
     }
 
     public static int loadProgram(int vertexShader, int fragmentShader)
