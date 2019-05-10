@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity
             button.setGravity(Gravity.CENTER);
             button.setTextSize(16);
             button.setTextColor(Color.BLACK);
+            button.setAllCaps(false);
             RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(Utils.sScreenW / 4, Utils.sScreenW / 4);
             button.setLayoutParams(params);
             return new Holder(button);

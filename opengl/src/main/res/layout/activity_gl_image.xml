@@ -7,9 +7,86 @@
     android:layout_height="match_parent"
     tools:context=".activity.GlImageActivity">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="16dp"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="16dp"/>
+
     <com.example.opengl.gl.GSurfaceView
         android:id="@+id/gl_surface_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <Button
+        android:id="@+id/btn_circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="圆"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        tools:ignore="HardcodedText,MissingConstraints"/>
+
+    <Button
+        android:id="@+id/btn_rect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="方形"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toEndOf="@+id/btn_circle"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        tools:ignore="HardcodedText,MissingConstraints"/>
+
+    <Button
+        android:id="@+id/btn_multi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="多个绘制"
+        android:textAllCaps="false"
+        app:layout_constraintStart_toEndOf="@+id/btn_rect"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        tools:ignore="HardcodedText,MissingConstraints"/>
+
+    <Button
+        android:id="@+id/btn_rotate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="旋转90"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        tools:ignore="HardcodedText,MissingConstraints"/>
+
+    <Button
+        android:id="@+id/btn_v_flip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="垂直翻转"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintLeft_toRightOf="@id/btn_rotate"
+        tools:ignore="HardcodedText,MissingConstraints"/>
+
+    <Button
+        android:id="@+id/btn_h_flip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="水平翻转"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintLeft_toRightOf="@id/btn_v_flip"
+        tools:ignore="HardcodedText,MissingConstraints"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

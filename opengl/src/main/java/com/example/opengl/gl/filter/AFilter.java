@@ -1,6 +1,8 @@
 package com.example.opengl.gl.filter;
 
 import android.content.Context;
+import android.opengl.GLES20;
+import android.util.Log;
 
 import com.example.opengl.gl.utils.GlMatrixTools;
 
@@ -13,6 +15,9 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public abstract class AFilter implements IFilter
 {
+    private static final String TAG = "AFilter";
+
+
     protected Context mContext;
 
     protected int mSurfaceWidth;
@@ -39,6 +44,7 @@ public abstract class AFilter implements IFilter
     //当前纹理句柄
     protected int mTextureHandle;
 
+    private boolean mGLDraw = true;
 
     public AFilter(Context mContext, String mVertexShader, String mFragmentShader)
     {
@@ -47,9 +53,17 @@ public abstract class AFilter implements IFilter
         this.mFragmentShader = mFragmentShader;
     }
 
+    public void onPause() {
+        mGLDraw = false;
+    }
+
+    public void onResume() {
+    }
+
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
     {
+        Log.d(TAG, "AFilter --> onSurfaceCreated: " + gl.toString());
         onSurfaceCreatedInit(config);
         mProgramHandle = onCreateProgram(config);
     }
@@ -57,6 +71,7 @@ public abstract class AFilter implements IFilter
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height)
     {
+        Log.d(TAG, "AFilter --> onSurfaceChanged: " + gl.toString());
         setSurfaceSize(width, height);
         onSurfaceChangedInit(width, height);
     }
@@ -74,6 +89,7 @@ public abstract class AFilter implements IFilter
     @Override
     public void onDrawFrame(GL10 gl)
     {
+        Log.d(TAG, "AFilter --> onDrawFrame: ");
         onDraw();
     }
 
@@ -82,5 +98,13 @@ public abstract class AFilter implements IFilter
     public abstract int onCreateProgram(EGLConfig eglConfig);
     public abstract void onDraw();
 
+    protected void disuseProgram() {
+        GLES20.glUseProgram(0);
+    }
 
+    @Override
+    public void onRelease()
+    {
+
+    }
 }
