@@ -160,7 +160,6 @@ public class ImageFilter extends AFilter
             //保护缩放旋转操作前矩阵
             matrix.pushMatrix();
 
-            // GL 矩阵是前乘关系（粗暴理解，后写的代码先执行），旋转要考虑缩放问题
             // 逻辑：如何理解旋转要考虑缩放问题？要清楚旋转之前，纹理的宽高缩放比例是基于什么角度的！！！
             // 假设，原纹理属性 (基于0°时) textureW = 1, textureH = 0.5，而且原纹理需要被填充到(w = 3, h = 4)的区域中，非铺满填充 mScaleFullIn = false，
             // 现在要将原纹理 顺时针旋转 90°，那么旋转后纹理的属性应该发生变化 textureW = 0.5， textureH = 1，
@@ -204,6 +203,7 @@ public class ImageFilter extends AFilter
             transY = mTempTransY;
             angle = mTempAngle;
 
+            // GL 矩阵是前乘关系，即右乘矩阵（粗暴理解，后写的代码先执行），旋转要考虑缩放问题
             matrix.translate(transX, transY, 0);
             matrix.rotate(-angle, 0, 0, 1);
             //基于近平面顶点坐标乘上缩放的系数
