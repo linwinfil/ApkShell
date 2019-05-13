@@ -51,6 +51,12 @@ public abstract class AFilter implements IFilter
         this.mContext = mContext;
         this.mVertexShader = mVertexShader;
         this.mFragmentShader = mFragmentShader;
+        this.mGlMatrixTools = new GlMatrixTools();
+    }
+
+    public GlMatrixTools getMatrix()
+    {
+        return mGlMatrixTools;
     }
 
     public void onPause() {

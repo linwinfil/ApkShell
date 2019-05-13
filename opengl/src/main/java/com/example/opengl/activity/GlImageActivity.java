@@ -36,6 +36,9 @@ public class GlImageActivity extends AppCompatActivity implements View.OnClickLi
     ImageFilter filter;
     ArrayList<Button> buttonArrayList = new ArrayList<>();
 
+
+    private static int sAnimationDuration = 1000;
+
     private static final int REQUEST_PICK_IMAGE = 1;
 
     @Override
@@ -56,7 +59,9 @@ public class GlImageActivity extends AppCompatActivity implements View.OnClickLi
             button.setOnClickListener(this);
         }
 
-        filter = new ImageFilter(this, GlUtils.loadShaderRawResource(this, R.raw.default_vertex_shader), GlUtils.loadShaderRawResource(this, R.raw.default_fragment_shader));
+        filter = new ImageFilter(this,
+                GlUtils.loadShaderRawResource(this, R.raw.default_vertex_shader),
+                GlUtils.loadShaderRawResource(this, R.raw.default_fragment_shader));
         glsurfaceView.setEGLContextClientVersion(2);
         glsurfaceView.setRenderer(filter);
         glsurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
@@ -107,24 +112,30 @@ public class GlImageActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.btn_rotate:
                 filter.setDrawMulti(false);
                 ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1f);
-                valueAnimator.setDuration(250);
+                valueAnimator.setDuration(sAnimationDuration);
                 valueAnimator.setInterpolator(new LinearInterpolator());
                 valueAnimator.addUpdateListener(animation ->
                 {
                     float animationFactor = (float) animation.getAnimatedValue();
                     filter.setAnimationFactor(animationFactor);
+                    glsurfaceView.requestRender();
                 });
                 valueAnimator.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation)
                     {
                         v.setClickable(true);
+                        filter.setRequestAnimation(false);
+                        filter.requestUpdateAngle();
+                        filter.setAnimationFactor(0f);
                     }
 
                     @Override
                     public void onAnimationStart(Animator animation)
                     {
                         v.setClickable(false);
+                        filter.setRequestAnimation(true);
+                        filter.setSweptAngle(90);
                     }
                 });
                 valueAnimator.start();
