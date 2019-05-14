@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity
 
 
         classSparseArray.add(new Object[]{"gl_image", GlImageActivity.class});
+        classSparseArray.add(new Object[]{"gl_fbo", GlFboActivity.class});
 
         Adapter adapter = new Adapter();
         recyclerView.setAdapter(adapter);
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity
     {
 
         int spanCount = 4;
-        int spacing = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
+        int spacing = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
         boolean includeEdge;
 
         @Override

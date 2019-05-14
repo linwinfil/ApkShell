@@ -6,6 +6,10 @@ import android.util.Log;
 
 import com.example.opengl.gl.utils.GlMatrixTools;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -46,12 +50,39 @@ public abstract class AFilter implements IFilter
 
     private boolean mGLDraw = true;
 
+    protected FloatBuffer mPositionBuffer;
+    protected FloatBuffer mCoordinateBuffer;
+
+    //顶点坐标
+    protected final float[] positionPoint = {
+            -1.0f, 1.0f, //左上角
+            -1.0f, -1.0f,//左下角
+            1.0f, 1.0f,//右上角
+            1.0f, -1.0f//右下角
+    };
+
+    //纹理坐标（对应顶点坐标）
+    protected final float[] coordinatePoint = {
+            0f, 0f,
+            0.0f,1.0f,
+            1.0f,0.0f,
+            1.0f,1.0f,
+    };
+
     public AFilter(Context mContext, String mVertexShader, String mFragmentShader)
     {
         this.mContext = mContext;
         this.mVertexShader = mVertexShader;
         this.mFragmentShader = mFragmentShader;
         this.mGlMatrixTools = new GlMatrixTools();
+
+        FloatBuffer floatBuffer = ByteBuffer.allocateDirect(positionPoint.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer().put(positionPoint);
+        floatBuffer.position(0);
+        mPositionBuffer = floatBuffer;
+
+        floatBuffer = ByteBuffer.allocateDirect(coordinatePoint.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer().put(coordinatePoint);
+        floatBuffer.position(0);
+        mCoordinateBuffer = floatBuffer;
     }
 
     public GlMatrixTools getMatrix()
@@ -106,6 +137,11 @@ public abstract class AFilter implements IFilter
 
     protected void disuseProgram() {
         GLES20.glUseProgram(0);
+    }
+
+    public void onClear() {
+        GLES20.glClearColor(1f, 1f, 1f, 1f);
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
     }
 
     @Override

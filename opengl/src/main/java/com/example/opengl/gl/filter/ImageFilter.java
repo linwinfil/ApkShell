@@ -7,10 +7,6 @@ import android.opengl.GLES20;
 import com.example.opengl.gl.utils.GlMatrixTools;
 import com.example.opengl.gl.utils.GlUtils;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
 import javax.microedition.khronos.egl.EGLConfig;
 
 /**
@@ -39,25 +35,6 @@ public class ImageFilter extends AFilter
     private int mTempFip;
 
 
-    protected FloatBuffer mPositionBuffer;
-    protected FloatBuffer mCoordinateBuffer;
-
-    //顶点坐标
-    protected final float[] positionPoint = {
-            -1.0f, 1.0f, //左上角
-            -1.0f, -1.0f,//左下角
-            1.0f, 1.0f,//右上角
-            1.0f, -1.0f//右下角
-    };
-
-    //纹理坐标（对应顶点坐标）
-    protected final float[] coordinatePoint = {
-            0f, 0f,
-            0.0f,1.0f,
-            1.0f,0.0f,
-            1.0f,1.0f,
-    };
-
     public ImageFilter(Context mContext, String mVertexShader, String mFragmentShader)
     {
         super(mContext, mVertexShader, mFragmentShader);
@@ -72,14 +49,6 @@ public class ImageFilter extends AFilter
         mSweptAngle = 0f;
 
         mTempFip = 0;
-
-        FloatBuffer floatBuffer = ByteBuffer.allocateDirect(positionPoint.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer().put(positionPoint);
-        floatBuffer.position(0);
-        mPositionBuffer = floatBuffer;
-
-        floatBuffer = ByteBuffer.allocateDirect(coordinatePoint.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer().put(coordinatePoint);
-        floatBuffer.position(0);
-        mCoordinateBuffer = floatBuffer;
     }
 
     public void setBitmap(Bitmap bitmap) {
@@ -370,8 +339,7 @@ public class ImageFilter extends AFilter
     public void onDraw()
     {
         //清屏颜色与深度
-        GLES20.glClearColor(1f, 1f, 1f, 1f);
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        onClear();
 
         if (mBitmap == null || mBitmap.isRecycled()) return;
         setMatrix();
