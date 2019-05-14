@@ -55,6 +55,9 @@ public class GlFboActivity extends BaseActivity implements View.OnClickListener
         filter = new FboFilter(this,
                 GlUtils.loadShaderRawResource(this, R.raw.default_vertex_shader),
                 GlUtils.loadShaderRawResource(this, R.raw.color_fragment_shader));
+        filter.setOnCaptureCallback(bitmap -> {
+            System.out.println(bitmap.getWidth() + ", " + bitmap.getHeight());
+        });
         glsurfaceview.setRenderer(filter);
         glsurfaceview.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
@@ -95,7 +98,8 @@ public class GlFboActivity extends BaseActivity implements View.OnClickListener
     {
         if (v.getId() == R.id.btn_capture)
         {
-
+            filter.setCapture(true);
+            glsurfaceview.requestRender();
         }
     }
 }

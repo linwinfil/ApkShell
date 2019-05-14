@@ -9,8 +9,6 @@ import com.example.opengl.gl.utils.GlMatrixTools;
 import com.example.opengl.gl.utils.GlUtils;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.ShortBuffer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
@@ -20,6 +18,11 @@ import javax.microedition.khronos.egl.EGLConfig;
  */
 public class FboFilter extends AFilter
 {
+
+    public interface onCaptureCallback
+    {
+        void onCapture(Bitmap bitmap);
+    }
 
     protected short[] vertexPointIndex = new short[]{
             0, 1, 2,
@@ -33,20 +36,23 @@ public class FboFilter extends AFilter
     protected int[] mFrameBuffers = new int[1];
     protected int[] mTextures = new int[2];
 
-    private ShortBuffer mVertexIndexBuffer;
+    private onCaptureCallback mOnCaptureCallback;
 
 
     private float mProgress = 50f;
     private Bitmap mBitmap;
 
+    private boolean isCapture = false;
+
     public FboFilter(Context mContext, String mVertexShader, String mFragmentShader)
     {
         super(mContext, mVertexShader, mFragmentShader);
-
-        mVertexIndexBuffer = ByteBuffer.allocateDirect(vertexPointIndex.length * 4).order(ByteOrder.nativeOrder()).asShortBuffer().put(vertexPointIndex);
-        mVertexIndexBuffer.position(0);
     }
 
+    public void setOnCaptureCallback(onCaptureCallback mOnCaptureCallback)
+    {
+        this.mOnCaptureCallback = mOnCaptureCallback;
+    }
 
     public void setProgress(int progress)
     {
@@ -64,6 +70,11 @@ public class FboFilter extends AFilter
     public void setBitmap(Bitmap bitmap)
     {
         this.mBitmap = bitmap;
+    }
+
+    public void setCapture(boolean capture)
+    {
+        isCapture = capture;
     }
 
     @Override
@@ -138,7 +149,9 @@ public class FboFilter extends AFilter
         //创建的 frame buffer 挂载一个texture，储存颜色
         GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, mTextures[1], 0);
         //buffer绘制视图窗口
-        GLES20.glViewport(0, 0, mSurfaceWidth, mSurfaceHeight);
+        int viewportw = mSurfaceWidth;
+        int viewporth = mSurfaceHeight;
+        GLES20.glViewport(0, 0, viewportw, viewporth);
 
         GlMatrixTools matrix = getMatrix();
         //保存相机视口的矩阵
@@ -175,7 +188,6 @@ public class FboFilter extends AFilter
 
         //绘制模式
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
-        // GLES20.glDrawElements(GLES20.GL_TRIANGLES, vertexPointIndex.length, GLES20.GL_UNSIGNED_SHORT, mVertexIndexBuffer);
 
         //解绑坐标
         GLES20.glDisableVertexAttribArray(mPositionHandle);
@@ -189,7 +201,7 @@ public class FboFilter extends AFilter
         //设置fbo为默认
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
         //还原视图窗口
-        GLES20.glViewport(0, 0, mSurfaceWidth, mSurfaceHeight);
+        GLES20.glViewport(0, 0, viewportw, viewporth);
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[1]);
@@ -203,7 +215,23 @@ public class FboFilter extends AFilter
         GLES20.glVertexAttribPointer(mCoordinateHandle, 2, GLES20.GL_FLOAT, false, 0, mCoordinateBuffer);
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
-        // GLES20.glDrawElements(GLES20.GL_TRIANGLES, vertexPointIndex.length, GLES20.GL_UNSIGNED_SHORT, mVertexIndexBuffer);
+
+        if (isCapture)
+        {
+            isCapture = false;
+            int outw = mBitmap.getWidth();
+            int outh = mBitmap.getHeight();
+            ByteBuffer buffer = ByteBuffer.allocate(outw * outh * 4);
+            buffer.rewind();
+            GLES20.glReadPixels(0, 0, outw, outh, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buffer);
+            buffer.rewind();
+
+            Bitmap bitmap = Bitmap.createBitmap(outw, outh, Bitmap.Config.ARGB_8888);
+            bitmap.copyPixelsFromBuffer(buffer);
+            buffer.clear();
+
+            if (mOnCaptureCallback != null) mOnCaptureCallback.onCapture(bitmap);
+        }
 
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mCoordinateHandle);
@@ -229,8 +257,10 @@ public class FboFilter extends AFilter
             }
             else
             {
+                int width = mSurfaceWidth;
+                int height = mSurfaceHeight;
                 //frame纹理
-                GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, mSurfaceWidth, mSurfaceHeight, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
+                GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
             }
 
             //设置过滤属性
