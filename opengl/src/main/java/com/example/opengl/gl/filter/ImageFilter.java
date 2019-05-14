@@ -213,21 +213,25 @@ public class ImageFilter extends AFilter
 
     private float handleAnimationScale(int viewportW, int viewportH, int textureW, int textureH, float textureScale, float currentDegree, float nextDegree, float animFactor)
     {
-        int tempW = viewportW;
-        int tempH = viewportH;
-
         currentDegree = Math.abs(currentDegree);
         nextDegree = Math.abs(nextDegree);
 
-        // if ((currentDegree >= 90 && currentDegree < 180) || currentDegree >= 270) {
-        //     tempW = tempW + tempH;
-        //     tempH = tempW - tempH;
-        //     tempW = tempW - tempH;
-        // }
+        int textureWidth = textureW;
+        int textureHeight = textureH;
 
-        float[] floats = handleFrameScale(viewportW, viewportH, tempW, tempH, textureScale, currentDegree);
+        if ((currentDegree >= 90 && currentDegree < 180) || currentDegree >= 270) {
+            textureWidth = textureWidth + textureHeight;
+            textureHeight = textureWidth - textureHeight;
+            textureWidth = textureWidth - textureHeight;
+        }
+
+        float[] floats = handleFrameScale(viewportW, viewportH, textureWidth, textureHeight, textureScale);
         float frameSizeUS = floats[0];
         float frameSizeVS = floats[1];
+
+        int tempW = viewportW;
+        int tempH = viewportH;
+
         float tempUS = tempW >= tempH ? 1f : (float) tempW / tempH;
         float tempVS = tempH > tempW ? 1f : (float) tempH / tempW;
 
@@ -239,17 +243,22 @@ public class ImageFilter extends AFilter
         }
 
         if (currentDegree != nextDegree) {
-            tempW = viewportW;
-            tempH = viewportH;
-            // if (nextDegree == 90 || nextDegree == 270) {
-            //     tempW = tempW + tempH;
-            //     tempH = tempW - tempH;
-            //     tempW = tempW - tempH;
-            // }
 
-            floats = handleFrameScale(viewportW, viewportH, tempW, tempH, textureScale, currentDegree);
+            textureWidth = textureW;
+            textureHeight = textureH;
+
+            if (nextDegree == 90 || nextDegree == 270) {
+                textureWidth = textureWidth + textureHeight;
+                textureHeight = textureWidth - textureHeight;
+                textureWidth = textureWidth - textureHeight;
+            }
+
+            floats = handleFrameScale(viewportW, viewportH, textureWidth, textureHeight, textureScale);
             frameSizeUS = floats[0];
             frameSizeVS = floats[1];
+
+            tempW = viewportW;
+            tempH = viewportH;
             tempUS = tempW >= tempH ? 1f : (float) tempW / tempH;
             tempVS = tempH > tempW ? 1f : (float) tempH / tempW;
 
@@ -270,19 +279,23 @@ public class ImageFilter extends AFilter
     private float handleStaticScale(int viewportW, int viewportH, int textureW, int textureH, float currentDegree, float textureScale)
     {
         currentDegree = Math.abs(currentDegree);
-        float[] floats = handleFrameScale(viewportW, viewportH, textureW, textureH, textureScale, currentDegree);
+
+        int textureWidth = textureW;
+        int textureHeight = textureH;
+
+        if (currentDegree % 180 == 90)
+        {
+            textureWidth = textureWidth + textureHeight;
+            textureHeight = textureWidth - textureHeight;
+            textureWidth = textureWidth - textureHeight;
+        }
+
+        float[] floats = handleFrameScale(viewportW, viewportH, textureWidth, textureHeight, textureScale);
         float frameSizeUS = floats[0];
         float frameSizeVS = floats[1];
 
         int viewportWidth = viewportW;
         int viewportHeight = viewportH;
-
-        // if (currentDegree % 180 == 90)
-        // {
-        //     viewportWidth = viewportWidth + viewportHeight;
-        //     viewportHeight = viewportWidth - viewportHeight;
-        //     viewportWidth = viewportWidth - viewportHeight;
-        // }
 
         float viewportUS = viewportWidth >= viewportHeight ? 1f : viewportWidth * 1f / viewportHeight;
         float viewportVS = viewportHeight > viewportWidth ? 1f : viewportHeight  * 1f / viewportWidth;
@@ -295,19 +308,12 @@ public class ImageFilter extends AFilter
     }
 
 
-    private float[] handleFrameScale(int viewportW, int viewportH, int textureW, int textureH, float textureScale, float currentDegree)
+    private float[] handleFrameScale(int viewportW, int viewportH, int textureW, int textureH, float textureScale)
     {
         //顶点坐标x轴位置
         float frameSizeUS;
         //顶点坐标y轴位置
         float frameSizeVS;
-
-        if (currentDegree % 180 == 90)
-        {
-            textureW = textureW + textureH;
-            textureH = textureW - textureH;
-            textureW = textureW - textureH;
-        }
 
         if (textureW >= textureH)
         {
