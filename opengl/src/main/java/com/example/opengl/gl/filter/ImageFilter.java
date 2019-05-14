@@ -36,6 +36,8 @@ public class ImageFilter extends AFilter
     private volatile float mTempTransX;
     private volatile float mTempTransY;
 
+    private int mTempFip;
+
 
     protected FloatBuffer mPositionBuffer;
     protected FloatBuffer mCoordinateBuffer;
@@ -68,6 +70,8 @@ public class ImageFilter extends AFilter
         mTempTransX = 0f;
         mTempTransY = 0f;
         mSweptAngle = 0f;
+
+        mTempFip = 0;
 
         FloatBuffer floatBuffer = ByteBuffer.allocateDirect(positionPoint.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer().put(positionPoint);
         floatBuffer.position(0);
@@ -108,9 +112,34 @@ public class ImageFilter extends AFilter
         mSweptAngle = 0;
     }
 
+    public void setFlipHorizontal(boolean flipHorizontal) {
+        if (flipHorizontal && ((mTempFip & Flip_Horizontal) == 0)) {
+            mTempFip |= Flip_Horizontal;
+        } else if (!flipHorizontal && ((mTempFip & Flip_Horizontal) != 0)){
+           mTempFip &= ~Flip_Horizontal;
+        }
+    }
+
+    public void setFlipVertical(boolean flipVertical) {
+        if (flipVertical && ((mTempFip & Flip_Vertical) == 0)) {
+            mTempFip |= Flip_Vertical;
+        } else if (!flipVertical && ((mTempFip & Flip_Vertical) != 0)) {
+            mTempFip &= ~Flip_Vertical;
+        }
+    }
+
+    private boolean isFlipHorizontal() {
+        return (mTempFip & Flip_Horizontal) != 0;
+    }
+
+    private boolean isFlipVertical() {
+        return (mTempFip & Flip_Vertical) != 0;
+    }
+
     @Override
     public void onSurfaceCreatedInit(EGLConfig eglConfig)
     {
+        unbindTextureId();
     }
 
 
@@ -207,7 +236,15 @@ public class ImageFilter extends AFilter
             matrix.translate(transX, transY, 0);
             matrix.rotate(-angle, 0, 0, 1);
             //基于近平面顶点坐标乘上缩放的系数
-            matrix.scale(x_scale * scale, y_scale * scale, 1f);
+            float scaleX = scale;
+            float scaleY = scale;
+            if (isFlipVertical()) {
+                scaleY *= -1;
+            }
+            if (isFlipHorizontal()) {
+                scaleX *= -1;
+            }
+            matrix.scale(x_scale * scaleX, y_scale * scaleY, 1f);
         }
     }
 

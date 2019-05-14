@@ -8,5 +8,8 @@ import android.opengl.GLSurfaceView;
  */
 public interface IFilter extends GLSurfaceView.Renderer
 {
+    int Flip_Horizontal = 1;//水平翻转
+    int Flip_Vertical = 1 << 1;//垂直翻转
+
     void onRelease();
 }
