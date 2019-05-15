@@ -21,11 +21,14 @@ public class BlendFilter extends ImageFilter
 
     protected Bitmap mWaterBmp;
 
+    protected int mBlendSrcInt = GLES20.GL_ONE;
+    protected int mBlendDstInt = GLES20.GL_SRC_ALPHA;
+
     public BlendFilter(Context mContext, String mVertexShader, String mFragmentShader)
     {
         super(mContext, mVertexShader, mFragmentShader);
 
-        mWaterBmp = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_launcher_round);
+        mWaterBmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher_round);
     }
 
     @Override
@@ -38,7 +41,18 @@ public class BlendFilter extends ImageFilter
     @Override
     public void onSurfaceChangedInit(int width, int height)
     {
+        super.onSurfaceChangedInit(width, height);
+    }
 
+
+    public void setBlendSrcInt(int mBlendSrcInt)
+    {
+        this.mBlendSrcInt = mBlendSrcInt;
+    }
+
+    public void setBlendDstInt(int mBlendDstInt)
+    {
+        this.mBlendDstInt = mBlendDstInt;
     }
 
     @Override
@@ -72,8 +86,8 @@ public class BlendFilter extends ImageFilter
             //混合操作
             GLES20.glBlendEquation(GLES20.GL_FUNC_ADD);
             //混合方程
-            // GLES20.glBlendFuncSeparate(GLES20.GL_ONE, GLES20.GL_SRC_ALPHA, GLES20.GL_ONE, GLES20.GL_ONE);
-            GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_SRC_ALPHA);
+            // GLES20.glBlendFuncSeparate(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA, GLES20.GL_ONE, GLES20.GL_ONE);
+            GLES20.glBlendFunc(mBlendSrcInt, mBlendDstInt);
         }
 
         {

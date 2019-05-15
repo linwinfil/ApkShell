@@ -16,26 +16,21 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="8dp"/>
 
-    <Button
-        android:id="@+id/btn_src"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="src:"
-        android:textAllCaps="false"
-        app:layout_constraintTop_toTopOf="@+id/guideline3"
-        tools:ignore="HardcodedText,MissingConstraints"/>
 
-    <Button
-        android:id="@+id/btn_dst"
-        android:layout_width="wrap_content"
+    <Spinner
+        android:id="@+id/spinner_src"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="dst:"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_src"
-        app:layout_constraintStart_toEndOf="@+id/btn_src"
-        app:layout_constraintTop_toTopOf="@+id/btn_src"
-        tools:ignore="HardcodedText,MissingConstraints"/>
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
+        tools:ignore="MissingConstraints"/>
+
+    <Spinner
+        android:id="@+id/spinner_dst"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner_src"
+        app:layout_constraintStart_toEndOf="@+id/spinner_src"
+        app:layout_constraintTop_toTopOf="@+id/spinner_src"/>
 
     <Button
         android:id="@+id/btn_opera"
@@ -44,8 +39,8 @@
         android:layout_marginStart="8dp"
         android:text="fun_add"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_dst"
-        app:layout_constraintStart_toEndOf="@+id/btn_dst"
-        app:layout_constraintTop_toTopOf="@+id/btn_dst"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner_dst"
+        app:layout_constraintStart_toEndOf="@+id/spinner_dst"
+        app:layout_constraintTop_toTopOf="@+id/spinner_dst"
         tools:ignore="HardcodedText,MissingConstraints"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
