@@ -80,7 +80,7 @@ public class FboFilter extends AFilter
     @Override
     public void onSurfaceCreatedInit(EGLConfig eglConfig)
     {
-        deleteFrameBuffer();
+        unbindFrameBuffer();
     }
 
     @Override
@@ -144,7 +144,7 @@ public class FboFilter extends AFilter
         //创建buffer
         createFrameBuffer();
 
-        //绑定buffer
+        //绑定buffer，绘制buffer的帧缓冲区域
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFrameBuffers[0]);
         //创建的 frame buffer 挂载一个texture，储存颜色
         GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, mTextures[1], 0);
@@ -167,12 +167,12 @@ public class FboFilter extends AFilter
         //启用程序
         GLES20.glUseProgram(mProgramHandle);
 
-        //绘制纹理
+        // 1 ======
+
+        //绘制纹理，当前绘制到帧缓冲区域上
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[0]);
         GLES20.glUniform1i(mTextureHandle, 0);
-
-        // 1 ======
 
         //参数赋值
         GLES20.glUniform1f(mProgressHandle, mProgress);
@@ -203,6 +203,7 @@ public class FboFilter extends AFilter
         //还原视图窗口
         GLES20.glViewport(0, 0, viewportw, viewporth);
 
+        //将帧缓冲区域的纹理绘制到当前屏幕上
         GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[1]);
         GLES20.glUniform1i(mTextureHandle, 1);
@@ -236,13 +237,14 @@ public class FboFilter extends AFilter
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mCoordinateHandle);
 
+        unbindFrameBuffer();
         disuseProgram();
     }
 
     protected void createFrameBuffer()
     {
         //创建buffer
-        GLES20.glGenFramebuffers(1, mFrameBuffers, 0);
+        GLES20.glGenFramebuffers(mFrameBuffers.length, mFrameBuffers, 0);
 
         //创建texture
         GLES20.glGenTextures(2, mTextures, 0);
@@ -252,7 +254,7 @@ public class FboFilter extends AFilter
 
             if (i == 0)
             {
-                //绘制纹理
+                //图像纹理
                 GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, mBitmap, 0);
             }
             else
@@ -271,10 +273,10 @@ public class FboFilter extends AFilter
         }
     }
 
-    protected void deleteFrameBuffer()
+    protected void unbindFrameBuffer()
     {
-        GLES20.glDeleteTextures(2, mTextures, 0);
-        GLES20.glDeleteBuffers(1, mFrameBuffers, 0);
+        GLES20.glDeleteTextures(mTextures.length, mTextures, 0);
+        GLES20.glDeleteBuffers(mFrameBuffers.length, mFrameBuffers, 0);
     }
 
     private float handleStaticScale(int viewportW, int viewportH, int textureW, int textureH)
@@ -298,7 +300,7 @@ public class FboFilter extends AFilter
     public void onRelease()
     {
         super.onRelease();
-        deleteFrameBuffer();
+        unbindFrameBuffer();
 
     }
 }
