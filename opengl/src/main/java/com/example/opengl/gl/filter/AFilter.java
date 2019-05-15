@@ -139,6 +139,10 @@ public abstract class AFilter implements IFilter
         GLES20.glUseProgram(0);
     }
 
+    protected void onUserProgram() {
+        GLES20.glUseProgram(mProgramHandle);
+    }
+
     public void onClear() {
         GLES20.glClearColor(1f, 1f, 1f, 1f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);

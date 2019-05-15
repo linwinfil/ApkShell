@@ -21,10 +21,8 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_end="16dp"/>
 
-    <com.example.opengl.gl.GSurfaceView
-        android:id="@+id/gl_surface_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <include
+        layout="@layout/merge_gl_surface_view"
         app:layout_constraintTop_toTopOf="parent"/>
 
 

@@ -16,8 +16,8 @@ import javax.microedition.khronos.egl.EGLConfig;
 public class ImageFilter extends AFilter
 {
 
-    private int mTextureId = GlUtils.NO_TEXTURE;
-    private Bitmap mBitmap;
+    protected int mTextureId = GlUtils.NO_TEXTURE;
+    protected Bitmap mBitmap;
     private boolean mRefresh;
     private boolean mDrawMulti;
 
@@ -118,7 +118,7 @@ public class ImageFilter extends AFilter
         GLES20.glViewport(0, 0, width, height);
     }
 
-    private void setMatrix()
+    protected void setMatrix()
     {
         if (mBitmap != null && !mBitmap.isRecycled())
         {
@@ -181,16 +181,15 @@ public class ImageFilter extends AFilter
             int textureH = bh;
             float x_scale = textureW >= textureH ? 1f : textureW * 1f/ textureH;
             float y_scale = textureH > textureW ? 1f : textureH * 1f / textureW;
-            float textureScale = Math.min(width * 1f / textureW, height * 1f / textureH);
             if (mRequestAnimation) {
                 float sweptAngle = mSweptAngle;
                 float nextAngle = (mAngle + sweptAngle) % 360;
-                mTempScale = handleAnimationScale(width, height, textureW, textureH, textureScale, mAngle, nextAngle, mAnimationFactor);
+                mTempScale = handleAnimationScale(width, height, textureW, textureH, mAngle, nextAngle, mAnimationFactor);
                 mTempTransX = 0;
                 mTempTransY = 0;
                 mTempAngle = mAngle + sweptAngle * mAnimationFactor;
             } else {
-                mTempScale = handleStaticScale(width, height, textureW, textureH, mAngle, textureScale);
+                mTempScale = handleStaticScale(width, height, textureW, textureH, mAngle);
                 mTempTransX = 0;
                 mTempTransY = 0;
                 mTempAngle = mAngle;
@@ -217,7 +216,7 @@ public class ImageFilter extends AFilter
         }
     }
 
-    private float handleAnimationScale(int viewportW, int viewportH, int textureW, int textureH, float textureScale, float currentDegree, float nextDegree, float animFactor)
+    private float handleAnimationScale(int viewportW, int viewportH, int textureW, int textureH, float currentDegree, float nextDegree, float animFactor)
     {
         currentDegree = Math.abs(currentDegree);
         nextDegree = Math.abs(nextDegree);
@@ -231,7 +230,7 @@ public class ImageFilter extends AFilter
             textureWidth = textureWidth - textureHeight;
         }
 
-        float[] floats = handleFrameScale(viewportW, viewportH, textureWidth, textureHeight, textureScale);
+        float[] floats = handleFrameScale(viewportW, viewportH, textureWidth, textureHeight);
         float frameSizeUS = floats[0];
         float frameSizeVS = floats[1];
 
@@ -259,7 +258,7 @@ public class ImageFilter extends AFilter
                 textureWidth = textureWidth - textureHeight;
             }
 
-            floats = handleFrameScale(viewportW, viewportH, textureWidth, textureHeight, textureScale);
+            floats = handleFrameScale(viewportW, viewportH, textureWidth, textureHeight);
             frameSizeUS = floats[0];
             frameSizeVS = floats[1];
 
@@ -282,7 +281,7 @@ public class ImageFilter extends AFilter
 
     }
 
-    private float handleStaticScale(int viewportW, int viewportH, int textureW, int textureH, float currentDegree, float textureScale)
+    protected float handleStaticScale(int viewportW, int viewportH, int textureW, int textureH, float currentDegree)
     {
         currentDegree = Math.abs(currentDegree);
 
@@ -296,7 +295,7 @@ public class ImageFilter extends AFilter
             textureWidth = textureWidth - textureHeight;
         }
 
-        float[] floats = handleFrameScale(viewportW, viewportH, textureWidth, textureHeight, textureScale);
+        float[] floats = handleFrameScale(viewportW, viewportH, textureWidth, textureHeight);
         float frameSizeUS = floats[0];
         float frameSizeVS = floats[1];
 
@@ -314,7 +313,7 @@ public class ImageFilter extends AFilter
     }
 
 
-    private float[] handleFrameScale(int viewportW, int viewportH, int textureW, int textureH, float textureScale)
+    private float[] handleFrameScale(int viewportW, int viewportH, int textureW, int textureH)
     {
         //顶点坐标x轴位置
         float frameSizeUS;
@@ -425,7 +424,7 @@ public class ImageFilter extends AFilter
         disuseProgram();
     }
 
-    private void unbindTextureId()
+    protected void unbindTextureId()
     {
         if (mTextureId != GlUtils.NO_TEXTURE) {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);

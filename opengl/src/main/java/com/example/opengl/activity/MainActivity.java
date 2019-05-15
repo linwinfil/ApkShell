@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity
 
         classSparseArray.add(new Object[]{"gl_image", GlImageActivity.class});
         classSparseArray.add(new Object[]{"gl_fbo", GlFboActivity.class});
+        classSparseArray.add(new Object[]{"gl_blend", GlBlendActivity.class});
 
         Adapter adapter = new Adapter();
         recyclerView.setAdapter(adapter);

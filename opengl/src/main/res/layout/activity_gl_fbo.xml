@@ -7,10 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".activity.GlFboActivity">
 
-    <com.example.opengl.gl.GSurfaceView
-        android:id="@+id/gl_surface_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <include layout="@layout/merge_gl_surface_view"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline4"
