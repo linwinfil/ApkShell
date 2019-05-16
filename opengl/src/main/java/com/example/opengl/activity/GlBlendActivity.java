@@ -27,7 +27,7 @@ public class GlBlendActivity extends BaseActivity
     Spinner spinner_dst;
     Button button_opera;
 
-
+    ArrayList<Pair<String, Integer>> mBlendOperaList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,6 +38,32 @@ public class GlBlendActivity extends BaseActivity
         spinner_src = findViewById(R.id.spinner_src);
         spinner_dst = findViewById(R.id.spinner_dst);
         button_opera = findViewById(R.id.btn_opera);
+        button_opera.setTag(0);
+        button_opera.setOnClickListener(v ->
+        {
+            if (mBlendOperaList == null)
+            {
+                mBlendOperaList = getBlendOperaData();
+            }
+            int size = mBlendOperaList.size();
+            int index = (int) v.getTag();
+            index++;
+            if (index >= size) {
+                index = 0;
+            }
+            v.setTag(index);
+            Pair<String, Integer> item = mBlendOperaList.get(index);
+            if (item != null) {
+                ((Button)v).setText(item.first);
+                if (filter != null) {
+                    filter.setBlendFuncInt(item.second);
+                }
+                if (glsurfaceview != null) {
+                    glsurfaceview.requestRender();
+                }
+            }
+
+        });
 
         glsurfaceview = findViewById(R.id.gl_surface_view);
         glsurfaceview.setEGLContextClientVersion(2);
@@ -135,6 +161,15 @@ public class GlBlendActivity extends BaseActivity
         out.add(new GlBlendActivity.Pair<>("GL_ONE_MINUS_CONSTANT_ALPHA", GLES20.GL_ONE_MINUS_CONSTANT_ALPHA));
         out.add(new GlBlendActivity.Pair<>("GL_SRC_ALPHA_SATURATE", GLES20.GL_SRC_ALPHA_SATURATE));
 
+        return out;
+    }
+
+    private ArrayList<Pair<String, Integer>> getBlendOperaData()
+    {
+        ArrayList<Pair<String , Integer>> out = new ArrayList<>();
+        out.add(new GlBlendActivity.Pair<>("GL_FUNC_ADD", GLES20.GL_FUNC_ADD));
+        out.add(new GlBlendActivity.Pair<>("GL_FUNC_SUBTRACT", GLES20.GL_FUNC_SUBTRACT));
+        out.add(new GlBlendActivity.Pair<>("GL_FUNC_REVERSE_SUBTRACT", GLES20.GL_FUNC_REVERSE_SUBTRACT));
         return out;
     }
 
