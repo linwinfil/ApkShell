@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.opengl.R;
+import com.example.opengl.gl.utils.GlUtils;
 import com.example.opengl.utils.Utils;
 
 import java.util.ArrayList;
@@ -49,6 +50,14 @@ public class MainActivity extends AppCompatActivity
         recyclerView.setAdapter(adapter);
     }
 
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+
+        float glSupportVersion = GlUtils.getGlSupportVersion(this);
+        System.out.println("glSupportVersion :" + glSupportVersion);
+    }
 
     private class Adapter extends RecyclerView.Adapter
     {

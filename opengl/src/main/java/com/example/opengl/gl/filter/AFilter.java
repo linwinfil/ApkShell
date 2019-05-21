@@ -101,8 +101,8 @@ public abstract class AFilter implements IFilter
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
     {
         Log.d(TAG, "AFilter --> onSurfaceCreated: " + gl.toString());
-        onSurfaceCreatedInit(config);
         mProgramHandle = onCreateProgram(config);
+        onSurfaceCreatedInit(config);
     }
 
     @Override

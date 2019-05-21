@@ -30,19 +30,14 @@ public abstract class BaseActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.gl_menu, menu);
+        onInflateOptionsMenu(menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        if (item.getItemId() == R.id.mPicker)
-        {
-            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-            photoPickerIntent.setType("image/*");
-            this.startActivityForResult(photoPickerIntent, REQUEST_PICK_IMAGE);
-        }
+        onItemSelectedMenu(item);
         return super.onOptionsItemSelected(item);
     }
 
@@ -58,6 +53,21 @@ public abstract class BaseActivity extends AppCompatActivity
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void onInflateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.gl_menu, menu);
+    }
+
+    public void onItemSelectedMenu(MenuItem item)
+    {
+        if (item.getItemId() == R.id.mPicker)
+        {
+            Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+            photoPickerIntent.setType("image/*");
+            this.startActivityForResult(photoPickerIntent, REQUEST_PICK_IMAGE);
+        }
     }
 
     private void handleImage(final Uri selectedImage)

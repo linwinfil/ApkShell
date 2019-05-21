@@ -33,13 +33,6 @@ public class BlendFilter extends ImageFilter
     }
 
     @Override
-    public void onSurfaceCreatedInit(EGLConfig eglConfig)
-    {
-        super.onSurfaceCreatedInit(eglConfig);
-
-    }
-
-    @Override
     public void onSurfaceChangedInit(int width, int height)
     {
         super.onSurfaceChangedInit(width, height);

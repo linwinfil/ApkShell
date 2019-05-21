@@ -1,7 +1,10 @@
 package com.example.opengl.gl.utils;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.pm.ConfigurationInfo;
 import android.graphics.Bitmap;
+import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.text.TextUtils;
@@ -24,6 +27,23 @@ public class GlUtils
     private static final String TAG = "GlUtils";
 
     public static final int NO_TEXTURE = -1;
+
+    public static int createTextureOES()
+    {
+        int textureType = GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+
+        int[] textures = new int[1];
+        GLES20.glGenTextures(1, textures, 0);
+        checkGlError("glGenTextures");
+        GLES20.glBindTexture(textureType, textures[0]);
+        checkGlError("glBindTexture " + textures[0]);
+        GLES20.glTexParameterf(textureType, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        GLES20.glTexParameterf(textureType, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+        GLES20.glTexParameterf(textureType, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameterf(textureType, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+        checkGlError("glTexParameter");
+        return textures[0];
+    }
 
     public static int createTexture(Bitmap bitmap)
     {
@@ -171,4 +191,27 @@ public class GlUtils
         }
     }
 
+    public static int getGlSupportVersionInt(Context context)
+    {
+        return (int) getGlSupportVersion(context);
+    }
+
+    public static float getGlSupportVersion(Context context)
+    {
+        float version = 0;
+        if (context != null)
+        {
+            final ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            if (activityManager != null)
+            {
+                final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
+                if (configurationInfo != null)
+                {
+                    System.out.println(configurationInfo.toString());
+                    version = Float.parseFloat(configurationInfo.getGlEsVersion());
+                }
+            }
+        }
+        return version;
+    }
 }
