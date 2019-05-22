@@ -3,9 +3,11 @@ package com.example.opengl.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
 
+import java.io.File;
 import java.lang.reflect.Field;
 
 public class Utils
@@ -84,6 +86,10 @@ public class Utils
             pix = 1;
         }
         return pix;
+    }
+
+    public static boolean isFileExists(String path) {
+        return !TextUtils.isEmpty(path) && new File(path).exists();
     }
 }
 

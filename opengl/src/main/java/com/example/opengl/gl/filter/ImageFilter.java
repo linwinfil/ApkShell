@@ -118,6 +118,12 @@ public class ImageFilter extends AFilter
         GLES20.glViewport(0, 0, width, height);
     }
 
+    @Override
+    public int getTextureType()
+    {
+        return GLES20.GL_TEXTURE_2D;
+    }
+
     protected void setMatrix()
     {
         if (mBitmap != null && !mBitmap.isRecycled())
@@ -299,11 +305,8 @@ public class ImageFilter extends AFilter
         float frameSizeUS = floats[0];
         float frameSizeVS = floats[1];
 
-        int viewportWidth = viewportW;
-        int viewportHeight = viewportH;
-
-        float viewportUS = viewportWidth >= viewportHeight ? 1f : viewportWidth * 1f / viewportHeight;
-        float viewportVS = viewportHeight > viewportWidth ? 1f : viewportHeight  * 1f / viewportWidth;
+        float viewportUS = viewportW >= viewportH ? 1f : viewportW * 1f / viewportH;
+        float viewportVS = viewportH > viewportW ? 1f : viewportH * 1f / viewportW;
 
         if (frameSizeUS >= viewportUS) {
             return Math.min(viewportUS / frameSizeUS, viewportVS / frameSizeVS);
@@ -370,7 +373,7 @@ public class ImageFilter extends AFilter
 
             //绑定纹理
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureId);
+            GLES20.glBindTexture(getTextureType(), mTextureId);
 
             //给纹理单元分配一个默认值
             GLES20.glUniform1i(mTextureHandle, 0);
@@ -397,7 +400,7 @@ public class ImageFilter extends AFilter
         //解绑
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mCoordinateHandle);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+        GLES20.glBindTexture(getTextureType(), 0);
         disuseProgram();
     }
 
@@ -427,7 +430,7 @@ public class ImageFilter extends AFilter
     protected void unbindTextureId()
     {
         if (mTextureId != GlUtils.NO_TEXTURE) {
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+            GLES20.glBindTexture(getTextureType(), 0);
             GLES20.glDeleteTextures(1, new int[]{mTextureId}, 0);
             mTextureId = GlUtils.NO_TEXTURE;
         }

@@ -97,7 +97,7 @@ public class BlendFilter extends ImageFilter
 
             //绑定纹理
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureId);
+            GLES20.glBindTexture(getTextureType(), mTextureId);
 
             //给纹理单元分配一个默认值
             GLES20.glUniform1i(mTextureHandle, 0);
@@ -118,13 +118,13 @@ public class BlendFilter extends ImageFilter
             //解绑坐标，解绑 纹理
             GLES20.glDisableVertexAttribArray(mPositionHandle);
             GLES20.glDisableVertexAttribArray(mCoordinateHandle);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+            GLES20.glBindTexture(getTextureType(), 0);
         }
 
         {
             //绑定水印纹理
             GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextureWId);
+            GLES20.glBindTexture(getTextureType(), mTextureWId);
             GLES20.glUniform1i(mTextureHandle, 1);
 
             GLES20.glEnableVertexAttribArray(mPositionHandle);
@@ -138,7 +138,7 @@ public class BlendFilter extends ImageFilter
             //解绑坐标，解绑 纹理
             GLES20.glDisableVertexAttribArray(mPositionHandle);
             GLES20.glDisableVertexAttribArray(mCoordinateHandle);
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+            GLES20.glBindTexture(getTextureType(), 0);
         }
 
 
@@ -193,7 +193,7 @@ public class BlendFilter extends ImageFilter
     {
         super.unbindTextureId();
         if (mTextureWId != GlUtils.NO_TEXTURE) {
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+            GLES20.glBindTexture(getTextureType(), 0);
             GLES20.glDeleteTextures(1, new int[]{mTextureWId}, 0);
             mTextureWId = GlUtils.NO_TEXTURE;
         }

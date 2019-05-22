@@ -24,6 +24,32 @@ import androidx.annotation.RawRes;
  */
 public class GlUtils
 {
+    public static final float TEXTURE_NO_ROTATION[] = {
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+    };
+
+    public static final float TEXTURE_ROTATED_90[] = {
+            1.0f, 1.0f,
+            1.0f, 0.0f,
+            0.0f, 1.0f,
+            0.0f, 0.0f,
+    };
+    public static final float TEXTURE_ROTATED_180[] = {
+            1.0f, 0.0f,
+            0.0f, 0.0f,
+            1.0f, 1.0f,
+            0.0f, 1.0f,
+    };
+    public static final float TEXTURE_ROTATED_270[] = {
+            0.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 0.0f,
+            1.0f, 1.0f,
+    };
+
     private static final String TAG = "GlUtils";
 
     public static final int NO_TEXTURE = -1;

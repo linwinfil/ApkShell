@@ -12,32 +12,69 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.MenuItem;
-import android.widget.Button;
 
 import com.example.opengl.R;
+import com.example.opengl.decoder.OnVideoDecoderListener;
+import com.example.opengl.decoder.VideoDecoder;
+import com.example.opengl.decoder.VideoDecoderThread;
 import com.example.opengl.gl.GSurfaceView;
-import com.example.opengl.gl.filter.VideoFilter;
+import com.example.opengl.gl.filter.OesDecoderFilter;
+import com.example.opengl.gl.filter.OnFilterListenerAdapter;
+import com.example.opengl.gl.utils.GlUtils;
 
 import androidx.annotation.Nullable;
 
-public class VideoActivity extends BaseActivity
+public class GlVideoDecoderActivity extends BaseActivity
 {
     public static final int REQUEST_PICK_VIDEO = 2;
 
     GSurfaceView glSurfaceView;
-    Button button;
-    VideoFilter filter;
+    OesDecoderFilter filter;
+    VideoDecoderThread decoderThread;
+    OnVideoDecoderListenerAdaptrer mDecoderListener;
+    OnFilterListenerAdapter mOnFilterListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video);
-        button = findViewById(R.id.btn_play);
-        glSurfaceView = findViewById(R.id.gl_surface_view);
+        setContentView(R.layout.activity_gl_video_decoder);
 
+        glSurfaceView = findViewById(R.id.gl_surface_view);
         glSurfaceView.setEGLContextClientVersion(2);
-        filter = new VideoFilter(this, null, null);
+
+
+        mOnFilterListener = new OnFilterListenerAdapter() {
+            @Override
+            public void onSurfaceCreated()
+            {
+            }
+
+            @Override
+            public void onSurfaceChanged(int width, int height)
+            {
+            }
+        };
+
+        mDecoderListener = new OnVideoDecoderListenerAdaptrer()
+        {
+            @Override
+            public void onPrepared(VideoDecoder videoDecoder)
+            {
+
+            }
+
+            @Override
+            public void onDraw()
+            {
+                super.onDraw();
+            }
+        };
+
+        filter = new OesDecoderFilter(this, GlUtils.loadShaderRawResource(this, R.raw.oes_vertex_shader),
+                GlUtils.loadShaderRawResource(this, R.raw.oes_fragment_shader));
+        filter.setOnFilterListener(mOnFilterListener);
         glSurfaceView.setRenderer(filter);
         glSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
@@ -59,11 +96,44 @@ public class VideoActivity extends BaseActivity
         if (requestCode == REQUEST_PICK_VIDEO && resultCode == Activity.RESULT_OK && data != null)
         {
             Uri uri = data.getData();
-            filter.setData(uri);
-            filter.prepare();
+            new LoadVideoTask(this, uri, path ->
+            {
+                if (decoderThread != null) {
+                    decoderThread.onRelease();
+                }
+                decoderThread = new VideoDecoderThread(path, filter.getSurface());
+                decoderThread.getVideoDecoder().setVideoListener(mDecoderListener);
+                decoderThread.start();
+            });
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        filter.onResume();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        filter.onPause();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        filter.onRelease();
+    }
+
+    @Override
+    public void handleImageCallback(Bitmap bitmap)
+    {
     }
 
     protected static final class LoadVideoTask extends AsyncTask<Void, Void, String>
@@ -109,29 +179,24 @@ public class VideoActivity extends BaseActivity
         }
     }
 
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        filter.onResume();
-    }
+    public abstract static class OnVideoDecoderListenerAdaptrer implements OnVideoDecoderListener {
 
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-        filter.onPause();
-    }
+        @Override
+        public void onPrepared(VideoDecoder videoDecoder)
+        {
 
-    @Override
-    protected void onDestroy()
-    {
-        super.onDestroy();
-        filter.onRelease();
-    }
+        }
 
-    @Override
-    public void handleImageCallback(Bitmap bitmap)
-    {
+        @Override
+        public void onDraw()
+        {
+
+        }
+
+        @Override
+        public void onFinish()
+        {
+
+        }
     }
 }

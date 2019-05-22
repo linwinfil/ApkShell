@@ -38,4 +38,10 @@ public class CameraFilter extends AFilter
     {
 
     }
+
+    @Override
+    public int getTextureType()
+    {
+        return 0;
+    }
 }

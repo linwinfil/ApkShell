@@ -2,6 +2,7 @@ package com.example.opengl.gl.filter;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.opengl.gl.utils.GlMatrixTools;
@@ -50,6 +51,8 @@ public abstract class AFilter implements IFilter
 
     private boolean mGLDraw = true;
 
+    private OnFilterListener mOnFilterListener;
+
     protected FloatBuffer mPositionBuffer;
     protected FloatBuffer mCoordinateBuffer;
 
@@ -76,6 +79,10 @@ public abstract class AFilter implements IFilter
         this.mFragmentShader = mFragmentShader;
         this.mGlMatrixTools = new GlMatrixTools();
 
+        if (TextUtils.isEmpty(mVertexShader) || TextUtils.isEmpty(mFragmentShader)) {
+            throw new IllegalStateException("vertex or fragment is null");
+        }
+
         FloatBuffer floatBuffer = ByteBuffer.allocateDirect(positionPoint.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer().put(positionPoint);
         floatBuffer.position(0);
         mPositionBuffer = floatBuffer;
@@ -97,12 +104,20 @@ public abstract class AFilter implements IFilter
     public void onResume() {
     }
 
+    public void setOnFilterListener(OnFilterListener mOnFilterListener)
+    {
+        this.mOnFilterListener = mOnFilterListener;
+    }
+
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
     {
         Log.d(TAG, "AFilter --> onSurfaceCreated: " + gl.toString());
         mProgramHandle = onCreateProgram(config);
         onSurfaceCreatedInit(config);
+        if (mOnFilterListener != null) {
+            mOnFilterListener.onSurfaceCreated();
+        }
     }
 
     @Override
@@ -111,6 +126,9 @@ public abstract class AFilter implements IFilter
         Log.d(TAG, "AFilter --> onSurfaceChanged: " + gl.toString());
         setSurfaceSize(width, height);
         onSurfaceChangedInit(width, height);
+        if (mOnFilterListener != null) {
+            mOnFilterListener.onSurfaceChanged(width, height);
+        }
     }
 
     private void setSurfaceSize(int width, int height)
@@ -134,6 +152,14 @@ public abstract class AFilter implements IFilter
     public abstract void onSurfaceChangedInit(int width, int height);
     public abstract int onCreateProgram(EGLConfig eglConfig);
     public abstract void onDraw();
+    public abstract int getTextureType();
+
+
+    protected void checkProgram(int program) {
+        if (program == 0) {
+            throw new IllegalStateException("create gl program error");
+        }
+    }
 
     protected void disuseProgram() {
         GLES20.glUseProgram(0);

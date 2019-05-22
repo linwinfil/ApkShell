@@ -84,6 +84,12 @@ public class FboFilter extends AFilter
     }
 
     @Override
+    public int getTextureType()
+    {
+        return GLES20.GL_TEXTURE_2D;
+    }
+
+    @Override
     public void onSurfaceChangedInit(int width, int height)
     {
         GLES20.glViewport(0, 0, width, height);
@@ -147,7 +153,7 @@ public class FboFilter extends AFilter
         //绑定buffer，绘制buffer的帧缓冲区域
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFrameBuffers[0]);
         //创建的 frame buffer 挂载一个texture，储存颜色
-        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, GLES20.GL_TEXTURE_2D, mTextures[1], 0);
+        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, getTextureType(), mTextures[1], 0);
         //buffer绘制视图窗口
         int viewportw = mSurfaceWidth;
         int viewporth = mSurfaceHeight;
@@ -171,7 +177,7 @@ public class FboFilter extends AFilter
 
         //绘制纹理，当前绘制到帧缓冲区域上
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[0]);
+        GLES20.glBindTexture(getTextureType(), mTextures[0]);
         GLES20.glUniform1i(mTextureHandle, 0);
 
         //参数赋值
@@ -205,7 +211,7 @@ public class FboFilter extends AFilter
 
         //将帧缓冲区域的纹理绘制到当前屏幕上
         GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[1]);
+        GLES20.glBindTexture(getTextureType(), mTextures[1]);
         GLES20.glUniform1i(mTextureHandle, 1);
 
         GLES20.glUniformMatrix4fv(mMatrixHandle, 1, false, getMatrix().getOpenGLUnitMatrix(), 0);

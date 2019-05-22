@@ -8,6 +8,7 @@ import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.view.Surface;
 
+import com.example.opengl.gl.utils.GlMatrixTools;
 import com.example.opengl.gl.utils.GlUtils;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -16,23 +17,34 @@ import javax.microedition.khronos.egl.EGLConfig;
  * @author lmx
  * Created by lmx on 2019/5/21.
  */
-public class VideoFilter extends AFilter implements MediaPlayer.OnVideoSizeChangedListener, MediaPlayer.OnPreparedListener, SurfaceTexture.OnFrameAvailableListener
+public class OesFilter extends AFilter implements MediaPlayer.OnVideoSizeChangedListener,
+        MediaPlayer.OnPreparedListener, SurfaceTexture.OnFrameAvailableListener
 {
-    Uri mUri;
-    MediaPlayer mMediaPlayer;
-    SurfaceTexture mSurfaceTexture;
-    Surface mSurface;
-
-    int mInputTextureId = GlUtils.NO_TEXTURE;
-
-    OnCallbackListenerAdapter mOnCallbackListenerAdapter;
-
-    float[] mSTMatrix = new float[16];
+    private Uri mUri;
+    private MediaPlayer mMediaPlayer;
+    private SurfaceTexture mSurfaceTexture;
+    private Surface mSurface;
 
 
-    public VideoFilter(Context mContext, String mVertexShader, String mFragmentShader)
+    //oes的纹理矩阵
+    private int mTexMatrixHandle;
+    private int mInputTextureId = GlUtils.NO_TEXTURE;
+    private float[] mSTMatrix = new float[16];
+    private boolean isPrepared;
+
+    private OnCallbackListenerAdapter mOnCallbackListenerAdapter;
+
+    public OesFilter(Context mContext, String mVertexShader, String mFragmentShader)
     {
         super(mContext, mVertexShader, mFragmentShader);
+
+        //上下纹理翻转
+        mCoordinateBuffer.put(new float[]{
+                0.0f,1.0f,
+                0f, 0f,
+                1.0f,1.0f,
+                1.0f,0.0f
+        }).position(0);
     }
 
     @Override
@@ -61,6 +73,12 @@ public class VideoFilter extends AFilter implements MediaPlayer.OnVideoSizeChang
     }
 
     @Override
+    public int getTextureType()
+    {
+        return GLES11Ext.GL_TEXTURE_EXTERNAL_OES;
+    }
+
+    @Override
     public int onCreateProgram(EGLConfig eglConfig)
     {
         mVertexShaderHandle = GlUtils.loadShader(mVertexShader, GLES20.GL_VERTEX_SHADER);
@@ -71,7 +89,7 @@ public class VideoFilter extends AFilter implements MediaPlayer.OnVideoSizeChang
         mCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "vCoordinate");
         mMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "vMatrix");
         mTextureHandle = GLES20.glGetUniformLocation(mProgramHandle, "vTexture");//oes纹理
-
+        mTexMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "vTexMatrix");
         return mProgramHandle;
     }
 
@@ -80,8 +98,8 @@ public class VideoFilter extends AFilter implements MediaPlayer.OnVideoSizeChang
     {
         onClear();
         GLES20.glViewport(0, 0, mSurfaceWidth, mSurfaceHeight);
+        if (!isPrepared) return;
         if (mInputTextureId == GlUtils.NO_TEXTURE || mSurfaceTexture == null) return;
-
 
         synchronized (this) {
             mSurfaceTexture.updateTexImage();
@@ -92,9 +110,14 @@ public class VideoFilter extends AFilter implements MediaPlayer.OnVideoSizeChang
         GLES20.glUseProgram(mProgramHandle);
 
         //给视图矩阵赋值
-        /*GLES20.glUniformMatrix4fv(mMatrixHandle, 1, false, , 0);*/
+        GLES20.glUniformMatrix4fv(mMatrixHandle, 1, false, mGlMatrixTools.getFinalMatrix(), 0);
 
+        //oes纹理的矩阵
+        GLES20.glUniformMatrix4fv(mTexMatrixHandle, 1, false, mSTMatrix, 0);
 
+        //绑定纹理
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        GLES20.glBindTexture(getTextureType(), mInputTextureId);
         //给纹理单元分配一个默认值
         GLES20.glUniform1i(mTextureHandle, 0);
 
@@ -107,13 +130,13 @@ public class VideoFilter extends AFilter implements MediaPlayer.OnVideoSizeChang
         GLES20.glEnableVertexAttribArray(mCoordinateHandle);
         //传如纹理坐标数据
         GLES20.glVertexAttribPointer(mCoordinateHandle, 2, GLES20.GL_FLOAT, false, 0 , mCoordinateBuffer);
-
         //绘制模式
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
 
         //解绑坐标，解绑 纹理
         GLES20.glDisableVertexAttribArray(mPositionHandle);
         GLES20.glDisableVertexAttribArray(mCoordinateHandle);
+        GLES20.glBindTexture(getTextureType(), 0);
     }
 
     public void setOnCallbackListenerAdapter(OnCallbackListenerAdapter mOnCallbackListenerAdapter)
@@ -130,8 +153,10 @@ public class VideoFilter extends AFilter implements MediaPlayer.OnVideoSizeChang
     {
         if (mMediaPlayer != null)
         {
+            mMediaPlayer.stop();
             mMediaPlayer.release();
             mMediaPlayer = null;
+            isPrepared = false;
         }
 
         mMediaPlayer = new MediaPlayer();
@@ -145,12 +170,59 @@ public class VideoFilter extends AFilter implements MediaPlayer.OnVideoSizeChang
         catch (Exception e)
         {
             e.printStackTrace();
+            throw new IllegalStateException("prepare", e);
         }
+
+        mMediaPlayer.setSurface(mSurface);
         mMediaPlayer.setLooping(true);
         mMediaPlayer.setOnVideoSizeChangedListener(this);
         mMediaPlayer.setOnPreparedListener(this);
-
         mMediaPlayer.prepareAsync();
+    }
+
+    @Override
+    public void onPause()
+    {
+        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+            mMediaPlayer.pause();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.start();
+        }
+    }
+
+    private void setVideoSize(int videoWidth, int videoHeight)
+    {
+        if (videoWidth > 0 && videoHeight > 0)
+        {
+            int width = mSurfaceWidth;
+            int height = mSurfaceHeight;
+
+            //eyez <= near < far
+            float near = 3.0f;
+            float far = 9.0f;
+            float eyez = near;
+
+            GlMatrixTools matrix = getMatrix();
+            //设置相机位置
+            matrix.setCamera(
+                    0f, 0f, eyez,   //相机位置（eyez <= far）
+                    0f, 0f, 0f,     //观察点
+                    0f, 1f, 0f      //辅助向上量
+            );
+
+            float videoWH = videoWidth * 1f / videoHeight;
+            float viewWH = width * 1f / height;
+            if (videoWH > viewWH) {
+                matrix.frustum(-1, 1, -videoWH / viewWH, videoWH / viewWH, near, far);
+            } else {
+                matrix.frustum(-viewWH / videoWH, viewWH / videoWH, -1, 1, near, far);
+            }
+        }
     }
 
     protected void unbindTextureId()
@@ -164,14 +236,33 @@ public class VideoFilter extends AFilter implements MediaPlayer.OnVideoSizeChang
     }
 
     @Override
+    public void onRelease()
+    {
+        super.onRelease();
+        mOnCallbackListenerAdapter = null;
+        disuseProgram();
+        unbindTextureId();
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
+    }
+
+    @Override
     public void onVideoSizeChanged(MediaPlayer mp, int width, int height)
     {
-
+        setVideoSize(width, height);
+        if (mOnCallbackListenerAdapter != null) {
+            mOnCallbackListenerAdapter.onVideoSizeChanged(mp, width, height);
+        }
     }
 
     @Override
     public void onPrepared(MediaPlayer mp)
     {
+        isPrepared = true;
+        mp.start();
         if (mOnCallbackListenerAdapter != null) {
             mOnCallbackListenerAdapter.onPrepared(mp);
         }
