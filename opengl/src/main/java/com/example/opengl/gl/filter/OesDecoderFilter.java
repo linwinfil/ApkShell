@@ -56,16 +56,9 @@ public class OesDecoderFilter extends AFilter
     @Override
     public int onCreateProgram(EGLConfig eglConfig)
     {
-        mVertexShaderHandle = GlUtils.loadShader(mVertexShader, GLES20.GL_VERTEX_SHADER);
-        mFragmentShaderHandle = GlUtils.loadShader(mFragmentShader, GLES20.GL_FRAGMENT_SHADER);
-        mProgramHandle = GlUtils.loadProgram(mVertexShaderHandle, mFragmentShaderHandle);
-
-        mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "vPosition");
-        mCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "vCoordinate");
-        mMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "vMatrix");
-        mTextureHandle = GLES20.glGetUniformLocation(mProgramHandle, "vTexture");//oes纹理
-        mTexMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "vTexMatrix");//oes纹理矩阵
-        return mProgramHandle;
+        int program =  super.onCreateProgram(eglConfig);
+        mTexMatrixHandle = GLES20.glGetUniformLocation(program, "vTexMatrix");//oes纹理矩阵
+        return program;
     }
 
     @Override
@@ -134,7 +127,7 @@ public class OesDecoderFilter extends AFilter
     {
         if (mInputTextureId != GlUtils.NO_TEXTURE)
         {
-            GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 0);
+            GLES20.glBindTexture(getTextureType(), 0);
             GLES20.glDeleteTextures(1, new int[]{mInputTextureId}, 0);
             mInputTextureId = GlUtils.NO_TEXTURE;
         }

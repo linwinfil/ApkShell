@@ -6,7 +6,6 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import com.example.opengl.gl.utils.GlMatrixTools;
-import com.example.opengl.gl.utils.GlUtils;
 
 import java.nio.ByteBuffer;
 
@@ -115,18 +114,9 @@ public class FboFilter extends AFilter
     @Override
     public int onCreateProgram(EGLConfig eglConfig)
     {
-        mVertexShaderHandle = GlUtils.loadShader(mVertexShader, GLES20.GL_VERTEX_SHADER);
-        mFragmentShaderHandle = GlUtils.loadShader(mFragmentShader, GLES20.GL_FRAGMENT_SHADER);
-        mProgramHandle = GlUtils.loadProgram(mVertexShaderHandle, mFragmentShaderHandle);
-
-        mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "vPosition");
-        mCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "vCoordinate");
-        mMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "vMatrix");
-        mTextureHandle = GLES20.glGetUniformLocation(mProgramHandle, "vTexture");
-
-        mProgressHandle = GLES20.glGetUniformLocation(mProgramHandle, "vProgress");
-
-        return mProgramHandle;
+        int program = super.onCreateProgram(eglConfig);
+        mProgressHandle = GLES20.glGetUniformLocation(program, "vProgress");
+        return program;
     }
 
     @Override

@@ -81,16 +81,9 @@ public class OesFilter extends AFilter implements MediaPlayer.OnVideoSizeChanged
     @Override
     public int onCreateProgram(EGLConfig eglConfig)
     {
-        mVertexShaderHandle = GlUtils.loadShader(mVertexShader, GLES20.GL_VERTEX_SHADER);
-        mFragmentShaderHandle = GlUtils.loadShader(mFragmentShader, GLES20.GL_FRAGMENT_SHADER);
-        mProgramHandle = GlUtils.loadProgram(mVertexShaderHandle, mFragmentShaderHandle);
-
-        mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "vPosition");
-        mCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "vCoordinate");
-        mMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "vMatrix");
-        mTextureHandle = GLES20.glGetUniformLocation(mProgramHandle, "vTexture");//oes纹理
-        mTexMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "vTexMatrix");
-        return mProgramHandle;
+        int program = super.onCreateProgram(eglConfig);
+        mTexMatrixHandle = GLES20.glGetUniformLocation(program, "vTexMatrix");
+        return program;
     }
 
     @Override

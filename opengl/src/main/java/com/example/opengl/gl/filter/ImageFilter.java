@@ -15,9 +15,7 @@ import javax.microedition.khronos.egl.EGLConfig;
  */
 public class ImageFilter extends AFilter
 {
-
-    protected int mTextureId = GlUtils.NO_TEXTURE;
-    protected Bitmap mBitmap;
+    Bitmap mBitmap;
     private boolean mRefresh;
     private boolean mDrawMulti;
 
@@ -407,16 +405,7 @@ public class ImageFilter extends AFilter
     @Override
     public int onCreateProgram(EGLConfig eglConfig)
     {
-        mVertexShaderHandle = GlUtils.loadShader(mVertexShader, GLES20.GL_VERTEX_SHADER);
-        mFragmentShaderHandle = GlUtils.loadShader(mFragmentShader, GLES20.GL_FRAGMENT_SHADER);
-        mProgramHandle = GlUtils.loadProgram(mVertexShaderHandle, mFragmentShaderHandle);
-
-        mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "vPosition");
-        mCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "vCoordinate");
-        mMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "vMatrix");
-        mTextureHandle = GLES20.glGetUniformLocation(mProgramHandle, "vTexture");
-
-        return mProgramHandle;
+        return super.onCreateProgram(eglConfig);
     }
 
     @Override
@@ -425,15 +414,6 @@ public class ImageFilter extends AFilter
         super.onRelease();
         unbindTextureId();
         disuseProgram();
-    }
-
-    protected void unbindTextureId()
-    {
-        if (mTextureId != GlUtils.NO_TEXTURE) {
-            GLES20.glBindTexture(getTextureType(), 0);
-            GLES20.glDeleteTextures(1, new int[]{mTextureId}, 0);
-            mTextureId = GlUtils.NO_TEXTURE;
-        }
     }
 
 }

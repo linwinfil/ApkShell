@@ -17,13 +17,12 @@ import javax.microedition.khronos.egl.EGLConfig;
  */
 public class BlendFilter extends ImageFilter
 {
-    protected int mTextureWId = GlUtils.NO_TEXTURE;
+    private int mTextureWId = GlUtils.NO_TEXTURE;
 
-    protected Bitmap mWaterBmp;
-
-    protected int mBlendSrcInt = GLES20.GL_ONE;
-    protected int mBlendDstInt = GLES20.GL_SRC_ALPHA;
-    protected int mBlendFuncInt = GLES20.GL_FUNC_ADD;
+    private Bitmap mWaterBmp;
+    private int mBlendSrcInt = GLES20.GL_ONE;
+    private int mBlendDstInt = GLES20.GL_SRC_ALPHA;
+    private int mBlendFuncInt = GLES20.GL_FUNC_ADD;
 
     public BlendFilter(Context mContext, String mVertexShader, String mFragmentShader)
     {

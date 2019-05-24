@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.opengl.gl.utils.GlMatrixTools;
+import com.example.opengl.gl.utils.GlUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -22,6 +23,7 @@ public abstract class AFilter implements IFilter
 {
     private static final String TAG = "AFilter";
 
+    public int mTextureId = GlUtils.NO_TEXTURE;
 
     protected Context mContext;
 
@@ -150,15 +152,26 @@ public abstract class AFilter implements IFilter
 
     public abstract void onSurfaceCreatedInit(EGLConfig eglConfig);
     public abstract void onSurfaceChangedInit(int width, int height);
-    public abstract int onCreateProgram(EGLConfig eglConfig);
     public abstract void onDraw();
     public abstract int getTextureType();
-
 
     protected void checkProgram(int program) {
         if (program == 0) {
             throw new IllegalStateException("create gl program error");
         }
+    }
+
+    protected int onCreateProgram(EGLConfig eglConfig) {
+        mVertexShaderHandle = GlUtils.loadShader(mVertexShader, GLES20.GL_VERTEX_SHADER);
+        mFragmentShaderHandle = GlUtils.loadShader(mFragmentShader, GLES20.GL_FRAGMENT_SHADER);
+        mProgramHandle = GlUtils.loadProgram(mVertexShaderHandle, mFragmentShaderHandle);
+
+        mPositionHandle = GLES20.glGetAttribLocation(mProgramHandle, "vPosition");
+        mCoordinateHandle = GLES20.glGetAttribLocation(mProgramHandle, "vCoordinate");
+        mMatrixHandle = GLES20.glGetUniformLocation(mProgramHandle, "vMatrix");
+        mTextureHandle = GLES20.glGetUniformLocation(mProgramHandle, "vTexture");
+
+        return mProgramHandle;
     }
 
     protected void disuseProgram() {
@@ -169,6 +182,15 @@ public abstract class AFilter implements IFilter
         GLES20.glUseProgram(mProgramHandle);
     }
 
+    protected void unbindTextureId()
+    {
+        if (mTextureId != GlUtils.NO_TEXTURE) {
+            GLES20.glBindTexture(getTextureType(), 0);
+            GLES20.glDeleteTextures(1, new int[]{mTextureId}, 0);
+            mTextureId = GlUtils.NO_TEXTURE;
+        }
+    }
+
     public void onClear() {
         GLES20.glClearColor(1f, 1f, 1f, 1f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
@@ -177,6 +199,7 @@ public abstract class AFilter implements IFilter
     @Override
     public void onRelease()
     {
-
+        unbindTextureId();
+        disuseProgram();
     }
 }

@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity
         classSparseArray.add(new Object[]{"gl_fbo", GlFboActivity.class});
         classSparseArray.add(new Object[]{"gl_blend", GlBlendActivity.class});
         classSparseArray.add(new Object[]{"gl_oes", GlVideoActivity.class});
+        classSparseArray.add(new Object[]{"gl_shape", GlShapeActivity.class});
 
         Adapter adapter = new Adapter();
         recyclerView.setAdapter(adapter);
@@ -115,7 +116,6 @@ public class MainActivity extends AppCompatActivity
 
         int spanCount = 4;
         int spacing = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
-        boolean includeEdge;
 
         @Override
         public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state)
@@ -123,25 +123,11 @@ public class MainActivity extends AppCompatActivity
             int position = parent.getChildAdapterPosition(view);
             int column = position % spanCount;
 
-            if (includeEdge)
+            outRect.left = column * spacing / spanCount;
+            outRect.right = spacing - (column + 1) * spacing / spanCount;
+            if (position >= spanCount)
             {
-                outRect.left = spacing - column * spacing / spanCount;
-                outRect.right = (column + 1) * spacing / spanCount;
-
-                if (position < spanCount)
-                {
-                    outRect.top = spacing;
-                }
-                outRect.bottom = spacing;
-            }
-            else
-            {
-                outRect.left = column * spacing / spanCount;
-                outRect.right = spacing - (column + 1) * spacing / spanCount;
-                if (position >= spanCount)
-                {
-                    outRect.top = spacing;
-                }
+                outRect.top = (int) (spacing * 1f/ spanCount);
             }
         }
     }
