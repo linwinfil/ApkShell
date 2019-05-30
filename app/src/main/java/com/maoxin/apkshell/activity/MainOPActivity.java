@@ -64,10 +64,6 @@ public class MainOPActivity extends AppCompatActivity
 
         findViewById(R.id.button_mp4parser_ex).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main5ExActivity.class)));
 
-        findViewById(R.id.button_clip_wav).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main3Activity.class)));
-
-        findViewById(R.id.button_gson_test).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main6Activity.class)));
-
         final Button button_test_cmdproc = findViewById(R.id.button_test_cmdproc);
         button_test_cmdproc.setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main7Activity.class)));
 
@@ -110,6 +106,8 @@ public class MainOPActivity extends AppCompatActivity
         findViewById(R.id.test_kotlin).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, MainKotlinActivity.class)));
 
         findViewById(R.id.test_task_stack_builder).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main12Activity.class)));
+
+        findViewById(R.id.test_open_camerax).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, MainCameraXActivity.class)));
     }
 
     private void test()

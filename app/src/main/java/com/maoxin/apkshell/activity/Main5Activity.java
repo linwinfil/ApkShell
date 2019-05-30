@@ -21,7 +21,6 @@ import com.maoxin.apkshell.utils.MLog;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +28,6 @@ import java.util.Set;
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.poco.audio.CommonUtils;
 
 public class Main5Activity extends AppCompatActivity implements MLog.ILogTag
 {
@@ -378,28 +376,28 @@ public class Main5Activity extends AppCompatActivity implements MLog.ILogTag
         MLog.d(this, String.format("mp4 parser %s", (System.currentTimeMillis() - start)));
     }
 
-    @OnClick(R.id.get_audio_sample_rate_by_jni)
-    public void onClickGetAudioSampleRate()
-    {
-
-        try
-        {
-            ArrayList<String> strings = videoPaths.get(ratio3_4);
-            if (strings != null && strings.size() > 0)
-            {
-                String path = strings.get(0);
-                String outpath = audio_basePath + "get_audio_sample_rate_by_jni.aac";
-                Mp4ParseUtils.extractAudio(Collections.singletonList(path), outpath);
-                int audioSampleRate = CommonUtils.getAudioSampleRate(outpath);
-                int audioChannels = CommonUtils.getAudioChannels(outpath);
-                MLog.d(this, String.format("sample_rate: %s, channel: %s", audioSampleRate, audioChannels));
-            }
-        }
-        catch (Throwable throwable)
-        {
-            throwable.printStackTrace();
-        }
-    }
+    // @OnClick(R.id.get_audio_sample_rate_by_jni)
+    // public void onClickGetAudioSampleRate()
+    // {
+    //
+    //     try
+    //     {
+    //         ArrayList<String> strings = videoPaths.get(ratio3_4);
+    //         if (strings != null && strings.size() > 0)
+    //         {
+    //             String path = strings.get(0);
+    //             String outpath = audio_basePath + "get_audio_sample_rate_by_jni.aac";
+    //             Mp4ParseUtils.extractAudio(Collections.singletonList(path), outpath);
+    //             int audioSampleRate = CommonUtils.getAudioSampleRate(outpath);
+    //             int audioChannels = CommonUtils.getAudioChannels(outpath);
+    //             MLog.d(this, String.format("sample_rate: %s, channel: %s", audioSampleRate, audioChannels));
+    //         }
+    //     }
+    //     catch (Throwable throwable)
+    //     {
+    //         throwable.printStackTrace();
+    //     }
+    // }
 
     public void loadVideoSource()
     {
