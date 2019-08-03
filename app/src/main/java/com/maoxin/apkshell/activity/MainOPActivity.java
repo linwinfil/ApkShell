@@ -108,6 +108,10 @@ public class MainOPActivity extends AppCompatActivity
         findViewById(R.id.test_task_stack_builder).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main12Activity.class)));
 
         findViewById(R.id.test_open_camerax).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, MainCameraXActivity.class)));
+
+        findViewById(R.id.test_dispatch_touch).setOnClickListener(v -> {
+            startActivity(new Intent(MainOPActivity.this, Main2Activity.class));
+        });
     }
 
     private void test()

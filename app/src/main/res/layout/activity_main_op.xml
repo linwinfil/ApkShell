@@ -99,5 +99,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="打开CameraX"/>
+
+        <Button
+            android:text="事件拦截"
+            android:id="@+id/test_dispatch_touch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </ScrollView>
