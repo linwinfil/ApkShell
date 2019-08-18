@@ -1,10 +1,10 @@
 package com.maoxin.apkshell.kotlin
 
-/** @author lmx
+/**
+ * kotlin作用域函数
+ *  @author lmx
  * Created by lmx on 2019-08-15.
  */
-
-
 fun main() {
     testFunScope_Run()
     testFunScope_With()
