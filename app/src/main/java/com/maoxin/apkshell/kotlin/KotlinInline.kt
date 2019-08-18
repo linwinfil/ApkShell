@@ -1,6 +1,7 @@
 package com.maoxin.apkshell.kotlin
 
-/** kotlin inline函数
+/** kotlin inline函数，其实就是拆封函数方法里面的调用，封装到一个fun中，不产生实例对象
+ * @see <a href="https://droidyue.com/blog/2019/04/27/lambda-inline-noinline-crossinline/"></a>
  *  @author lmx
  * Created by lmx on 2019-08-18.
  */
