@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.maoxin.apkshell"
-          xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.maoxin.apkshell">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".MyApplication"
@@ -18,42 +18,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.Main2Activity">
-        </activity>
-        <activity android:name=".activity.MainCameraXActivity">
-        </activity>
+        <activity android:name=".activity.Main13Activity" />
+        <activity android:name=".activity.Main2Activity" />
+        <activity android:name=".activity.MainCameraXActivity" />
         <activity
             android:name=".activity.Main12Activity"
-            android:parentActivityName=".activity.MainOPActivity">
-        </activity>
-        <activity android:name=".activity.MainActivity">
-        </activity>
-        <activity android:name=".activity.MainKotlinActivity">
-        </activity>
+            android:parentActivityName=".activity.MainOPActivity" />
+        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.MainKotlinActivity" />
         <activity android:name=".activity.MainOPActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.Main4Activity">
-        </activity>
-        <activity android:name=".activity.Main5Activity">
-        </activity>
-        <activity android:name=".activity.Main7Activity">
-        </activity>
-        <activity android:name=".activity.MainShapeUtilsActivity">
-        </activity>
-        <activity android:name=".activity.Main8Activity">
-        </activity>
-        <activity android:name=".activity.Main5ExActivity">
-        </activity>
+        <activity android:name=".activity.Main4Activity" />
+        <activity android:name=".activity.Main5Activity" />
+        <activity android:name=".activity.Main7Activity" />
+        <activity android:name=".activity.MainShapeUtilsActivity" />
+        <activity android:name=".activity.Main8Activity" />
+        <activity android:name=".activity.Main5ExActivity" />
         <activity
             android:name=".activity.Main9Activity"
             android:label="@string/title_activity_main9"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <provider
             android:name=".activity.Main9Activity$MyFileProvider"
@@ -62,15 +51,11 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_path"/>
+                android:resource="@xml/provider_path" />
         </provider>
 
-        <activity android:name=".activity.Main10Activity">
-        </activity>
-        <activity android:name=".activity.Main11Activity">
-        </activity>
-        <activity android:name=".lifecycle.DemoViewModeActivity">
-        </activity>
+        <activity android:name=".activity.Main10Activity" />
+        <activity android:name=".lifecycle.DemoViewModeActivity" />
     </application>
 
 </manifest>

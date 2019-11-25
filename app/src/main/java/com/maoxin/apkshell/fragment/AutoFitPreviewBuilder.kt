@@ -3,7 +3,6 @@ package com.maoxin.apkshell.fragment
 import android.util.Size
 import android.view.Display
 import android.view.TextureView
-import android.view.ViewGroup
 import androidx.camera.core.Preview
 import androidx.camera.core.PreviewConfig
 import java.lang.ref.WeakReference
@@ -28,17 +27,17 @@ class AutoFitPreviewBuilder private constructor(config: PreviewConfig, viewRef: 
         rotation = GetDisplaySurfaceRotation(textureView.display)
 
         userCase = Preview(config)
-        userCase.onPreviewOutputUpdateListener = Preview.OnPreviewOutputUpdateListener {
-            var textureView = viewRef.get() ?: return@OnPreviewOutputUpdateListener //返回表达式调用者
-            val parent = textureView.parent as ViewGroup
-            parent.removeView(textureView)
-            parent.addView(textureView, 0)
-
-            textureView.surfaceTexture = it.surfaceTexture
-            bufferRotation = it.rotationDegrees
-
-            var rotation = GetDisplaySurfaceRotation(textureView.display)
-        }
+//        userCase.setOnPreviewOutputUpdateListener = Preview.OnPreviewOutputUpdateListener {
+//            var textureView = viewRef.get() ?: return@OnPreviewOutputUpdateListener //返回表达式调用者
+//            val parent = textureView.parent as ViewGroup
+//            parent.removeView(textureView)
+//            parent.addView(textureView, 0)
+//
+//            textureView.surfaceTexture = it.surfaceTexture
+//            bufferRotation = it.rotationDegrees
+//
+//            var rotation = GetDisplaySurfaceRotation(textureView.display)
+//        }
     }
 
     private fun updateTransform(textureView: TextureView?, rotation: Int?, newBufferDimens: Size, newTextureViewDimens: Size) {

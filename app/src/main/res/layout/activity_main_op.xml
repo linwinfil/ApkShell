@@ -77,12 +77,6 @@
             android:text="21_2.0.0_脸型数据的转换"/>
 
         <Button
-            android:id="@+id/test_mmkv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="MMKV测试"/>
-
-        <Button
             android:id="@+id/test_kotlin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -103,6 +97,12 @@
         <Button
             android:text="事件拦截"
             android:id="@+id/test_dispatch_touch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/test_android10_storage"
+            android:text="Android 10 储存"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>

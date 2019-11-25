@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
+import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraX
 import androidx.camera.core.Preview
 import androidx.camera.core.PreviewConfig
@@ -120,7 +121,7 @@ class CameraXFragment : Fragment() {
             setLensFacing(lensFacing)
             setTargetResolution(size)
             setTargetRotation(rotation)
-            setTargetAspectRatio(rational)
+            setTargetAspectRatio(AspectRatio.RATIO_16_9)
         }.build()
     }
 

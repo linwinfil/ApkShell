@@ -4,6 +4,8 @@ package com.maoxin.apkshell.kotlin
  * @see <a href="https://droidyue.com/blog/2019/04/27/lambda-inline-noinline-crossinline/"></a>
  *  @author lmx
  * Created by lmx on 2019-08-18.
+ *
+ * 避免内联过大的函数，因为内联会导致代码增加
  */
 fun main() {
     test_InlineFunction()
@@ -11,6 +13,8 @@ fun main() {
     test_InlineFunction_return_flow()
 
     test_bigHigherOrderFunction()
+
+    test_reifiedInlineFunction()
 }
 
 fun test_InlineFunction() {
@@ -60,13 +64,27 @@ fun test_bigHigherOrderFunction() {
             },
             {
                 println("print second")
-                return@bigHigherOrderFunction
+                return@bigHigherOrderFunction//结束当前runnable的方法，继续执行往后的内联
+
+                return Unit//return 当前函数方法的执行，往后的内联就不会执行了
             },
             {
                 println("print third")
                 //return
                 //这里不能return此函数，因为添加noinline
             }
+    )
+}
+
+fun test_reifiedInlineFunction() {
+    reifiedInlineFunction(
+            {
+                println("print first line ")
+            },
+            {
+                println("print second line")
+            },
+            "this is third line"
     )
 }
 
@@ -79,4 +97,11 @@ inline fun bigHigherOrderFunction(noinline firstRunnable: () -> Unit, secondRunn
     secondRunnable()
     thirdRunnable()
     println("end bigHigherOrderFunction fun")
+}
+
+inline fun <T : String> reifiedInlineFunction(noinline firstRunnable: () -> Unit, secondRunnable: () -> Unit, params: T?) {
+    println("-------")
+    firstRunnable()
+    secondRunnable()
+    println(" ---> $params <---")
 }

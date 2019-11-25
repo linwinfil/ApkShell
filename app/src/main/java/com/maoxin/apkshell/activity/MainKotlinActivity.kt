@@ -1,5 +1,7 @@
 package com.maoxin.apkshell.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -39,6 +41,8 @@ class MainKotlinActivity : AppCompatActivity() {
 
             testNullPointCheck("88", "99")
             testNullPointCheck("ada", "aa_+a")
+
+            testReifiedStartActivity()
         }
         findViewById<Button>(R.id.button5).setOnClickListener(function)
     }
@@ -46,6 +50,15 @@ class MainKotlinActivity : AppCompatActivity() {
     private fun createKotlinParamsObject(): KotlinParams {
         return KotlinParams(width = 1920, height = 1080, maxSize = 2560, outSize = 2560.0f)
     }
+
+    fun testReifiedStartActivity() {
+        startAC<MainActivity>()
+    }
+
+    inline fun <reified T : Activity> Activity.startAC() {
+        startActivity(Intent(this, T::class.java))
+    }
+
 
     /**
      * 空指针的判断

@@ -3,7 +3,6 @@ package com.maoxin.apkshell;
 import android.app.Application;
 
 import com.squareup.leakcanary.LeakCanary;
-import com.tencent.mmkv.MMKV;
 
 /**
  * @author lmx
@@ -26,8 +25,6 @@ public class MyApplication extends Application
             LeakCanary.install(this);
         }
 
-        String initialize = MMKV.initialize(this);
-        System.out.println("MMKV root dir:" + initialize);
 
 
     }

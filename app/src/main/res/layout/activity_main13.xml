@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.Main13Activity">
+
+
+    <Button
+        android:id="@+id/btn_open_media_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="打开媒体相册"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_open_media_video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="打开媒体视频"
+        app:layout_constraintStart_toEndOf="@id/btn_open_media_image"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_open_media_audio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="打开媒体音频"
+        app:layout_constraintStart_toEndOf="@id/btn_open_media_video"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_open_ex_media"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="获取相册"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_open_media_image" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

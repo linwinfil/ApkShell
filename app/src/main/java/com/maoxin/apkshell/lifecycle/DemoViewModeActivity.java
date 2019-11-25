@@ -11,7 +11,6 @@ import androidx.lifecycle.LifecycleOwner;
 
 public class DemoViewModeActivity extends AppCompatActivity
 {
-    private DemoLifecyclePresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -23,7 +22,7 @@ public class DemoViewModeActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.container, DemoViewModeFragment.newInstance()).commitNow();
         }
 
-        mPresenter = new DemoLifecyclePresenter();
+        DemoLifecyclePresenter mPresenter = new DemoLifecyclePresenter();
         getLifecycle().addObserver(mPresenter);
     }
 
