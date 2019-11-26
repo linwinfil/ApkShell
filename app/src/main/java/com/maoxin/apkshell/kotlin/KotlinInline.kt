@@ -99,9 +99,19 @@ inline fun bigHigherOrderFunction(noinline firstRunnable: () -> Unit, secondRunn
     println("end bigHigherOrderFunction fun")
 }
 
-inline fun <T : String> reifiedInlineFunction(noinline firstRunnable: () -> Unit, secondRunnable: () -> Unit, params: T?) {
+@PublishedApi
+internal val taskLevel = 1
+val taskCount = 1
+
+/**
+ *reified相当于泛型
+ * inline函数无法访问private修饰属性，解决此方法是增加public、或者internal（限定在同一模块访问）增加@PublishedApi注解（推荐）
+ */
+inline fun <reified T> reifiedInlineFunction(noinline firstRunnable: () -> Unit, secondRunnable: () -> Unit, params: T?) {
     println("-------")
     firstRunnable()
     secondRunnable()
     println(" ---> $params <---")
+    println(" ---> $taskLevel <---")
+    println(" ---> $taskCount <---")
 }
