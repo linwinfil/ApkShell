@@ -8,13 +8,15 @@ package com.maoxin.apkshell.kotlin
  * 避免内联过大的函数，因为内联会导致代码增加
  */
 fun main() {
-    test_InlineFunction()
-    test_InlineFunction_return()
-    test_InlineFunction_return_flow()
+    /*test_InlineFunction()*/
+    /*test_InlineFunction_return()*/
+    /*test_InlineFunction_return_flow()*/
 
-    test_bigHigherOrderFunction()
+    /*test_bigHigherOrderFunction()*/
 
-    test_reifiedInlineFunction()
+    /*test_reifiedInlineFunction()*/
+
+    test_inlineClass()
 }
 
 fun test_InlineFunction() {
@@ -87,6 +89,39 @@ fun test_reifiedInlineFunction() {
             "this is third line"
     )
 }
+
+
+fun test_inlineClass() {
+    val sampleInlineClass = SampleInlineClass(1000)
+
+    val newSampleInlineClass_id = id(sampleInlineClass)//装箱后又拆箱
+    println("newSampleInlineClass_id == sampleInlineClass : ${newSampleInlineClass_id == sampleInlineClass}")
+
+    val sampleInlineClassV2 = SampleInlineClassV2()
+
+}
+
+interface IInline
+inline class SampleInlineClass(val i: Int) : IInline
+
+inline class SampleInlineClassV2(val tag: String) : IInline {
+    constructor() : this("SampleInlineClassV2")
+
+    fun exception(): Nothing = throw UnsupportedOperationException()
+
+    var count: Int
+        get() = 11
+        set(value) = println(value)
+
+    companion object
+
+}
+
+fun asInline(s: SampleInlineClass) {}
+fun <T> asGenric(s: T) {}
+fun asInterface(i: IInline) {}
+fun asNullable(s: SampleInlineClass?) {}
+fun <T> id(sample: T): T = sample
 
 /**
  * noinline 强制lambda表达式 不进行inline处理，对应的方式就是翻译成内部类实现</br>
