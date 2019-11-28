@@ -1,10 +1,5 @@
 package com.maoxin.apkshell.kotlin
 
-import kotlin.properties.Delegates
-import kotlin.properties.ObservableProperty
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
-
 /** @author lmx
  * Created by lmx on 2019/2/17.
  * @see https://www.kotlincn.net/docs/reference/classes.html
@@ -12,51 +7,16 @@ import kotlin.reflect.KProperty
 
 fun main() {
     //1
-    /*val student = KotlinClass.Student("张三", 26)
+    val student = KotlinClass.Student("张三", 26)
     println(student.saysomething("func"))
 
-    val sampleClassDelegateObservable = KotlinClass.SampleClassDelegateObservable()
-    sampleClassDelegateObservable.name = "aaa"
-    sampleClassDelegateObservable.name = "bbb"
-    sampleClassDelegateObservable.name = "ccc"
-    sampleClassDelegateObservable.name = sampleClassDelegateObservable.name*/
-
-    //2
-    /*val sampleDelegateVetoable = KotlinClass.SampleDelegateVetoable()
-    sampleDelegateVetoable.name = "AAA"
-    sampleDelegateVetoable.name = "AABV"
-    println(sampleDelegateVetoable.name)
-
-    sampleDelegateVetoable.name = "AAA"
-    println(sampleDelegateVetoable.name)*/
-
-    //3
-    /*val sampleDelegateImpl = KotlinClass.SampleDelegateImpl()
-    sampleDelegateImpl.name = "AAA"
-    sampleDelegateImpl.name = "AABV"
-    println(sampleDelegateImpl.name)
-
-    sampleDelegateImpl.name = "AABV"
-    sampleDelegateImpl.name = "CCC"*/
-
-    //4
-    val sampleMap = KotlinClass.SampleMap(mapOf(
-            "name" to "func",
-            "age" to 123,
-            "name" to "func——————",
-            "age" to 11112
-    ))
-    println(sampleMap.toString())
-
-    val sampleMapV2 = KotlinClass.SampleMapV2(hashMapOf(
-            "name" to "adada",
-            "age" to 1212,
-            "name" to "chunk",
-            "age" to 222
-    ))
-    println(sampleMapV2.toString())
-
+    val intArray = IntArray(10)
+    for (i in 0..9) {
+        intArray[i] = i + 1
+    }
+    println(intArray.toList())
 }
+
 
 class KotlinClass {
 
@@ -150,58 +110,5 @@ class KotlinClass {
             }
         }
     }
-
-    class SampleClassDelegateObservable {
-        /**可观察属性，在name改变后，观察者监听到并反馈到afterChange函数*/
-        var name: String by Delegates.observable("init name") { property, oldValue, newValue ->
-            run {
-                println("<-- $oldValue, $newValue -->")
-            }
-        }
-    }
-
-    class SampleDelegateVetoable {
-        /**可观察属性，在name改变后，通过beforeChange函数判断是否执行afterChange函数*/
-        var name: String by Delegates.vetoable("init name", onChange = { property, oldValue, newValue ->
-            return@vetoable !(oldValue === newValue)
-        })
-    }
-
-    class SampleDelegateImpl {
-        var name: String by DelegatesImpl.vetoable4observable("init name", onChangeAfter = { _, oldValue, newValue ->
-            println("<-- SampleDelegateImpl#onChangeAfter:$oldValue, $newValue -->")
-        }, onChangeBefore = { _, oldValue, newValue ->
-            val result = !(oldValue === newValue)
-            println("SampleDelegateImpl#onChangeBefore:$result")
-            return@vetoable4observable result
-        })
-    }
-
-    //不可变
-    class SampleMap(map: Map<String, Any?>) {
-        val name: String by map
-        val age: Int by map
-        override fun toString(): String {
-            return "{name:$name, age:$age}"
-        }
-    }
-
-    class SampleMapV2(map: MutableMap<String, Any?>) {
-        var name: String by map
-        var age: Int by map
-        override fun toString(): String {
-            return "{name:$name, age:$age}"
-        }
-    }
 }
 
-object DelegatesImpl {
-    //实现了beforeChange和aafterChange函数
-    inline fun <T> vetoable4observable(initialValue: T, crossinline onChangeAfter: (property: KProperty<*>, oldValue: T, newValue: T) -> Unit,
-                                       crossinline onChangeBefore: (property: KProperty<*>, oldValue: T, newValue: T) -> Boolean):
-            ReadWriteProperty<Any?, T> = object : ObservableProperty<T>(initialValue) {
-        override fun beforeChange(property: KProperty<*>, oldValue: T, newValue: T): Boolean = onChangeBefore(property, oldValue, newValue)
-        override fun afterChange(property: KProperty<*>, oldValue: T, newValue: T) = onChangeAfter(property, oldValue, newValue)
-    }
-
-}

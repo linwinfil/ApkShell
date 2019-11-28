@@ -14,7 +14,16 @@ import org.jetbrains.anko.toast
 
 class MainKotlinActivity : AppCompatActivity() {
 
-    val TAG = "MainKotlinActivity"
+    private val TAG = "MainKotlinActivity"
+
+    //一般 by lazy 用于非空只读属性，需要延迟加载
+    private val mBtnText: Button by lazy {
+        findViewById<Button>(R.id.button5)
+    }
+
+    //一般 lateinit 用于非空可变属性，需延迟加载
+    private lateinit var mBtnText2: Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +42,8 @@ class MainKotlinActivity : AppCompatActivity() {
         toast(LazyKotlinInstance.instance.title())
 
 
-        val function: (View) -> Unit = {
+        //1、默认
+        /*val function: (View) -> Unit = {
             val createKotlinParamsObject = createKotlinParamsObject()
             toast("click,$createKotlinParamsObject")
 
@@ -44,7 +54,23 @@ class MainKotlinActivity : AppCompatActivity() {
 
             testReifiedStartActivity()
         }
-        findViewById<Button>(R.id.button5).setOnClickListener(function)
+        findViewById<Button>(R.id.button5).setOnClickListener(function)*/
+
+        //2、当第一次访问mBtnText时才find view
+        mBtnText.setOnClickListener(mOnClickListener)
+    }
+
+
+    private val mOnClickListener = View.OnClickListener {
+        val createKotlinParamsObject = createKotlinParamsObject()
+        toast("click,$createKotlinParamsObject")
+
+        toast("get instance:${KotlinInstance.getInstance()}")
+
+        testNullPointCheck("88", "99")
+        testNullPointCheck("ada", "aa_+a")
+
+        testReifiedStartActivity()
     }
 
     private fun createKotlinParamsObject(): KotlinParams {

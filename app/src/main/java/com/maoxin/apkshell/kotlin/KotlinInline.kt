@@ -101,6 +101,12 @@ fun test_inlineClass() {
 
 }
 
+fun test_AAA(a: Int): Int {
+    fun test_BBB(b: Int) = (a + b) * (a + b)
+
+    return test_BBB(12) + test_BBB(13)
+}
+
 interface IInline
 inline class SampleInlineClass(val i: Int) : IInline
 
