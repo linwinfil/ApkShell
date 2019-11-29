@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.maoxin.apkshell.R;
+import com.maoxin.apkshell.kotlin.example.recyclerview.MainKotlinRecyclerViewActivity;
 
 import java.util.HashMap;
 
@@ -101,7 +102,7 @@ public class MainOPActivity extends AppCompatActivity
 
         findViewById(R.id.test_new_shape_args).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main10Activity.class)));
 
-        findViewById(R.id.test_kotlin).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, MainKotlinActivity.class)));
+        findViewById(R.id.test_kotlin).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, MainKotlinRecyclerViewActivity.class)));
 
         findViewById(R.id.test_task_stack_builder).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main12Activity.class)));
 
