@@ -1,12 +1,16 @@
 package com.maoxin.apkshell.kotlin
 
+import java.util.*
+
 /** @author lmx
  * Created by lmx on 2019/11/29.
  */
 fun main() {
     /*test_same_map()*/
 
-    test_iterator()
+    /*test_iterator()*/
+
+    test_group()
 }
 
 private fun test_same_map() {
@@ -32,7 +36,7 @@ private fun test_same_map() {
 }
 
 fun test_iterator() {
-    val numbersMap = mutableMapOf<String, Any?>("key1" to 1, "key2" to 2, "key3" to 3, "key4" to 1)
+    val numbersMap = mutableMapOf<String, Any?>("key1" to 1, "key2" to 2, "key3" to 3, "key4" to 1)//可变的map
 
     val iterator = numbersMap.iterator()
     while (iterator.hasNext()) {
@@ -49,6 +53,9 @@ fun test_group() {
     val numbers = listOf("one", "two", "three", "four", "five")
 
     val groupBy = numbers.groupBy { it.first().toUpperCase() }
-    
+    println(groupBy)
+
+    val groupBy1 = numbers.groupBy(keySelector = { it.first() }, valueTransform = { it.toUpperCase(Locale.getDefault()) })
+    println(groupBy1)
 }
 
