@@ -7,6 +7,8 @@ import kotlin.system.measureTimeMillis
 
 /** @author lmx
  * Created by lmx on 2019/12/2.
+ *
+ * @see {https://www.cnblogs.com/mengdd/p/kotlin-coroutines-basics.html}
  */
 
 suspend fun main() {
@@ -24,7 +26,11 @@ suspend fun main() {
 
     /*test_CoroutineScope2()*/
 
-    test_composing_coroutineScope(true, true)
+    test_composing_coroutineScope {
+
+    }
+
+    /*test_dispatcher()*/
 }
 
 suspend fun test_suspend_launch() {
@@ -40,10 +46,11 @@ suspend fun test_suspend_launch() {
 
 
     //runBlocking阻塞主线程，阻塞直至内部执行完成
-    runBlocking {
+    val block: suspend CoroutineScope.() -> Unit = {
         delay(3000)
         println("runBlocking print")
     }
+    runBlocking(block = block)
 }
 
 @TestOnly
@@ -76,9 +83,9 @@ private suspend inline fun testSuspend(index: Int) {
 @TestOnly
 fun test_coroutineScope() = runBlocking {
 
+    //coroutineScope等待所有子协程执行完毕时不会阻塞当前线程
     coroutineScope {
         printThreadName()
-        //coroutineScope等待所有子协程执行完毕时不会阻塞当前线程
         launch {
             printThreadName()
             delay(1000)
@@ -94,8 +101,8 @@ fun test_coroutineScope() = runBlocking {
     println("CCC")
 }
 
-fun printThreadName() {
-    println("thread --> ${Thread.currentThread().name}")
+fun printThreadName(tag: Any? = null) {
+    println("thread $tag--> ${Thread.currentThread().name}")
 }
 
 fun test_CoroutineScope2() {
@@ -121,6 +128,7 @@ fun test_CoroutineScope2() {
 
         var result = getXXXInIO()//io函数，执行后拿到结果
 
+
         //do in 2
     }
 }
@@ -131,8 +139,9 @@ suspend fun getXXXInIO(): Int = withContext(Dispatchers.IO) {
 }
 
 
-fun test_composing_coroutineScope(withAsync: Boolean = false, throwsEx :Boolean = false) = runBlocking {
+fun test_composing_coroutineScope(withAsync: Boolean = false, throwsEx: Boolean = false, aaa: Any? = null, block: (ada: Boolean) -> Unit) = runBlocking {
     //如果其中一个子协程发生异常失败中断，等待中的父线程也会被取消
+    println("${withAsync},${throwsEx},${aaa}")
     val measureTimeMillis = measureTimeMillis {
         if (withAsync) {
             val doA = async { doA() }//默认 lazy 延迟启动，需要手动start，如果没有start，await内部实现start
@@ -160,6 +169,35 @@ suspend fun doB(throwsEx: Boolean = false): Int {
     }
     delay(1200)
     return 11
+}
+
+fun test_dispatcher() = runBlocking<Unit> {
+    /**
+     * @see [Dispatchers.Unconfined]调度器在程序运行到第一个挂起点时，在调度线程中启动；
+     * 它将在挂起函数执行的线程中恢复，恢复的线程完全取决于该挂起函数在哪个线程执行。
+     */
+    launch(Dispatchers.Unconfined) {
+        printThreadName(1)
+        //aapit
+        // app2
+
+        delay(1000)
+        printThreadName(2)
+
+    }
+    launch {
+        printThreadName(3)
+        delay(1800)
+        printThreadName(4)
+    }
+    launch(Dispatchers.IO) {
+        printThreadName(5)
+    }
+    launch(Dispatchers.Default) {
+        printThreadName(6)
+        printThreadName(7)
+        printThreadName(8)
+    }
 }
 
 

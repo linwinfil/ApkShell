@@ -10,13 +10,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.maoxin.apkshell.R
+import kotlinx.coroutines.*
 import org.jetbrains.anko.backgroundColor
+import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.random.Random
 
 class MainKotlinRecyclerViewActivity : AppCompatActivity() {
 
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: MyAdapter
+    private var coroutineScope: CoroutineScope? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,18 +32,41 @@ class MainKotlinRecyclerViewActivity : AppCompatActivity() {
         mAdapter = MyAdapter()
         mRecyclerView.adapter = mAdapter
 
-        Thread(Runnable {
-            val list = ArrayList<VData>()
-            val random = Random
-            for (i in 1..256) {
-                list.add(VData(Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256))))
-            }
 
-            runOnUiThread {
-                mAdapter.list = list
-                mAdapter.notifyDataSetChanged()
-            }
-        }).start()
+        println("AAA")
+
+        runBlocking {
+
+        }
+        GlobalScope.launch {  }
+        coroutineScope = CoroutineScope(EmptyCoroutineContext)
+        coroutineScope!!.launch(Dispatchers.Main) {
+            println("CCC")
+            val list = loadData()
+            println("DDD")
+            mAdapter.list = list
+            mAdapter.notifyDataSetChanged()
+        }
+
+        coroutineScope!!.launch {
+
+        }
+        println("BBB")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineScope?.cancel()
+    }
+
+    private suspend inline fun loadData(): ArrayList<VData> = withContext(Dispatchers.IO) {
+        val list = ArrayList<VData>()
+        val random = Random
+        repeat(256) {
+            list.add(VData(Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256))))
+        }
+        delay(1500)
+        return@withContext list
     }
 
     inner class MyAdapter : RecyclerView.Adapter<VH>() {
