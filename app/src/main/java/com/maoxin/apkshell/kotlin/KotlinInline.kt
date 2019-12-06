@@ -5,7 +5,9 @@ package com.maoxin.apkshell.kotlin
  *  @author lmx
  * Created by lmx on 2019-08-18.
  *
- * 避免内联过大的函数，因为内联会导致代码增加
+ * 1、内联函数可以避免高阶函数创建函数对象及装箱拆箱开销，但是要注意inline函数体不宜过大
+ * 2、避免内联过大的函数，因为内联会导致代码增加
+ *
  */
 fun main() {
     /*test_InlineFunction()*/

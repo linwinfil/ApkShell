@@ -34,11 +34,6 @@ class MainKotlinRecyclerViewActivity : AppCompatActivity() {
 
 
         println("AAA")
-
-        runBlocking {
-
-        }
-        GlobalScope.launch {  }
         coroutineScope = CoroutineScope(EmptyCoroutineContext)
         coroutineScope!!.launch(Dispatchers.Main) {
             println("CCC")
@@ -56,6 +51,10 @@ class MainKotlinRecyclerViewActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        destroyScope()
+    }
+
+    private fun destroyScope() {
         coroutineScope?.cancel()
     }
 

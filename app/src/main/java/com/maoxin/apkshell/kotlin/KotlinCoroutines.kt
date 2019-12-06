@@ -8,27 +8,41 @@ import kotlin.system.measureTimeMillis
 /** @author lmx
  * Created by lmx on 2019/12/2.
  *
- * @see {https://www.cnblogs.com/mengdd/p/kotlin-coroutines-basics.html}
+ * @see https://www.cnblogs.com/mengdd/p/kotlin-coroutines-basics.html
+ * @see http://mouxuejie.com/blog/2019-05-23/kotlin-coroutines-basic/
+ * @see https://johnnyshieh.me/posts/kotlin-coroutine-introduction/  协程原理解析
+ * 协程可以看作是能被挂起、不阻塞线程的计算，协程的挂起几乎没有代价，没有上下文切换，不需要虚拟机和操作系统的支持。
+ * 协程挂起通过suspend函数实现，suspend函数用状态机的方式用挂起点将协程的运算逻辑拆分为不同的片段，每次运行协程执行不同的逻辑片段。
+ * 线程上下文切换开销大，依赖于虚拟机和操作系统
  */
 
 suspend fun main() {
     /*test_suspend_launch()*/
 
 
-    /*repeat(3) {
-        test_runBloking(it*//*, true*//*)
-        if (it == 2) {
-            println("repeat finish")
+    /*val measureTimeMillis = measureTimeMillis {
+        repeat(3) {
+            test_runBloking(it)
+            println("-----------")
+            if (it == 2) {
+                println("repeat finish")
+            }
         }
-    }*/
+    }
+    println("test_runBloking : $measureTimeMillis")*/
+
+    /*test_runBloking2()*/
+
+    /*test_yield()*/
+    /*test_yield2()*/
+
+    test_cancel()
 
     /*test_coroutineScope()*/
 
     /*test_CoroutineScope2()*/
 
-    test_composing_coroutineScope {
-
-    }
+    /*test_composing_coroutineScope {}*/
 
     /*test_dispatcher()*/
 }
@@ -60,6 +74,9 @@ suspend fun test_suspend(): String {
     return "test_suspend over"
 }
 
+/**
+ * 创建新的协程，并阻塞当前线程，知道当前协程结束
+ */
 @TestOnly
 fun test_runBloking(index: Int, withIO: Boolean = false) = runBlocking {
     printThreadName()
@@ -69,6 +86,100 @@ fun test_runBloking(index: Int, withIO: Boolean = false) = runBlocking {
         }
     } else {
         testSuspend(index)
+    }
+}
+
+@TestOnly
+fun test_runBloking2() = runBlocking {
+    launch {
+        println("start") //2
+        delay(2000)
+        println("delay") //3
+    }
+
+    println("aaa") //1
+    delay(4000)
+}
+
+@TestOnly
+suspend fun test_withContext(dispatcher: CoroutineDispatcher) {
+    withContext(dispatcher) {
+
+    }
+}
+
+/**
+ * async和launch 区别在于，async是带有deferred返回值
+ */
+@TestOnly
+fun test_async() = runBlocking {
+    val async_deferred = async { }
+}
+
+@TestOnly
+suspend fun test_yield() = runBlocking {
+    launch {
+        /*delay(3000)*/
+        println("delay ing...")
+    }
+
+    launch {
+        //yield 将协程逻辑分发到Dispatcher队列中，让出当前的线程或线程池运行其他的协程逻辑，
+        //在Dispatcher空闲时执行回原来的协程，简单来说就是交出执行权
+        yield()
+        printThreadName()
+        delay(3000)
+        println("yield ing ...")
+    }
+}
+
+@TestOnly
+suspend fun test_yield2() = runBlocking {
+    launch {
+        repeat(3) {
+            println("job1 repeat index:$it")
+            yield()
+        }
+    }
+
+
+    launch {
+        repeat(3) {
+            println("job2 repeat index:$it")
+            yield()
+        }
+    }
+}
+
+@TestOnly
+suspend fun test_withtimeout() {
+    try {
+        withTimeout(1300) {
+            //超时抛异常
+            repeat(3) {
+                delay(1200)
+                println("job3 repeat index:$it")
+            }
+        }
+    } catch (th: Throwable) {
+        th.printStackTrace()
+    } finally {
+        println("...")
+    }
+}
+
+suspend fun test_cancel() = runBlocking {
+    launch {
+        repeat(20) {
+            when (it) {
+                8 -> cancel()
+            }
+            println("$it")
+
+            //delay 会检测当前协程是否被取消，如果已经取消，则中断内部逻辑运算，
+            //如果没有调用delay，内部运算逻辑正常运行
+            delay(500)
+        }
     }
 }
 
@@ -102,7 +213,7 @@ fun test_coroutineScope() = runBlocking {
 }
 
 fun printThreadName(tag: Any? = null) {
-    println("thread $tag--> ${Thread.currentThread().name}")
+    println("thread ${tag ?: ""}--> ${Thread.currentThread().name}")
 }
 
 fun test_CoroutineScope2() {
