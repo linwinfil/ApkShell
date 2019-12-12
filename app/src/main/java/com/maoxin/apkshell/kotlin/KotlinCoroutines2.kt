@@ -1,6 +1,7 @@
 package com.maoxin.apkshell.kotlin
 
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.actor
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.util.concurrent.atomic.AtomicInteger
@@ -22,16 +23,17 @@ fun main() {
 
     /*test_threadLocal()*/
 }
+
 //volatile 变量保证可线性化读取和写入变量，但在大量动作（在我们的示例中即“递增”操作）
 @Volatile
 var counter = 0
 
 //同步原子锁
-var counterAtomic : AtomicInteger = AtomicInteger(0)
+var counterAtomic: AtomicInteger = AtomicInteger(0)
 
 fun test_normal() = runBlocking {
 
-    counter=0
+    counter = 0
     withContext(Dispatchers.Default) {
         val n = 50
         val k = 50
@@ -82,6 +84,49 @@ fun test_atomic() = runBlocking {
     println("counter=${counterAtomic.get()}")
 }
 
+fun test_actor() = runBlocking {
+    val counter = counterActor() // 创建该 actor
+    withContext(Dispatchers.Default) {
+        massiveRun {
+            counter.send(IncCounter)
+        }
+    }
+    // 发送一条消息以用来从一个 actor 中获取计数值
+    val response = CompletableDeferred<Int>()
+    counter.send(GetCounter(response))
+    println("Counter = ${response.await()}")
+    counter.close() // 关闭该actor
+}
+
+sealed class CounterMsg
+object IncCounter : CounterMsg()
+class GetCounter(val response: CompletableDeferred<Int>) : CounterMsg()
+
+suspend fun massiveRun(action: suspend () -> Unit) {
+    val n = 100  // 启动的协程数量
+    val k = 1000 // 每个协程重复执行同个动作的次数
+    val time = measureTimeMillis {
+        coroutineScope {
+            // 协程的作用域
+            repeat(n) {
+                launch {
+                    repeat(k) { action() }
+                }
+            }
+        }
+    }
+    println("Completed ${n * k} actions in $time ms")
+}
+
+fun CoroutineScope.counterActor() = GlobalScope.actor<CounterMsg> {
+    var counter = 0 // actor 状态
+    for (msg in channel) { // 即将到来消息的迭代器
+        when (msg) {
+            is IncCounter -> counter++
+            is GetCounter -> msg.response.complete(counter)
+        }
+    }
+}
 
 fun test_mutex() = runBlocking {
 
@@ -89,18 +134,22 @@ fun test_mutex() = runBlocking {
     val mutex = Mutex()
     var count = 0
     repeat(100) {
+        println("repeat index:$it")
         GlobalScope.launch {
             //synchronized(this@runBlocking) {
             //    count++
             //    println("the count $count")
             //}
             mutex.withLock {
+                //当前unit被锁住互斥
                 count++
                 println("the count $count")
             }
         }
 
     }
+
+    println("count:$count")
 }
 
 fun test_threadLocal() = runBlocking {
