@@ -113,7 +113,8 @@ public class MainOPActivity extends AppCompatActivity
         });
 
         findViewById(R.id.test_android10_storage).setOnClickListener(v -> {
-            startActivity(new Intent(MainOPActivity.this, Main13Activity.class));
+            // startActivity(new Intent(MainOPActivity.this, Main13Activity.class));
+            startActivity(new Intent(MainOPActivity.this, Main13KotlinActivity.class));
         });
     }
 

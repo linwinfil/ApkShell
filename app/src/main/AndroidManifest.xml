@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".kotlin.example.recyclerview.MainKotlinRecyclerViewActivity"/>
+        <activity android:name=".activity.Main13KotlinActivity"></activity>
+        <activity android:name=".kotlin.example.recyclerview.MainKotlinRecyclerViewActivity" />
         <activity android:name=".activity.Main13Activity" />
         <activity android:name=".activity.Main2Activity" />
         <activity android:name=".activity.MainCameraXActivity" />

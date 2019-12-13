@@ -17,11 +17,13 @@ fun main() {
 
     /*test_normal()*/
 
-    test_atomic()
+    /*test_atomic()*/
 
     /*test_mutex()*/
 
     /*test_threadLocal()*/
+
+    test_actor()
 }
 
 //volatile 变量保证可线性化读取和写入变量，但在大量动作（在我们的示例中即“递增”操作）
@@ -118,7 +120,7 @@ suspend fun massiveRun(action: suspend () -> Unit) {
     println("Completed ${n * k} actions in $time ms")
 }
 
-fun CoroutineScope.counterActor() = GlobalScope.actor<CounterMsg> {
+fun counterActor() = GlobalScope.actor<CounterMsg> {
     var counter = 0 // actor 状态
     for (msg in channel) { // 即将到来消息的迭代器
         when (msg) {
