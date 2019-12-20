@@ -19,6 +19,8 @@ import kotlin.system.measureTimeMillis
 suspend fun main() {
     /*test_suspend_launch()*/
 
+    test_launch()
+
 
     /*val measureTimeMillis = measureTimeMillis {
         repeat(3) {
@@ -36,7 +38,7 @@ suspend fun main() {
     /*test_yield()*/
     /*test_yield2()*/
 
-    test_cancel()
+    /*test_cancel()*/
 
     /*test_coroutineScope()*/
 
@@ -47,6 +49,15 @@ suspend fun main() {
     /*test_dispatcher()*/
 }
 
+suspend fun test_launch() {
+    println("aa")
+    val scope = GlobalScope.launch(Dispatchers.Main) {
+        delay(1000)
+        println("bb")
+    }
+//    scope.join()
+    println("ccc")
+}
 suspend fun test_suspend_launch() {
     val job = GlobalScope.launch {
         delay(1500)//非阻塞式
