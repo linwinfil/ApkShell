@@ -13,7 +13,7 @@ import java.io.InputStream;
  */
 public class TestClassLoader extends ClassLoader {
 
-    private String path;
+    private String path = getProjectRootDir();
 
     public void setPath(String path) {
         this.path = path;

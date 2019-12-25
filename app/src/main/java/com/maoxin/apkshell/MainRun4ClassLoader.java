@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
  * @author lmx
  * Created by lmx on 2019/12/20.
  */
-public class MainRun {
+public class MainRun4ClassLoader {
 
     public static void main(String[] args) {
         // testClassLoader();
@@ -57,7 +57,7 @@ public class MainRun {
             System.out.println("[=====]");
             Method setTest = aClass.getMethod("setTest", aClass);
             setTest.setAccessible(true);
-            setTest.invoke(o, o2);//fixme error
+            setTest.invoke(o, o2);//fixme error，两个实例是由不同的类加载器加载出来的，在jvm看来，即使包名、类名一样，但并非同个类
 
             Method printSetText = aClass.getMethod("printSetText");
             printSetText.invoke(o);
