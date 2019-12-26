@@ -1,4 +1,4 @@
-package com.maoxin.apkshell.ioc;
+package com.maoxin.apkshell.ipc;
 
 import javax.inject.Inject;
 

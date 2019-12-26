@@ -105,5 +105,11 @@
             android:text="Android 10 储存"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/test_binder_ipc"
+            android:text="binder ipc test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </ScrollView>

@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.Main13KotlinActivity"></activity>
+        <activity android:name=".ipc.client.ClientActivity"></activity>
+        <activity android:name=".activity.Main13KotlinActivity" />
         <activity android:name=".kotlin.example.recyclerview.MainKotlinRecyclerViewActivity" />
         <activity android:name=".activity.Main13Activity" />
         <activity android:name=".activity.Main2Activity" />
@@ -58,6 +59,18 @@
 
         <activity android:name=".activity.Main10Activity" />
         <activity android:name=".lifecycle.DemoViewModeActivity" />
+
+
+        <service
+            android:name=".ipc.server.RemoteService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="com.maoxin.apkshell.ipc.server" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
