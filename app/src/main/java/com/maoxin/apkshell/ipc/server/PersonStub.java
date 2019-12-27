@@ -1,6 +1,5 @@
 package com.maoxin.apkshell.ipc.server;
 
-import android.os.Binder;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
@@ -18,7 +17,7 @@ import androidx.annotation.Nullable;
  * Created by lmx on 2019/12/26.
  * binder本地对象，实现{@link PersonInterface}接口，声明具有server承诺给client的能力
  */
-public abstract class PersonStub extends Binder implements PersonInterface {
+public abstract class PersonStub extends android.os.Binder implements PersonInterface {
     public static final String DESCRIPTOR = "com.maoxin.apkshell.ipc.server.PersonInterface";
     public static final int TRANSAVTION_addPerson = IBinder.FIRST_CALL_TRANSACTION;
     public static final int TRANSAVTION_getPerson = IBinder.FIRST_CALL_TRANSACTION + 1;
@@ -44,24 +43,30 @@ public abstract class PersonStub extends Binder implements PersonInterface {
         switch (code) {
 
             case INTERFACE_TRANSACTION:
-                reply.writeString(DESCRIPTOR);
+                if (reply != null) {
+                    reply.writeString(DESCRIPTOR);
+                }
                 return true;
 
             case TRANSAVTION_getPerson:
-                data.enforceInterface(DESCRIPTOR);
-                List<Person> result = this.getPersons();
-                reply.writeNoException();
-                reply.writeTypedList(result);
+                if (reply != null) {
+                    data.enforceInterface(DESCRIPTOR);
+                    List<Person> result = this.getPersons();
+                    reply.writeNoException();
+                    reply.writeTypedList(result);
+                }
                 return true;
 
             case TRANSAVTION_addPerson:
-                data.enforceInterface(DESCRIPTOR);
-                Person arg0 = null;
-                if (data.readInt() != 0) {
-                    arg0 = Person.CREATOR.createFromParcel(data);
+                if (reply != null) {
+                    data.enforceInterface(DESCRIPTOR);
+                    Person arg0 = null;
+                    if (data.readInt() != 0) {
+                        arg0 = Person.CREATOR.createFromParcel(data);
+                    }
+                    this.addPerson(arg0);
+                    reply.writeNoException();
                 }
-                this.addPerson(arg0);
-                reply.writeNoException();
                 return true;
 
         }

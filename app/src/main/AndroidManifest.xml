@@ -67,7 +67,18 @@
             android:exported="true"
             android:process=":remote">
             <intent-filter>
-                <action android:name="com.maoxin.apkshell.ipc.server" />
+                <action android:name="com.maoxin.apkshell.ipc.server.RemoteService" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".ipc.server.WorkerService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote">
+            <intent-filter>
+                <action android:name="com.maoxin.apkshell.ipc.server.WorkerService"/>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>

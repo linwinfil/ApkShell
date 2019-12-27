@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.os.IBinder
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import com.maoxin.apkshell.IWorker
 import com.maoxin.apkshell.R
 import com.maoxin.apkshell.ipc.Person
 import com.maoxin.apkshell.ipc.server.PersonInterface
 import com.maoxin.apkshell.ipc.server.PersonStub
 import com.maoxin.apkshell.ipc.server.RemoteService
+import com.maoxin.apkshell.ipc.server.WorkerService
 import java.util.*
 
 /**
@@ -22,6 +24,9 @@ class ClientActivity : AppCompatActivity() {
 
     private var isConnection: Boolean = false
     private var personInterface: PersonInterface? = null
+
+    private var work_isConnection : Boolean = false
+    private var work_interface: IWorker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,17 +45,50 @@ class ClientActivity : AppCompatActivity() {
                 it.addPerson(person)
             }
         }
+
+        findViewById<Button>(R.id.btn_bind_worker_service).setOnClickListener {
+            if (!work_isConnection) {
+                work_bindServiceConnenction()
+                return@setOnClickListener
+            }
+            work_interface?.also {
+                it.onEditCode("edit the Binder/IPC code", System.currentTimeMillis())
+            }
+        }
     }
 
 
     private fun bindServiceConnection() {
         val intent = Intent(this, RemoteService::class.java)
-        intent.action = "com.maoxin.apkshell.ipc.server"
+        intent.action = "com.maoxin.apkshell.ipc.server.RemoteService"
         bindService(intent, serviceConnection, Service.BIND_AUTO_CREATE)
+    }
+
+    private fun work_bindServiceConnenction() {
+        val intent = Intent(this, WorkerService::class.java)
+        intent.action = "com.maoxin.apkshell.ipc.server.WorkerService"
+        this.bindService(intent, work_serviceConnection, Service.BIND_AUTO_CREATE)
+    }
+
+    private fun work_unbindServiceConnection() {
+        unbindService(work_serviceConnection)
     }
 
     private fun unBindServiceConnection() {
         unbindService(serviceConnection)
+    }
+
+    private var work_serviceConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+            work_isConnection = false
+            println("work bind service")
+        }
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            work_isConnection = true
+            println("work unbind service $service")
+            work_interface = IWorker.Stub.asInterface(service)
+        }
     }
 
     private var serviceConnection = object : ServiceConnection {
@@ -80,6 +118,9 @@ class ClientActivity : AppCompatActivity() {
         super.onStop()
         if (this.isConnection) {
             unBindServiceConnection()
+        }
+        if (this.work_isConnection) {
+            work_unbindServiceConnection()
         }
     }
 }
