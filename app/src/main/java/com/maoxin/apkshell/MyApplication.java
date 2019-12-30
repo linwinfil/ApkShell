@@ -2,7 +2,11 @@ package com.maoxin.apkshell;
 
 import android.app.Application;
 
+import com.meituan.android.walle.ChannelInfo;
+import com.meituan.android.walle.WalleChannelReader;
 import com.squareup.leakcanary.LeakCanary;
+
+import java.util.Map;
 
 /**
  * @author lmx
@@ -26,6 +30,15 @@ public class MyApplication extends Application
         }
 
 
-
+        ChannelInfo channelInfo = WalleChannelReader.getChannelInfo(this);
+        if (channelInfo != null) {
+            Map<String, String> extraInfo = channelInfo.getExtraInfo();
+            if (extraInfo != null) {
+                for (Map.Entry<String, String> entry : extraInfo.entrySet()) {
+                    System.out.println(entry.getKey() + " == " + entry.getValue());
+                }
+            }
+            System.out.println(channelInfo.getChannel());//输出的渠道
+        }
     }
 }

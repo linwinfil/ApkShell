@@ -1,10 +1,22 @@
+import com.android.build.gradle.api.BaseVariant
 apply plugin: 'com.android.application'
+apply plugin: 'walle'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
+    signingConfigs {
+        mySigned {
+            keyAlias 'apk@shell'
+            keyPassword '123456'
+            storeFile file('apkshell.jks')
+            storePassword '123456'
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.maoxin.apkshell"
@@ -17,6 +29,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            signingConfig signingConfigs.mySigned
+        }
+        debug {
+            signingConfig signingConfigs.mySigned
         }
     }
 
@@ -28,6 +45,39 @@ android {
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         sourceCompatibility = rootProject.ext.java_version
         targetCompatibility = rootProject.ext.java_version
+    }
+}
+
+walle {
+    apkOutputFolder = new File("${project.buildDir}/outputs/channels")//指定渠道包输出路径
+    apkFileNameFormat = '${appName}-${packageName}-${channel}-${buildType}-v${versionName}-${versionCode}-${buildTime}-${flavorName}.apk'//定制渠道包名
+    //     apkFileNameFormat 配置
+
+    //      projectName - 项目名字
+    //     appName - App模块名字
+    //     packageName - applicationId (App包名packageName)
+    //     buildType - buildType (release/debug等)
+    //     channel - channel名称 (对应渠道打包中的渠道名字)
+    //     versionName - versionName (显示用的版本号)
+    //     versionCode - versionCode (内部版本号)
+    //     buildTime - buildTime (编译构建日期时间)
+    //     fileSHA1 - fileSHA1 (最终APK文件的SHA1哈希值)
+    //     flavorName - 编译构建 productFlavors 名
+
+    //configFile与channelFile两者必须存在一个，否则无法生成渠道包。两者都存在时优先执行configFile
+    channelFile = new File("${project.getProjectDir()}/channel")
+    //configFile = new File("${project.getProjectDir()}/config.json")
+}
+
+// 根据不同的applicationId来配置不同的channelFile／configFile
+afterEvaluate {
+    project.android.applicationVariants.all { BaseVariant variant ->
+        variant.assemble.doFirst {
+            if (variant.buildType.name.equalsIgnoreCase("debug")) {
+                project.walle.apkOutputFolder = new File("${project.buildDir}/outputs/channels_debug")
+                project.walle.channelFile = new File("${project.getProjectDir()}/channel_debug")
+            }
+        }
     }
 }
 
@@ -81,4 +131,7 @@ dependencies {
 
     implementation "com.google.dagger:dagger-android:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+
+    //美团walle
+    implementation 'com.meituan.android.walle:library:1.1.6'
 }
