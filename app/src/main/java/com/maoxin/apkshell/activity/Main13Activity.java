@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.maoxin.apkshell.R;
 
 import java.io.File;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 /**
  * Android 10 沙盒存储机制
  */
+@Route(path = "/activity/main_13")
 public class Main13Activity extends AppCompatActivity implements View.OnClickListener
 {
     public static final int REQUEST_PICK_IMAGE = 0x11;

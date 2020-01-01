@@ -11,7 +11,6 @@ import com.maoxin.apkshell.kotlin.KotlinInstance
 import com.maoxin.apkshell.kotlin.KotlinParams
 import com.maoxin.apkshell.kotlin.LazyKotlinInstance
 import org.jetbrains.anko.toast
-
 class MainKotlinActivity : AppCompatActivity() {
 
     private val TAG = "MainKotlinActivity"

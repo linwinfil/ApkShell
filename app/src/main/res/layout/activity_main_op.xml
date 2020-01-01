@@ -41,12 +41,6 @@
             android:text="mp4_parser_ex"/>
 
         <Button
-            android:id="@+id/button_test_cmdproc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="cmd proc test"/>
-
-        <Button
             android:id="@+id/button_test_animation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -109,6 +103,12 @@
         <Button
             android:id="@+id/test_binder_ipc"
             android:text="binder ipc test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/test_arouter"
+            android:text="ARouter组件路由跳转"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>

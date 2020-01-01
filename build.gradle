@@ -8,6 +8,10 @@ buildscript {
     ext.butterknife_version = '10.2.0'
     ext.dagger_version = '2.25'
 
+    //是否应用组件路由ARouter
+    ext.isARouter = true
+    ext.arouter_version = '1.5.0'
+
 
     repositories {
         google()

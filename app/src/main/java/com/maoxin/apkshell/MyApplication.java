@@ -2,6 +2,7 @@ package com.maoxin.apkshell;
 
 import android.app.Application;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.meituan.android.walle.ChannelInfo;
 import com.meituan.android.walle.WalleChannelReader;
 import com.squareup.leakcanary.LeakCanary;
@@ -28,6 +29,14 @@ public class MyApplication extends Application
         if (!LeakCanary.isInAnalyzerProcess(this)) {
             LeakCanary.install(this);
         }
+
+        //ARouter路由
+        if (BuildConfig.DEBUG) {
+            //必须在init之前设置
+            ARouter.openDebug();
+            ARouter.openLog();
+        }
+        ARouter.init(this);
 
 
         ChannelInfo channelInfo = WalleChannelReader.getChannelInfo(this);

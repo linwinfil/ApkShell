@@ -10,6 +10,8 @@ import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.maoxin.apkshell.R;
 import com.maoxin.apkshell.ipc.client.ClientActivity;
 import com.maoxin.apkshell.kotlin.example.recyclerview.MainKotlinRecyclerViewActivity;
@@ -18,7 +20,7 @@ import java.util.HashMap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
+@Route(path = "/activity/main_op")
 public class MainOPActivity extends AppCompatActivity
 {
 
@@ -65,9 +67,6 @@ public class MainOPActivity extends AppCompatActivity
         findViewById(R.id.button_mp4parser).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main5Activity.class)));
 
         findViewById(R.id.button_mp4parser_ex).setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main5ExActivity.class)));
-
-        final Button button_test_cmdproc = findViewById(R.id.button_test_cmdproc);
-        button_test_cmdproc.setOnClickListener(v -> startActivity(new Intent(MainOPActivity.this, Main7Activity.class)));
 
         findViewById(R.id.button_test_animation).setOnClickListener(new View.OnClickListener()
         {
@@ -121,6 +120,8 @@ public class MainOPActivity extends AppCompatActivity
         findViewById(R.id.test_binder_ipc).setOnClickListener(v -> {
             startActivity(new Intent(MainOPActivity.this, ClientActivity.class));
         });
+
+        findViewById(R.id.test_arouter).setOnClickListener(v -> ARouter.getInstance().build("/activity/main_13").navigation());
     }
 
     private void test()

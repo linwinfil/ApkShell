@@ -1,4 +1,5 @@
 import com.android.build.gradle.api.BaseVariant
+
 apply plugin: 'com.android.application'
 apply plugin: 'walle'
 apply plugin: 'kotlin-android'
@@ -24,6 +25,15 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+
+        if (isARouter.toBoolean()) {
+            javaCompileOptions {
+                annotationProcessorOptions {
+                    arguments = [AROUTER_MODULE_NAME: project.getName()]
+                }
+            }
+        }
+
     }
     buildTypes {
         release {
@@ -50,7 +60,8 @@ android {
 
 walle {
     apkOutputFolder = new File("${project.buildDir}/outputs/channels")//指定渠道包输出路径
-    apkFileNameFormat = '${appName}-${packageName}-${channel}-${buildType}-v${versionName}-${versionCode}-${buildTime}-${flavorName}.apk'//定制渠道包名
+    apkFileNameFormat = '${appName}-${packageName}-${channel}-${buildType}-v${versionName}-${versionCode}-${buildTime}-${flavorName}.apk'
+//定制渠道包名
     //     apkFileNameFormat 配置
 
     //      projectName - 项目名字
@@ -134,4 +145,10 @@ dependencies {
 
     //美团walle
     implementation 'com.meituan.android.walle:library:1.1.6'
+
+    if (isARouter.toBoolean()) {
+        //组件ARouter
+        implementation "com.alibaba:arouter-api:$arouter_version"
+        annotationProcessor "com.alibaba:arouter-compiler:$arouter_version"
+    }
 }

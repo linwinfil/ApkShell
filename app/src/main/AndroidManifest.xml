@@ -18,7 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ipc.client.ClientActivity"></activity>
+        <activity android:name=".activity.MainARouterActivity"></activity>
+        <activity android:name=".ipc.client.ClientActivity" />
         <activity android:name=".activity.Main13KotlinActivity" />
         <activity android:name=".kotlin.example.recyclerview.MainKotlinRecyclerViewActivity" />
         <activity android:name=".activity.Main13Activity" />
@@ -38,7 +39,6 @@
         </activity>
         <activity android:name=".activity.Main4Activity" />
         <activity android:name=".activity.Main5Activity" />
-        <activity android:name=".activity.Main7Activity" />
         <activity android:name=".activity.MainShapeUtilsActivity" />
         <activity android:name=".activity.Main8Activity" />
         <activity android:name=".activity.Main5ExActivity" />
@@ -60,7 +60,6 @@
         <activity android:name=".activity.Main10Activity" />
         <activity android:name=".lifecycle.DemoViewModeActivity" />
 
-
         <service
             android:name=".ipc.server.RemoteService"
             android:enabled="true"
@@ -68,17 +67,18 @@
             android:process=":remote">
             <intent-filter>
                 <action android:name="com.maoxin.apkshell.ipc.server.RemoteService" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
-
         <service
             android:name=".ipc.server.WorkerService"
             android:enabled="true"
             android:exported="true"
             android:process=":remote">
             <intent-filter>
-                <action android:name="com.maoxin.apkshell.ipc.server.WorkerService"/>
+                <action android:name="com.maoxin.apkshell.ipc.server.WorkerService" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
