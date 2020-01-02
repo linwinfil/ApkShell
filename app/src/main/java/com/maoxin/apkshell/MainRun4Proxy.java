@@ -15,9 +15,28 @@ import java.util.List;
  * Created by lmx on 2019/12/25.
  */
 public class MainRun4Proxy {
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        System.out.println(getClass().getSimpleName() + ", finalize");
+    }
+
     public static void main(String[] args) {
         testProxyInterfaces();
         // testProxyClassLoader();
+        // testGCbug();
+    }
+
+
+    private static void testGCbug() {
+        MainRun4Proxy a = new MainRun4Proxy();
+        for (int i = 0; i < 1_000; i++) {
+            if (i % 100 == 0) System.gc();
+        }
+        System.out.println("ok");
+        //如果a没有被引用到，频繁GC导致a被finalize
+        /*System.out.println(a);*/
     }
 
     private static void testProxyInterfaces() {

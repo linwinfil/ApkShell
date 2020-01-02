@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.maoxin.apkshell.R;
 
 import java.io.File;
+import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +22,19 @@ import androidx.appcompat.app.AppCompatActivity;
 @Route(path = "/activity/main_13")
 public class Main13Activity extends AppCompatActivity implements View.OnClickListener
 {
+
+    @Autowired(name = "list")
+    List<Object> list = null;
+
+    @Autowired(name = "isARouter")
+    boolean isARouter = false;
+
+    @Autowired(name =  "isLogin")
+    boolean isLogin = false;
+
+    @Autowired(name = "fromClass")
+    String fromClass = null;
+
     public static final int REQUEST_PICK_IMAGE = 0x11;
 
     @Override
@@ -31,6 +47,15 @@ public class Main13Activity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.btn_open_media_image).setOnClickListener(this);
         findViewById(R.id.btn_open_media_video).setOnClickListener(this);
         findViewById(R.id.btn_open_ex_media).setOnClickListener(this);
+
+        //1、传统Intent方式
+        // Intent intent = getIntent();
+        // boolean isARouter = intent.getBooleanExtra("isARouter", false);
+        // String fromClasses = intent.getStringExtra("fromClass");
+        // System.out.println("isARouter:" + isARouter + ", fromClass:" + fromClasses);
+
+        //2、ARouter参数注解
+        ARouter.getInstance().inject(this);
     }
 
 

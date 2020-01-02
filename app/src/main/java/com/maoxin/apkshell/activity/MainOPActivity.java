@@ -121,7 +121,13 @@ public class MainOPActivity extends AppCompatActivity
             startActivity(new Intent(MainOPActivity.this, ClientActivity.class));
         });
 
-        findViewById(R.id.test_arouter).setOnClickListener(v -> ARouter.getInstance().build("/activity/main_13").navigation());
+        findViewById(R.id.test_arouter).setOnClickListener(v -> {
+            ARouter.getInstance().build("/activity/main_13")
+                    .withBoolean("isARouter", true)
+                    .withBoolean("isLogin", false)
+                    .withString("fromClass", MainOPActivity.this.getClass().getSimpleName())
+                    .navigation();
+        });
     }
 
     private void test()

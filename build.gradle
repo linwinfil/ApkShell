@@ -10,7 +10,8 @@ buildscript {
 
     //是否应用组件路由ARouter
     ext.isARouter = true
-    ext.arouter_version = '1.5.0'
+    //美团Router
+    ext.isWMRouter = true
 
 
     repositories {

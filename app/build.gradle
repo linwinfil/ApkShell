@@ -27,9 +27,9 @@ android {
         versionName "1.0"
 
         if (isARouter.toBoolean()) {
-            javaCompileOptions {
-                annotationProcessorOptions {
-                    arguments = [AROUTER_MODULE_NAME: project.getName()]
+            kapt {
+                arguments {
+                    arg("AROUTER_MODULE_NAME", project.getName())
                 }
             }
         }
@@ -148,7 +148,14 @@ dependencies {
 
     if (isARouter.toBoolean()) {
         //组件ARouter
-        implementation "com.alibaba:arouter-api:$arouter_version"
-        annotationProcessor "com.alibaba:arouter-compiler:$arouter_version"
+        implementation "com.alibaba:arouter-api:1.5.0"
+        kapt "com.alibaba:arouter-compiler:1.2.2"
     }
+
+//    if (isWMRouter.toBoolean()) {
+//        //美团路由
+//        def wmrouter_version = "1.2.0"
+//        implementation "com.sankuai.waimai.router:router:$wmrouter_version"
+//        kapt "com.sankuai.waimai.router:compiler:$wmrouter_version"
+//    }
 }
