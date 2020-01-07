@@ -104,6 +104,8 @@ dependencies {
     implementation group: 'com.googlecode.mp4parser', name: 'isoparser', version: '1.1.22'
     implementation 'com.github.bumptech.glide:glide:4.10.0'
 
+    implementation project(':appinstaller')
+
 
     //butterknife 组件
     implementation "com.jakewharton:butterknife:$butterknife_version"

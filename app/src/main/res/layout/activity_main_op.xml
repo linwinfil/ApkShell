@@ -111,5 +111,11 @@
             android:text="ARouter组件路由跳转"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/test_appinstaller"
+            android:text="Apk下载安装"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </ScrollView>

@@ -15,6 +15,8 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.maoxin.apkshell.R;
 import com.maoxin.apkshell.ipc.client.ClientActivity;
 import com.maoxin.apkshell.kotlin.example.recyclerview.MainKotlinRecyclerViewActivity;
+import com.maoxin.appinstaller.entity.AppUpdate;
+import com.maoxin.appinstaller.utils.UpdateManager;
 
 import java.util.HashMap;
 
@@ -127,6 +129,32 @@ public class MainOPActivity extends AppCompatActivity
                     .withBoolean("isLogin", false)
                     .withString("fromClass", MainOPActivity.this.getClass().getSimpleName())
                     .navigation();
+        });
+
+        findViewById(R.id.test_appinstaller).setOnClickListener(v -> {
+            // 更新的数据参数
+            AppUpdate appUpdate = new AppUpdate.Builder()
+                    //更新地址（必传）
+                    .newVersionUrl("http://c.adnonstop.com/camera21_201911152102.apk")
+                    // 版本号（非必填）
+                    .newVersionCode("v2.4.5")
+                    // 更新的标题，弹框的标题（非必填，默认为应用更新）
+                    .updateTitle(R.string.update_title)
+                    // 更新内容的提示语，内容的标题（非必填，默认为更新内容）
+                    .updateContentTitle(R.string.update_content_lb)
+                    // 更新内容（非必填，默认“1.用户体验优化\n2.部分问题修复”）
+                    .updateInfo("1.用户体验优化\n2.部分问题修复")
+                    // 文件大小（非必填）
+                    .fileSize("5.8M")
+                    .savePath("")
+                    //是否采取静默下载模式（非必填，只显示更新提示，后台下载完自动弹出安装界面），否则，显示下载进度，显示下载失败
+                    .isSilentMode(true)
+                    //是否强制更新（非必填，默认不采取强制更新，否则，不更新无法使用）
+                    .forceUpdate(0)
+                    //文件的MD5值，默认不传，如果不传，不会去验证md5(非静默下载模式生效，若有值，且验证不一致，会启动浏览器去下载)
+                    .md5("")
+                    .build();
+            new UpdateManager().startUpdate(MainOPActivity.this, appUpdate);
         });
     }
 
