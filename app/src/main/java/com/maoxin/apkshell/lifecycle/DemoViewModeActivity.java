@@ -15,53 +15,62 @@ public class DemoViewModeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        DemoLifecyclePresenter mPresenter = new DemoLifecyclePresenter();
+        getLifecycle().addObserver(mPresenter);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.demo_view_mode_activity);
         if (savedInstanceState == null)
         {
             getSupportFragmentManager().beginTransaction().replace(R.id.container, DemoViewModeFragment.newInstance()).commitNow();
         }
-
-        DemoLifecyclePresenter mPresenter = new DemoLifecyclePresenter();
-        getLifecycle().addObserver(mPresenter);
     }
 
-    class DemoLifecyclePresenter extends BaseLifecyclePreseneter
+    class DemoLifecyclePresenter extends BaseLifecyclePresenter
     {
+        DemoLifecyclePresenter() {
+        }
+
+
         @Override
         public void onCreate(@NonNull LifecycleOwner owner)
         {
-            System.out.println("lifecycle onCreate");
+            sout("lifecycle onCreate");
         }
 
         @Override
         public void onStart(@NonNull LifecycleOwner owner)
         {
-            System.out.println("lifecycle onStart");
+            sout("lifecycle onStart");
         }
 
         @Override
         public void onResume(@NonNull LifecycleOwner owner)
         {
-            System.out.println("lifecycle onResume");
+            sout("lifecycle onResume");
         }
 
         @Override
         public void onPause(@NonNull LifecycleOwner owner)
         {
-            System.out.println("lifecycle onPause");
+            sout("lifecycle onPause");
         }
 
         @Override
         public void onStop(@NonNull LifecycleOwner owner)
         {
-            System.out.println("lifecycle onStop");
+            sout("lifecycle onStop");
         }
 
         @Override
         public void onDestroy(@NonNull LifecycleOwner owner)
         {
-            System.out.println("lifecycle onDestroy");
+            sout("lifecycle onDestroy");
+            getLifecycle().removeObserver(this);
+        }
+
+        private void sout(String s) {
+            System.out.println(s);
         }
     }
 
