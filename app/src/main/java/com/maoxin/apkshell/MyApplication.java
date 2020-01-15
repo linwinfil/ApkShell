@@ -1,6 +1,11 @@
 package com.maoxin.apkshell;
 
 import android.app.Application;
+import android.os.Build;
+import android.view.Display;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.meituan.android.walle.ChannelInfo;
@@ -20,6 +25,49 @@ public class MyApplication extends Application
     public static MyApplication getInstance() {
         return sApp;
     }
+
+
+    @Override
+    public Object getSystemService(String name) {
+        Object systemService = super.getSystemService(name);
+        //通过伪装代理，try了addview的操作方法，以防止由activity销毁后taost的bad token exception问题
+        //当时这样不排除厂商对windowmanager的重写，增加抽象方法
+        if (systemService instanceof WindowManager && Build.VERSION.SDK_INT == Build.VERSION_CODES.N_MR1) {
+            WindowManager w = (WindowManager) systemService;
+            return new WindowManager() {
+                @Override
+                public Display getDefaultDisplay() {
+                    return w.getDefaultDisplay();
+                }
+
+                @Override
+                public void removeViewImmediate(View view) {
+                    w.removeViewImmediate(view);
+                }
+
+                @Override
+                public void addView(View view, ViewGroup.LayoutParams params) {
+                    try {
+                        w.addView(view, params);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void updateViewLayout(View view, ViewGroup.LayoutParams params) {
+                    w.updateViewLayout(view, params);
+                }
+
+                @Override
+                public void removeView(View view) {
+                    w.removeView(view);
+                }
+            };
+        }
+        return systemService;
+    }
+
     @Override
     public void onCreate()
     {
