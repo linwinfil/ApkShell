@@ -14,6 +14,8 @@ import com.squareup.leakcanary.LeakCanary;
 
 import java.util.Map;
 
+import butterknife.ButterKnife;
+
 /**
  * @author lmx
  * Created by lmx on 2019/1/17.
@@ -74,8 +76,14 @@ public class MyApplication extends Application
         super.onCreate();
         sApp = this;
 
+        //泄露检测
         if (!LeakCanary.isInAnalyzerProcess(this)) {
             LeakCanary.install(this);
+        }
+
+        //ButterKnife
+        if (BuildConfig.DEBUG) {
+            ButterKnife.setDebug(true);
         }
 
         //ARouter路由
@@ -87,6 +95,7 @@ public class MyApplication extends Application
         ARouter.init(this);
 
 
+        //美团打包输出
         ChannelInfo channelInfo = WalleChannelReader.getChannelInfo(this);
         if (channelInfo != null) {
             Map<String, String> extraInfo = channelInfo.getExtraInfo();
