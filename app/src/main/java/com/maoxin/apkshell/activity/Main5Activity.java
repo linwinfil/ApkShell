@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.coremedia.iso.IsoFile;
 import com.maoxin.apkshell.Mp4ParseUtils;
 import com.maoxin.apkshell.R;
@@ -28,6 +29,7 @@ import java.util.Set;
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 public class Main5Activity extends AppCompatActivity implements MLog.ILogTag
 {
@@ -49,14 +51,15 @@ public class Main5Activity extends AppCompatActivity implements MLog.ILogTag
     String apk_basePath = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "apkshell";
     String video_basePath = apk_basePath + VIDEO_SEPARATOR;
     String audio_basePath = apk_basePath + AUDIO_SEPARATOR;
+    private Unbinder butterKnifeBind;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main5);
-        ButterKnife.bind(this);
-
+        butterKnifeBind = ButterKnife.bind(this);
+        Glide
     }
 
 
@@ -454,5 +457,12 @@ public class Main5Activity extends AppCompatActivity implements MLog.ILogTag
     public String getLogTag()
     {
         return TAG;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (butterKnifeBind != null) butterKnifeBind.unbind();
+        butterKnifeBind = null;
     }
 }
