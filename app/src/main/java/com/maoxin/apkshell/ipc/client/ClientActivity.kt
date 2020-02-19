@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.widget.Button
@@ -11,10 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.maoxin.apkshell.IWorker
 import com.maoxin.apkshell.R
 import com.maoxin.apkshell.ipc.Person
-import com.maoxin.apkshell.ipc.server.PersonInterface
-import com.maoxin.apkshell.ipc.server.PersonStub
-import com.maoxin.apkshell.ipc.server.RemoteService
-import com.maoxin.apkshell.ipc.server.WorkerService
+import com.maoxin.apkshell.ipc.server.*
 import java.util.*
 
 /**
@@ -25,7 +23,7 @@ class ClientActivity : AppCompatActivity() {
     private var isConnection: Boolean = false
     private var personInterface: PersonInterface? = null
 
-    private var work_isConnection : Boolean = false
+    private var work_isConnection: Boolean = false
     private var work_interface: IWorker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +52,20 @@ class ClientActivity : AppCompatActivity() {
             work_interface?.also {
                 it.onEditCode("edit the Binder/IPC code", System.currentTimeMillis())
             }
+        }
+
+        findViewById<Button>(R.id.btn_start_foreground_service).setOnClickListener {
+            val intent = Intent(this, ForegroundService::class.java)
+            intent.action = "com.maoxin.apkshell.ipc.server.ForegroundService"
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                this.startForegroundService(intent)
+            }
+        }
+
+        findViewById<Button>(R.id.btn_stop_foreground_service).setOnClickListener {
+            val intent = Intent(this, ForegroundService::class.java)
+            intent.action = "com.maoxin.apkshell.ipc.server.ForegroundService"
+            this.stopService(intent)
         }
     }
 

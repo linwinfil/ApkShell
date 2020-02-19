@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.coremedia.iso.IsoFile;
 import com.maoxin.apkshell.Mp4ParseUtils;
 import com.maoxin.apkshell.R;
@@ -59,7 +58,6 @@ public class Main5Activity extends AppCompatActivity implements MLog.ILogTag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main5);
         butterKnifeBind = ButterKnife.bind(this);
-        Glide
     }
 
 

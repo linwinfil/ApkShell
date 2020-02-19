@@ -83,6 +83,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".ipc.server.ForegroundService"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.maoxin.apkshell.ipc.server.ForegroundService" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
