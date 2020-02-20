@@ -1,18 +1,22 @@
 package com.maoxin.apkshell.ipc.client
 
+import android.app.Activity
 import android.app.Service
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.os.Build
-import android.os.Bundle
-import android.os.IBinder
+import android.os.*
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.maoxin.apkshell.IWorker
 import com.maoxin.apkshell.R
 import com.maoxin.apkshell.ipc.Person
 import com.maoxin.apkshell.ipc.server.*
+import java.lang.ref.WeakReference
 import java.util.*
 
 /**
@@ -20,11 +24,19 @@ import java.util.*
  */
 class ClientActivity : AppCompatActivity() {
 
+    companion object {
+        public val MSG_JOB_START = 1
+        public val MSG_JOB_STOP = 2
+    }
+
     private var isConnection: Boolean = false
     private var personInterface: PersonInterface? = null
 
     private var work_isConnection: Boolean = false
     private var work_interface: IWorker? = null
+
+    private var mJobServiceIntent: Intent? = null
+    private var mJobIncomeHandler: JobIncomeHandler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,8 +79,89 @@ class ClientActivity : AppCompatActivity() {
             intent.action = "com.maoxin.apkshell.ipc.server.ForegroundService"
             this.stopService(intent)
         }
+
+
+        /*<a href="http://jackzhang.info/2019/04/29/Android-Jobscheduler-%E4%BB%A5%E5%8F%8A-Android-Job/"></a>
+        * */
+        findViewById<Button>(R.id.btn_start_job_service).setOnClickListener {
+            //启动JobService
+            mJobServiceIntent?.let { return@setOnClickListener }
+            mJobServiceIntent = Intent(this, JobServiceImpl::class.java)
+            mJobIncomeHandler ?: also {
+                mJobIncomeHandler = JobIncomeHandler(Looper.getMainLooper(), this)
+            }
+            val messenger = Messenger(mJobIncomeHandler)
+            mJobServiceIntent!!.putExtra("messenger", messenger)
+            startService(mJobServiceIntent)
+        }
+
+        findViewById<Button>(R.id.btn_start_job).setOnClickListener {
+            startJobSchedule()
+        }
+        findViewById<Button>(R.id.btn_stop_job).setOnClickListener {
+            stopJobSchedule()
+        }
     }
 
+    /**
+     * 启动Job
+     */
+    private fun startJobSchedule() {
+        val jobScheduler: JobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        val builder: JobInfo.Builder = JobInfo.Builder(999, ComponentName(this, JobServiceImpl::class.java))
+        // builder.setRequiresCharging(true) //充电才能运行
+        // builder.setBackoffCriteria(JobInfo.DEFAULT_INITIAL_BACKOFF_MILLIS, JobInfo.BACKOFF_POLICY_LINEAR) //回退/重试策略
+
+        //设置延迟时间 setMinimumLatency(long minLatencyMillis)和
+        //设置最终期限时间 setOverrideDeadline(long maxExecutionDelayMillis)的两个方法
+        //不能同时与setPeriodic(long time)同时设置
+        builder.setPeriodic(5000) //执行周期
+        // builder.setMinimumLatency(10_000)//最小延迟毫秒
+        // builder.setOverrideDeadline(30_000)//最大延迟毫秒
+
+        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED) //非蜂窝网络下执行
+        val bundle = PersistableBundle()
+
+        bundle.putLong("delay_stop", 8_000)//设置启动后，延迟8秒结束
+        builder.setExtras(bundle)
+
+
+        val jobInfo: JobInfo = builder.build()
+        val schedule: Int = jobScheduler.schedule(jobInfo)
+        println("job schedule jobInfo id==${jobInfo.id}")
+        if (schedule == JobScheduler.RESULT_SUCCESS) {
+            println("job schedule success")
+        } else {
+            println("job schedule failed")
+        }
+    }
+
+    /**
+     * 停止Job
+     */
+    private fun stopJobSchedule() {
+        val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        jobScheduler.cancelAll()
+        Toast.makeText(this, "job schedule cancel all", Toast.LENGTH_SHORT).show()
+    }
+
+    private class JobIncomeHandler(looper: Looper, activity: Activity) : Handler(looper) {
+        private var mActivity: WeakReference<Activity> = WeakReference(activity)
+        override fun handleMessage(msg: Message) {
+            val activity: Activity? = mActivity.get()
+            activity ?: return
+
+            when (msg.what) {
+                MSG_JOB_START -> {
+                    Toast.makeText(activity, "job start~~~", Toast.LENGTH_SHORT).show()
+                }
+                MSG_JOB_STOP -> {
+                    Toast.makeText(activity, "job stop~~~", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+    }
 
     private fun bindServiceConnection() {
         val intent = Intent(this, RemoteService::class.java)
@@ -134,5 +227,7 @@ class ClientActivity : AppCompatActivity() {
         if (this.work_isConnection) {
             work_unbindServiceConnection()
         }
+        mJobServiceIntent?.let { stopService(it) }
+        mJobServiceIntent = null
     }
 }

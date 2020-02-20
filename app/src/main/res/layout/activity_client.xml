@@ -38,4 +38,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_start_foreground_service" />
 
+    <Button
+        android:id="@+id/btn_start_job_service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="start job service"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_stop_foreground_service" />
+
+    <Button
+        android:id="@+id/btn_start_job"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="start job"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_start_job_service"
+        app:layout_constraintStart_toEndOf="@+id/btn_start_job_service"
+        app:layout_constraintTop_toTopOf="@+id/btn_start_job_service" />
+
+    <Button
+        android:id="@+id/btn_stop_job"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="stop job"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_start_job"
+        app:layout_constraintStart_toEndOf="@+id/btn_start_job"
+        app:layout_constraintTop_toTopOf="@+id/btn_start_job"
+        app:layout_constraintVertical_bias="1.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

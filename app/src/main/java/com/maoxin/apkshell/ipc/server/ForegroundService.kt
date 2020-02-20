@@ -1,15 +1,13 @@
 package com.maoxin.apkshell.ipc.server
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import com.maoxin.apkshell.R
 import com.maoxin.apkshell.ipc.Person
 import java.util.*
 
@@ -36,13 +34,18 @@ class ForegroundService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-
-
-        val builder: NotificationCompat.Builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationCompat.Builder(this, TAG)
-        } else {
-            NotificationCompat.Builder(this)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val channel = NotificationChannel(TAG, "前台服务通知", NotificationManager.IMPORTANCE_LOW)
+            channel.canBypassDnd()
+            channel.enableLights(true)
+            channel.setShowBadge(true)
+            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            notificationManager.createNotificationChannel(channel)
         }
+
+        val builder: NotificationCompat.Builder = NotificationCompat.Builder(this, TAG)
+        builder.setSmallIcon(R.mipmap.ic_launcher)
         builder.setContentTitle("标题，前台服务")
         builder.setContentText("内容，前台服务！")
         builder.setOngoing(false)
@@ -51,16 +54,8 @@ class ForegroundService : Service() {
         aintent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 9990, aintent, PendingIntent.FLAG_UPDATE_CURRENT, null)
         builder.setContentIntent(pendingIntent)
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val notificationChannel = NotificationChannel(TAG, "前台服务通知", NotificationManager.IMPORTANCE_LOW)
-            notificationManager.createNotificationChannel(notificationChannel)
-        }
-
         this.startForeground(999, builder.build())
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
     }
 
     override fun onDestroy() {
