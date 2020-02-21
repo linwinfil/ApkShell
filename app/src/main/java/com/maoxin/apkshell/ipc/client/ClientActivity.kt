@@ -1,5 +1,6 @@
 package com.maoxin.apkshell.ipc.client
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Service
 import android.app.job.JobInfo
@@ -101,6 +102,36 @@ class ClientActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btn_stop_job).setOnClickListener {
             stopJobSchedule()
         }
+
+        findViewById<Button>(R.id.btn_add_idle_handle).setOnClickListener {
+            // val queue: MessageQueue = Looper.myQueue()
+            // queue.addIdleHandler {
+            //     println("queueIdle now in [main] thread:${Looper.getMainLooper().thread.id == Thread.currentThread().id}")
+            //     return@addIdleHandler false
+            // }
+
+            val thread = Thread {
+                Looper.prepare()
+                val handler: Handler = @SuppressLint("HandlerLeak")
+                object : Handler() {
+                    override fun handleMessage(msg: Message) {
+                        super.handleMessage(msg)
+                    }
+                }
+                handler.post{
+                    println("post runnable")
+                }
+                Looper.myQueue().addIdleHandler {
+                    println("queueIdle now in [other] thread:${Looper.getMainLooper().thread.id != Thread.currentThread().id}")
+                    return@addIdleHandler false
+                }
+                Looper.loop()
+                println("thread runnable")
+                Thread.sleep(5_000)
+                println("thread sleep wakeup")
+            }
+            thread.start()
+        }
     }
 
     /**
@@ -116,13 +147,13 @@ class ClientActivity : AppCompatActivity() {
         //设置最终期限时间 setOverrideDeadline(long maxExecutionDelayMillis)的两个方法
         //不能同时与setPeriodic(long time)同时设置
         builder.setPeriodic(5000) //执行周期
-        // builder.setMinimumLatency(10_000)//最小延迟毫秒
-        // builder.setOverrideDeadline(30_000)//最大延迟毫秒
+        builder.setMinimumLatency(10_000) //最小延迟毫秒
+        builder.setOverrideDeadline(30_000) //最大延迟毫秒
 
         builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED) //非蜂窝网络下执行
         val bundle = PersistableBundle()
 
-        bundle.putLong("delay_stop", 8_000)//设置启动后，延迟8秒结束
+        bundle.putLong("delay_stop", 8_000) //设置启动后，延迟8秒结束
         builder.setExtras(bundle)
 
 
@@ -198,6 +229,7 @@ class ClientActivity : AppCompatActivity() {
 
     private var serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            println("call #onServiceConnected is in Main thread:${Looper.getMainLooper().thread.id == Thread.currentThread().id}")
             isConnection = true
             val interfaceProxy = PersonStub.asInterfaceProxy(service)
             this@ClientActivity.personInterface = interfaceProxy
@@ -209,6 +241,7 @@ class ClientActivity : AppCompatActivity() {
 
         override fun onServiceDisconnected(name: ComponentName?) {
             isConnection = false
+            println("call #onServiceDisconnected is in Main thread:${Looper.getMainLooper().thread.id == Thread.currentThread().id}")
         }
     }
 
