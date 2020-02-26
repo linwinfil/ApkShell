@@ -19,6 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".lifecycle.activity.ViewModelMainActivity"></activity>
         <activity android:name=".activity.MainARouterActivity" />
         <activity android:name=".ipc.client.ClientActivity" />
         <activity android:name=".activity.Main13KotlinActivity" />
@@ -83,29 +84,28 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
-
         <service
             android:name=".ipc.server.ForegroundService"
             android:enabled="true">
             <intent-filter>
                 <action android:name="com.maoxin.apkshell.ipc.server.ForegroundService" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
-
         <service
             android:name=".ipc.server.JobServiceImpl"
             android:enabled="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" /><!--必要权限申明-->
-
+            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- 必要权限申明 -->
         <provider
-            android:name="com.maoxin.apkshell.provider.MainContentProvider"
+            android:name=".provider.MainContentProvider"
             android:authorities="${applicationId}.provider.MainContentProvider"
             android:exported="true"
             android:grantUriPermissions="true" />
 
         <receiver android:name=".widget.MainAppWidgetProvider">
             <meta-data android:name="android.appwidget.provider" />
+
             <intent-filter>
                 <action android:name="com.maoxin.apkshell.action.MainAppWidgetProvider" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
