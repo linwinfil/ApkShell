@@ -16,14 +16,13 @@ class ViewModelMainActivity : AppCompatActivity(), MainViewModel.Handlers {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // setContentView(R.layout.activity_view_model_main)
         DataBindingUtil.setContentView<ActivityViewModelMainBinding>(this, R.layout.activity_view_model_main).also {
-            val viewModelProvider = ViewModelProvider(this)
+            val viewModelProvider = ViewModelProvider(this@ViewModelMainActivity)
+
             it.viewModel = viewModelProvider[MainViewModel::class.java].apply {
-                text = "view model 测试文本"
+                this.text = "view model 测试文本"
             }
-            it.handlers = this
+            it.handlers = this@ViewModelMainActivity
         }
     }
 
@@ -31,7 +30,5 @@ class ViewModelMainActivity : AppCompatActivity(), MainViewModel.Handlers {
         startActivity<MainOPActivity>()
     }
 
-    private inline fun <reified T : Activity> startActivity() {
-        startActivity(Intent(this, T::class.java))
-    }
+    private inline fun <reified T : Activity> startActivity() = startActivity(Intent(this, T::class.java))
 }
