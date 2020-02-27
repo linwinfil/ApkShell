@@ -6,31 +6,26 @@
     <data>
 
         <variable
-            name="viewModel"
+            name="viewmodel"
             type="com.maoxin.apkshell.lifecycle.viewmodel.MainViewModel" />
-
-        <variable
-            name="handlers"
-            type="com.maoxin.apkshell.lifecycle.viewmodel.MainViewModel.Handlers" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".lifecycle.activity.ViewModelMainActivity">
+        tools:context=".lifecycle.activity.ViewModelMain2Activity">
 
-        <Button
+        <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="@{handlers::onNatigateToOtherActivityClick}"
-            android:padding="12dp"
-            android:text="@{viewModel.text}"
-            android:textSize="16sp"
+            android:text="@{viewmodel.text}"
+            android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

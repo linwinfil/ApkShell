@@ -19,7 +19,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".lifecycle.activity.ViewModelMainActivity"></activity>
+        <activity android:name=".activity.MainOPActivity"/>
+        <activity android:name=".lifecycle.activity.ViewModelMain2Activity" />
+        <activity android:name=".lifecycle.activity.ViewModelMainActivity" />
         <activity android:name=".activity.MainARouterActivity" />
         <activity android:name=".ipc.client.ClientActivity" />
         <activity android:name=".activity.Main13KotlinActivity" />
@@ -29,10 +31,10 @@
         <activity android:name=".activity.MainCameraXActivity" />
         <activity
             android:name=".activity.Main12Activity"
-            android:parentActivityName=".activity.MainOPActivity" />
+            android:parentActivityName=".activity.MainOPKotlinActivity" />
         <activity android:name=".activity.MainActivity" />
         <activity android:name=".activity.MainKotlinActivity" />
-        <activity android:name=".activity.MainOPActivity">
+        <activity android:name=".activity.MainOPKotlinActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -103,14 +105,14 @@
             android:exported="true"
             android:grantUriPermissions="true" />
 
-        <receiver android:name=".widget.MainAppWidgetProvider">
-            <meta-data android:name="android.appwidget.provider" />
+<!--        <receiver android:name=".widget.MainAppWidgetProvider">-->
+<!--            <meta-data android:name="android.appwidget.provider" />-->
 
-            <intent-filter>
-                <action android:name="com.maoxin.apkshell.action.MainAppWidgetProvider" />
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-        </receiver>
+<!--            <intent-filter>-->
+<!--                <action android:name="com.maoxin.apkshell.action.MainAppWidgetProvider" />-->
+<!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
     </application>
 
 </manifest>
