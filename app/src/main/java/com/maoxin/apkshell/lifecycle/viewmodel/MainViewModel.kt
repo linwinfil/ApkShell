@@ -17,6 +17,17 @@ class MainViewModel : ObservableViewModel() {
             onNotifyPropertyChanged(BR.text)
         }
 
+    @Bindable
+    var inputNumber: String = 0.toString()
+        set(value) {
+            if (field != value) {
+                field = value
+                onNotifyPropertyChanged(BR.inputNumber)
+            }
+        }
+        get() {
+            return field
+        }
 
     interface Handlers {
         fun onNatigateToOtherActivityClick(view: View)
