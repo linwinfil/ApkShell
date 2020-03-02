@@ -27,6 +27,14 @@ class MainViewModel : BaseObservable() {
             notifyPropertyChanged(BR.inputNumber)
         }
 
+
+    @get:Bindable
+    var inputNumber2: Int = 0
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.inputNumber2)
+        }
+
     companion object {
         open class SimpleTextWatcher : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

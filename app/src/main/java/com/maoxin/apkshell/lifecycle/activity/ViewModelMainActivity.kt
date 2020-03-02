@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import com.maoxin.apkshell.R
 import com.maoxin.apkshell.databinding.ActivityViewModelMainBinding
@@ -21,6 +23,15 @@ import com.maoxin.apkshell.lifecycle.viewmodel.MainViewModel
 class ViewModelMainActivity : AppCompatActivity(), MainViewModel.Handlers {
     companion object {
         private val TAG: String = "ViewModelMainActivity"
+
+        @BindingAdapter("android:text")
+        fun setText(view: EditText, text: CharSequence) {
+            val old: CharSequence = view.text
+            if (old == text) {
+                return
+            }
+            view.setText(text.toString())
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
