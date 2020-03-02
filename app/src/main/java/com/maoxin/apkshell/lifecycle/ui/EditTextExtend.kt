@@ -4,10 +4,7 @@ import android.content.Context
 import android.text.Editable
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingListener
-import androidx.databinding.InverseBindingMethod
-import androidx.databinding.InverseBindingMethods
+import androidx.databinding.*
 import com.maoxin.apkshell.lifecycle.viewmodel.MainViewModel
 
 /** @author lmx
@@ -18,6 +15,7 @@ import com.maoxin.apkshell.lifecycle.viewmodel.MainViewModel
  *      method：指定逆向绑定的时候的数据来源方法
  */
 @InverseBindingMethods(value = [InverseBindingMethod(type = EditTextExtend::class, attribute = "inputText", method = "getInputText", event = "inputTextAttrChanged")])
+@BindingMethods(value = [BindingMethod(type = EditTextExtend::class, attribute = "inputText", method = "setInputText")])
 open class EditTextExtend : AppCompatEditText {
 
     interface OnInputTextChangeListener {
