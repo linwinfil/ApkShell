@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.MainOPActivity"/>
+        <activity android:name=".activity.MainClassLoaderActivity"></activity>
+        <activity android:name=".activity.MainOPActivity" />
         <activity android:name=".lifecycle.activity.ViewModelMain2Activity" />
         <activity android:name=".lifecycle.activity.ViewModelMainActivity" />
         <activity android:name=".activity.MainARouterActivity" />
@@ -104,15 +105,6 @@
             android:authorities="${applicationId}.provider.MainContentProvider"
             android:exported="true"
             android:grantUriPermissions="true" />
-
-<!--        <receiver android:name=".widget.MainAppWidgetProvider">-->
-<!--            <meta-data android:name="android.appwidget.provider" />-->
-
-<!--            <intent-filter>-->
-<!--                <action android:name="com.maoxin.apkshell.action.MainAppWidgetProvider" />-->
-<!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
-<!--            </intent-filter>-->
-<!--        </receiver>-->
     </application>
 
 </manifest>

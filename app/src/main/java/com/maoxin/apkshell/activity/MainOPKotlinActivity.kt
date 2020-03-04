@@ -56,6 +56,7 @@ class MainOPKotlinActivity : AppCompatActivity() {
         mList.add(VHData("Android 10 储存", Main13KotlinActivity::class.java))
         mList.add(VHData("binder ipc test", ClientActivity::class.java))
         mList.add(VHData("Video Model test", ViewModelMainActivity::class.java))
+        mList.add(VHData("易观CL", MainClassLoaderActivity::class.java))
 
 
         mGridAdapter.notifyDataSetChanged()

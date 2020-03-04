@@ -29,7 +29,7 @@ class MainViewModel : BaseObservable() {
 
 
     @get:Bindable
-    var inputNumber2: Int = 0
+    var inputNumber2: String = ""
         set(value) {
             field = value
             notifyPropertyChanged(BR.inputNumber2)

@@ -24,13 +24,16 @@ class ViewModelMainActivity : AppCompatActivity(), MainViewModel.Handlers {
     companion object {
         private val TAG: String = "ViewModelMainActivity"
 
+        @JvmStatic
         @BindingAdapter("android:text")
         fun setText(view: EditText, text: CharSequence) {
-            val old: CharSequence = view.text
-            if (old == text) {
+            val old: String = view.text.toString()
+            val toString = text.toString()
+            if (old == toString) {
                 return
             }
-            view.setText(text.toString())
+
+            view.setText(toString)
         }
     }
 
@@ -45,13 +48,16 @@ class ViewModelMainActivity : AppCompatActivity(), MainViewModel.Handlers {
 
             it.editText.setInputTextChangeListener(object : EditTextExtend.OnInputTextChangeListener {
                 override fun onInputTextChange(arg: String) {
-                    it.textView.isClickable = if (arg.toInt() > 0) {
+                    val value: Int = arg.toInt()
+                    it.textView.isClickable = if (value > 0) {
                         it.textView.text = "数字有效"
                         true
                     } else {
                         it.textView.text = "数字无效"
                         false
                     }
+
+                    it.viewModel?.inputNumber2 = arg
                 }
             })
         }
