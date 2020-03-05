@@ -23,8 +23,9 @@ class LoginViewModel : BaseViewModel() {
         return data
     }
 
-    fun onLogin(username: String, password: String) = launchUI(call = {
-        data.postValue(repository.onLogin(username, password))
+    fun onLogin(username: String, password: String) = launchUI(block = {
+        val response:ResponseData<LoginData> = repository.onLogin(username, password)
+        data.postValue(response)
     })
 
     @get:Bindable

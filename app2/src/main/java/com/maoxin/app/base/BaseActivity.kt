@@ -1,6 +1,7 @@
 package com.maoxin.app.base
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 /** @author lmx
@@ -16,4 +17,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     protected abstract fun initData()
     protected abstract fun initView()
+    protected fun showToast(msg: String) {
+        Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
+    }
 }

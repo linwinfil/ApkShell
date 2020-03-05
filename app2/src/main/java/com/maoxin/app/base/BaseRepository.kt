@@ -23,6 +23,6 @@ open class BaseRepository {
             }
         }
     }
-}
 
-class ParamsException(msg: String = "params error") : Exception(msg)
+    class ParamsException(msg: String = "params error") : Exception(msg)
+}

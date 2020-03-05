@@ -39,10 +39,10 @@ open class BaseViewModel : ViewModel(), LifecycleObserver, Observable {
         callbacks?.clear()
     }
 
-    fun launchUI(call: suspend CoroutineScope.() -> Unit) = viewModelScope.launch {
+    fun launchUI(block: suspend CoroutineScope.() -> Unit) = viewModelScope.launch {
         try {
             withTimeout(5_000) {
-                call()
+                block()
             }
         } catch (e: Exception) {
             error.value = e

@@ -9,6 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 import java.util.concurrent.TimeUnit
 
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitFactory {
     val TAG: String = RetrofitFactory::class.java.simpleName
 
-    public val reqApi: RequestService by lazy {
+    val reqApi: RequestService by lazy {
         return@lazy Retrofit.Builder()
                 .baseUrl(RequestService.BaseUrl)
                 .client(getClient())
@@ -47,18 +48,19 @@ object RetrofitFactory {
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return httpLoggingInterceptor
     }
-}
 
-interface RequestService {
+    interface RequestService {
 
-    companion object {
-        val BaseUrl: String
-            get() = "https://www.wanandroid.com/"
+        companion object {
+            val BaseUrl: String
+                get() = "https://www.wanandroid.com/"
+        }
+
+        /**
+         * https://www.wanandroid.com/user/login
+         */
+        @FormUrlEncoded
+        @POST("user/login")
+        suspend fun login(@Field("username") username: String, @Field("password") password: String): ResponseData<LoginData>
     }
-
-    /**
-     * https://www.wanandroid.com/user/login
-     */
-    @POST("user/login")
-    suspend fun login(@Field("username") username: String, @Field("password") password: String): ResponseData<LoginData>
 }
