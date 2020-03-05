@@ -5,15 +5,31 @@ import android.os.Bundle
 import android.view.autofill.AutofillManager
 import android.widget.Button
 import android.widget.EditText
+import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.maoxin.app.MyApplication.Companion.showToast
 import com.maoxin.app.R
 import com.maoxin.app.base.BaseViewModelActivity
 import com.maoxin.app.data.LoginData
 import com.maoxin.app.data.ResponseData
 import com.maoxin.app.databinding.ActivityLoginBinding
+import com.maoxin.app.utils.SharedPreUtils
 
 class LoginActivity : BaseViewModelActivity<LoginViewModel>() {
+    companion object {
+
+        @JvmStatic
+        @BindingAdapter("android:text")
+        fun setText(view: EditText, text: CharSequence) {
+            val old: String = view.text.toString()
+            val toString = text.toString()
+            if (old == toString) {
+                return
+            }
+            view.setText(toString)
+        }
+    }
 
     private lateinit var mLoginBinding: ActivityLoginBinding
     private var mAutoFillManager: AutofillManager? = null
@@ -42,6 +58,16 @@ class LoginActivity : BaseViewModelActivity<LoginViewModel>() {
         mLoginBinding.loginModel = viewModel
         viewModel.getLogin().observe(this@LoginActivity, loginObserve)
 
+        viewModel.also {
+            if (SharedPreUtils.contain("username")) {
+                it.username = SharedPreUtils.get("username", "") as String
+            }
+            if (SharedPreUtils.contain("password")) {
+                it.password = SharedPreUtils.get("password", "") as String
+            }
+        }
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mAutoFillManager = this.getSystemService(AutofillManager::class.java) as AutofillManager
         }
@@ -51,6 +77,8 @@ class LoginActivity : BaseViewModelActivity<LoginViewModel>() {
         Observer<ResponseData<LoginData>> {
             when (it.errorCode) {
                 0 -> {
+                    SharedPreUtils.save("username", viewModel.username)
+                    SharedPreUtils.save("password", viewModel.password)
                     showToast("登录成功")
                 }
                 else -> {

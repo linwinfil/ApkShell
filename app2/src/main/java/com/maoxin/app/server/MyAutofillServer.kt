@@ -10,7 +10,14 @@ import androidx.annotation.RequiresApi
  */
 @RequiresApi(Build.VERSION_CODES.O)
 class MyAutofillServer : AutofillService() {
-    override fun onFillRequest(request: FillRequest, cancellationSignal: CancellationSignal, callback: FillCallback) {
+    companion object {
+        val TAG = MyAutofillServer::class.java.simpleName
+    }
+
+    override fun onFillRequest(request: FillRequest,
+                               cancellationSignal: CancellationSignal,
+                               callback: FillCallback) {
+
     }
 
     override fun onSaveRequest(request: SaveRequest, callback: SaveCallback) {

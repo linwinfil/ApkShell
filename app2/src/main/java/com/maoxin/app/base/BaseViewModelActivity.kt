@@ -3,6 +3,7 @@ package com.maoxin.app.base
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.maoxin.app.MyApplication.Companion.showToast
 import com.maoxin.app.data.ServerException
 import kotlinx.coroutines.TimeoutCancellationException
 import org.json.JSONException
