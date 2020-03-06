@@ -10,6 +10,8 @@ import com.maoxin.app.utils.SharedPreUtils
 class MyApplication : Application() {
 
     companion object {
+        public val TAG = MyApplication::class.java.simpleName
+
         @JvmStatic
         var sApp: MyApplication? = null
 

@@ -41,7 +41,7 @@ open class BaseViewModel : ViewModel(), LifecycleObserver, Observable {
 
     fun launchUI(block: suspend CoroutineScope.() -> Unit) = viewModelScope.launch {
         try {
-            withTimeout(5_000) {
+            withTimeout(5_000) {//5s超时抛异常
                 block()
             }
         } catch (e: Exception) {

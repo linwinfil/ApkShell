@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.MainClassLoaderActivity"></activity>
+        <activity android:name=".activity.MainHookActivity"></activity>
+        <activity android:name=".activity.MainClassLoaderActivity" />
         <activity android:name=".activity.MainOPActivity" />
         <activity android:name=".lifecycle.activity.ViewModelMain2Activity" />
         <activity android:name=".lifecycle.activity.ViewModelMainActivity" />
