@@ -2,6 +2,7 @@ package com.maoxin.apkshell.activity
 
 import android.content.Intent
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -59,7 +60,11 @@ class MainOPKotlinActivity : AppCompatActivity() {
         mList.add(VHData("易观CL", MainClassLoaderActivity::class.java))
         mList.add(VHData("Hook Activity", MainHookActivity::class.java))
         mList.add(VHData("Hook Activity4Java", MainHook4JActivity::class.java))
+        mList.add(VHData("Toast BadWindowToken问题", MainToastActivity::class.java))
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            mList.add(VHData("Image Decoder", MainImageDecoderActivity::class.java.javaClass))
+        }
 
         mGridAdapter.notifyDataSetChanged()
     }
