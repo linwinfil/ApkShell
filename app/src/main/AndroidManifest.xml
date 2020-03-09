@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.MainHookActivity"></activity>
+        <activity android:name=".activity.MainHookActivity"/>
+        <activity android:name=".activity.MainHook4JActivity"/>
         <activity android:name=".activity.MainClassLoaderActivity" />
         <activity android:name=".activity.MainOPActivity" />
         <activity android:name=".lifecycle.activity.ViewModelMain2Activity" />
@@ -65,6 +66,7 @@
 
         <activity android:name=".activity.Main10Activity" />
         <activity android:name=".lifecycle.DemoViewModeActivity" />
+        <activity android:name=".activity.MainHookActivity$ProxyActivity" />
 
         <service
             android:name=".ipc.server.RemoteService"

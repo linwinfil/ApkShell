@@ -57,6 +57,8 @@ class MainOPKotlinActivity : AppCompatActivity() {
         mList.add(VHData("binder ipc test", ClientActivity::class.java))
         mList.add(VHData("Video Model test", ViewModelMainActivity::class.java))
         mList.add(VHData("易观CL", MainClassLoaderActivity::class.java))
+        mList.add(VHData("Hook Activity", MainHookActivity::class.java))
+        mList.add(VHData("Hook Activity4Java", MainHook4JActivity::class.java))
 
 
         mGridAdapter.notifyDataSetChanged()
@@ -110,5 +112,5 @@ class MainOPKotlinActivity : AppCompatActivity() {
         var button: Button = itemView.findViewById(R.id.m_item_button_view)
     }
 
-    inner class VHData(val text: String, val activity: Class<*>?)
+    private data class VHData(val text: String, val activity: Class<*>?)
 }
