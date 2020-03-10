@@ -1,6 +1,8 @@
 package com.maoxin.app
 
 import android.app.Application
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import com.maoxin.app.utils.SharedPreUtils
 
@@ -26,10 +28,13 @@ class MyApplication : Application() {
         }
     }
 
+    lateinit var mMainHandler: Handler
+
     override fun onCreate() {
         super.onCreate()
         sApp = this
 
         SharedPreUtils.init(this, "sp_login_config")
+        mMainHandler = Handler(Looper.getMainLooper())
     }
 }

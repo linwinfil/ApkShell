@@ -2,6 +2,8 @@ package com.maoxin.apkshell;
 
 import android.app.Application;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,8 @@ import butterknife.ButterKnife;
 public class MyApplication extends Application
 {
     private static MyApplication sApp = null;
+
+    public static Handler sMainHandler;
 
     public static MyApplication getInstance() {
         return sApp;
@@ -94,6 +98,7 @@ public class MyApplication extends Application
         }
         ARouter.init(this);
 
+        sMainHandler = new Handler(Looper.getMainLooper());
 
         //美团打包输出
         ChannelInfo channelInfo = WalleChannelReader.getChannelInfo(this);

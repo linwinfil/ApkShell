@@ -1,11 +1,10 @@
 package com.maoxin.apkshell.activity
 
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Message
+import android.os.*
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.maoxin.apkshell.MyApplication
 import com.maoxin.apkshell.R
 import java.lang.reflect.Field
 
@@ -17,6 +16,7 @@ class MainToastActivity : AppCompatActivity() {
 
         init {
             try {
+                //Android 8.0（26）及以上已经修复Toast的BadWindowTokenException
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                     sField_TN = Toast::class.java.getDeclaredField("mTN")
                     sField_TN?.also {
@@ -34,6 +34,26 @@ class MainToastActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_toast)
+
+        findViewById<Button>(R.id.btn_show_toast).setOnClickListener {
+            val toast = Toast.makeText(this@MainToastActivity, "弹弹弹-${System.currentTimeMillis()}", Toast.LENGTH_SHORT)
+            MyApplication.sMainHandler.postDelayed({
+                println("is destroy:${this@MainToastActivity.isDestroyed}")
+                toast.show()
+            }, 10_000)
+
+            finish()
+        }
+
+        findViewById<Button>(R.id.btn_hook_toast).setOnClickListener {
+            val toast = Toast.makeText(this@MainToastActivity, "hook 弹弹弹-${System.currentTimeMillis()}", Toast.LENGTH_SHORT)
+            hook(toast)
+            MyApplication.sMainHandler.postDelayed({
+                println("is destroy:${this@MainToastActivity.isDestroyed}")
+                toast.show()
+            }, 10_000)
+            finish()
+        }
     }
 
 
@@ -45,9 +65,9 @@ class MainToastActivity : AppCompatActivity() {
     private fun hook(toast: Toast) {
         try {
             if (sField_TN != null && sField_TN_Handler != null) {
-                val tn = sField_TN!![toast]
-                val preHandler = sField_TN_Handler!![tn] as Handler
-                sField_TN_Handler!![tn] = ToastSafelyHandlerWrapper(preHandler)
+                val tn = sField_TN!!.get(toast)
+                val preHandler = sField_TN_Handler!!.get(tn) as Handler
+                sField_TN_Handler!!.set(tn, ToastSafelyHandlerWrapper(preHandler))
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -60,6 +80,7 @@ class MainToastActivity : AppCompatActivity() {
                 super.dispatchMessage(msg)
             } catch (ex: Exception) {
                 ex.printStackTrace()
+                println(" toast handler cache exception!")
             }
         }
 

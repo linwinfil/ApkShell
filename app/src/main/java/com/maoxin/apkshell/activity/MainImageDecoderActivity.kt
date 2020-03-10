@@ -24,7 +24,7 @@ class MainImageDecoderActivity : AppCompatActivity() {
 
 
     val imgView: ImageView by lazy {
-        findViewById(R.id.imgv_pic)
+        findViewById<ImageView>(R.id.imgv_pic)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
