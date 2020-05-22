@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.MainToastActivity"></activity>
+        <activity android:name=".activity.MainCanvasActivity"></activity>
+        <activity android:name=".activity.MainToastActivity" />
         <activity android:name=".activity.MainImageDecoderActivity" />
         <activity android:name=".activity.MainHookActivity" />
         <activity android:name=".activity.MainHook4JActivity" />

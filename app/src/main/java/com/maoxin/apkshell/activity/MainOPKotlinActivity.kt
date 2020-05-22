@@ -61,6 +61,7 @@ class MainOPKotlinActivity : AppCompatActivity() {
         mList.add(VHData("Hook Activity", MainHookActivity::class.java))
         mList.add(VHData("Hook Activity4Java", MainHook4JActivity::class.java))
         mList.add(VHData("Toast BadWindowToken问题", MainToastActivity::class.java))
+        mList.add(VHData("Canvas 测试", MainCanvasActivity::class.java))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             mList.add(VHData("Image Decoder", MainImageDecoderActivity::class.java.javaClass))

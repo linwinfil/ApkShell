@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_subject_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:gravity="start"
+        android:singleLine="true"
+        android:textColor="@android:color/black"
+        android:textSize="13sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@id/tv_subject_count"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="草本风模板专辑是你爱aaa草本风模板专辑是你aaa爱aaa草本风模板asda" />
+
+    <TextView
+        android:id="@+id/tv_subject_count"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="start"
+        android:maxLines="1"
+        android:textColor="@android:color/black"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_subject_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_subject_title"
+        tools:text="·8款" />
+
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_text"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:singleLine="true"-->
+    <!--        app:layout_constrainedWidth="true"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toStartOf="@id/tv_action"-->
+    <!--        app:layout_constraintHorizontal_chainStyle="packed"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        tools:text="草本风模板专辑是你爱aaa草本风模板专辑是你aaa爱aaa草本风模板asda草本风模板专辑是你爱aaa草本风模板专辑是你aaa爱aaa草本风模板asda" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/tv_action"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/tv_text"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/tv_text"-->
+    <!--        app:layout_constraintTop_toTopOf="@id/tv_text"-->
+    <!--        tools:text="查看" />-->
+</androidx.constraintlayout.widget.ConstraintLayout>
