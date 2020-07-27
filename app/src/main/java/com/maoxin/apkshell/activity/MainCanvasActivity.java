@@ -19,7 +19,9 @@ import com.maoxin.apkshell.R;
 
 import java.util.Arrays;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.Size;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
@@ -84,6 +86,7 @@ public class MainCanvasActivity extends AppCompatActivity {
             shape = new Shape();
             shape.m_bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
             shape.m_matrix.reset();
+            shape.m_matrix.postRotate(6);
             shape.m_matrix.postTranslate(200, 400);
             shape.m_matrix.postScale(1.5f, 1.5f);
         }
@@ -102,6 +105,15 @@ public class MainCanvasActivity extends AppCompatActivity {
             canvas.drawBitmap(shape.m_bmp, shape.m_matrix, paint);
             canvas.restore();
 
+            canvas.save();
+            paint.reset();
+            paint.setAntiAlias(true);
+            paint.setStrokeWidth(2);
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setColor(Color.WHITE);
+            canvas.concat(shape.m_matrix);
+            canvas.drawRect(0, 0, shape.m_bmp.getWidth(), shape.m_bmp.getHeight(), paint);
+            canvas.restore();
         }
 
         @Override
@@ -169,6 +181,8 @@ public class MainCanvasActivity extends AppCompatActivity {
             if (imgShowPos != null) {
                 Log.i("@@@", "oddUp --> showPos:" + Arrays.toString(imgShowPos));
             }
+            float[] imgLogicRect = getImgLogicRect(target);
+            Log.i("@@@", "oddUp --> logicRect:" + Arrays.toString(imgLogicRect));
         }
     }
 
@@ -228,5 +242,62 @@ public class MainCanvasActivity extends AppCompatActivity {
         target.m_matrix.mapPoints(dst, src);
         return dst;
     }
+
+    /**
+     * 基于画布left，top为原点的 Matrix变换 --->> 逻辑坐标<br/>
+     * 换算出target的图片当前外切矩形的坐标
+     *
+     * @return 返回长度4的数组 left, top, right, bottom
+     */
+    @Size(value = 4)
+    @NonNull
+    private float[] getImgLogicRect(Shape target)
+    {
+        float[] src = new float[8];
+        float[] dst = new float[8];
+        float[] matrixX = new float[4];
+        float[] matrixY = new float[4];
+        float[] result = new float[4];
+        final int width = target.m_bmp.getWidth();
+        final int height = target.m_bmp.getHeight();
+
+        // left-top
+        src[0] = 0;
+        src[1] = 0;
+        // right-top
+        src[2] = width;
+        src[3] = 0;
+        // right-bottom
+        src[4] = width;
+        src[5] = height;
+        // left-bottom
+        src[6] = 0;
+        src[7] = height;
+
+        // 自身变换
+        target.m_matrix.mapPoints(dst, src);
+
+        // 求变换后矩形的外切矩形
+        // 从小到大排序
+        matrixX[0] = dst[0];
+        matrixX[1] = dst[2];
+        matrixX[2] = dst[4];
+        matrixX[3] = dst[6];
+        Arrays.sort(matrixX);
+
+        matrixY[0] = dst[1];
+        matrixY[1] = dst[3];
+        matrixY[2] = dst[5];
+        matrixY[3] = dst[7];
+        Arrays.sort(matrixY);
+
+        // 变换后的矩形四个点
+        result[0] = matrixX[0];// left
+        result[1] = matrixY[0];// top
+        result[2] = matrixX[3];// right
+        result[3] = matrixY[3];// bottom
+        return result;
+    }
+
 
 }
