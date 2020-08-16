@@ -1,6 +1,8 @@
 package com.maoxin.app.base
 
 import android.os.Bundle
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.maoxin.app.MyApplication.Companion.showToast

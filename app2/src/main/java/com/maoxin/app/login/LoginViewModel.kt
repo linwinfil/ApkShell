@@ -52,4 +52,24 @@ class LoginViewModel : BaseViewModel() {
                 notifyPropertyChanged(BR.password)
             }
         }
+
+    override fun onStart() {
+        super.onStart()
+        println("login view model onStart")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        println("login view model onResume")
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        println("login view model onCreate")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        println("login view model onDestroy")
+    }
 }

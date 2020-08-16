@@ -11,9 +11,12 @@ import androidx.lifecycle.Observer
 import com.maoxin.app.MyApplication.Companion.showToast
 import com.maoxin.app.R
 import com.maoxin.app.base.BaseViewModelActivity
+import com.maoxin.app.box.Objectbox
 import com.maoxin.app.data.LoginData
 import com.maoxin.app.data.ResponseData
+import com.maoxin.app.data.User
 import com.maoxin.app.databinding.ActivityLoginBinding
+import com.maoxin.app.utils.CommonUtils
 import com.maoxin.app.utils.SharedPreUtils
 
 class LoginActivity : BaseViewModelActivity<LoginViewModel>() {
@@ -77,8 +80,10 @@ class LoginActivity : BaseViewModelActivity<LoginViewModel>() {
         Observer<ResponseData<LoginData>> {
             when (it.errorCode) {
                 0 -> {
-                    SharedPreUtils.save("username", viewModel.username)
-                    SharedPreUtils.save("password", viewModel.password)
+                    val user = User(1, viewModel.username, CommonUtils.base64Encode(viewModel.password))
+                    Objectbox.boxStore.boxFor(User::class.java).put(user)
+                    SharedPreUtils.save("username", user.name!!)
+                    SharedPreUtils.save("password", user.pwd!!)
                     showToast("登录成功")
                 }
                 else -> {

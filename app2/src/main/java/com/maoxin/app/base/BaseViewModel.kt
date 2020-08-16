@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
+import java.util.*
 
 
 /** @author lmx
@@ -31,6 +32,16 @@ open class BaseViewModel : ViewModel(), LifecycleObserver, Observable {
     fun getFinally(): LiveData<Int> {
         return finally
     }
+
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    open fun onStart() {}
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    open fun onResume(){}
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    open fun onCreate(){}
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    open fun onDestroy(){}
 
 
     override fun onCleared() {

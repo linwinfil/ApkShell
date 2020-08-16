@@ -4,7 +4,9 @@ import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import com.maoxin.app.box.Objectbox
 import com.maoxin.app.utils.SharedPreUtils
+import io.objectbox.BoxStore
 
 /** @author lmx
  * Created by lmx on 2020/3/4.
@@ -34,6 +36,7 @@ class MyApplication : Application() {
         super.onCreate()
         sApp = this
 
+        Objectbox.init(this)
         SharedPreUtils.init(this, "sp_login_config")
         mMainHandler = Handler(Looper.getMainLooper())
     }
