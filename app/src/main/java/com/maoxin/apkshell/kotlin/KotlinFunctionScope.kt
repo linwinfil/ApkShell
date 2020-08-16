@@ -54,9 +54,11 @@ fun testFunScope_Apply() {
     test.apply {
         println("print $this")
         reversed()
+        toByteArray()
     }.apply {
         println("print $this")
         length
+        reversed()
     }.apply {
         println("print $this")
     }
@@ -69,9 +71,10 @@ fun testFunScope_Let() {
     test.let {
         println("print $it")
         it.reversed()
+        it.toByteArray()
     }.let {
         println("print $it")
-        it.length
+        it.size
     }.let {
         println("print $it")
     }
