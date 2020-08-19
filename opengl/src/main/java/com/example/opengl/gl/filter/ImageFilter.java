@@ -145,10 +145,13 @@ public class ImageFilter extends AFilter
                     0f, 1f, 0f      //辅助向上量
             );
 
+            //如果宽度大于高度，如果以宽度以-1到1为基准，则高度为-1 * height/width 到 1 * height/width
+            //反之亦然
+            float aspectRatio = width >= height ? (height*1f/width) : (width*1f/height);
             if (width >= height) {
-                matrix.frustum(-1, 1, -height * 1f / width, height * 1f / width, near, far);
+                matrix.frustum(-1, 1, -aspectRatio, aspectRatio, near, far);
             } else {
-                matrix.frustum(-width * 1f / height, width * 1f / height, -1, 1, near, far);
+                matrix.frustum(-aspectRatio, aspectRatio, -1, 1, near, far);
             }
 
             // float bWH = bw * 1f / bh;
