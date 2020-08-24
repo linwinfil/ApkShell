@@ -33,9 +33,10 @@ public abstract class PersonStub extends android.os.Binder implements PersonInte
 
     public static PersonInterface asInterfaceProxy(IBinder binder) {
         if (binder == null) return null;
+        //binder驱动查询到响应的binder服务
         IInterface iin = binder.queryLocalInterface(DESCRIPTOR);
         if (iin instanceof PersonInterface) return (PersonInterface) iin;
-        return new PersonProxy(binder);
+        return new PersonProxy(binder);//构建代理对象
     }
 
     @Override

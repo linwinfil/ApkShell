@@ -15,7 +15,7 @@ import java.util.List;
 public class PersonProxy implements PersonInterface {
 
     private static final String DESCRIPTOR = PersonStub.DESCRIPTOR;
-    private IBinder remote;
+    private IBinder remote;//binder代理对象
 
     public PersonProxy(IBinder binder) {
         remote = binder;

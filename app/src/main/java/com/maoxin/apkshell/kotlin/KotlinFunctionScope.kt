@@ -6,11 +6,12 @@ package com.maoxin.apkshell.kotlin
  * Created by lmx on 2019-08-15.
  */
 fun main() {
-    testFunScope_Run()
-    testFunScope_With()
-    testFunScope_Apply()
-    testFunScope_Let()
-    testFunScope_Also()
+    // testFunScope_Run()
+    // testFunScope_With()
+    // testFunScope_Apply()
+    // testFunScope_Let()
+    // testFunScope_Also()
+    // testFunScope_takeIf()
 }
 
 /**
@@ -93,6 +94,23 @@ fun testFunScope_Also() {
     }.also {
         println("print $it")
     }
+}
+
+fun testFunScope_takeIf() {
+    val test = "is takeIf"
+    val result = test.takeIf { it.length > 100 }
+    println("$test is $result")
+
+    val test2 = 100L
+    val result2 = test2.takeIf { it > 100 }
+    val result3 = test2.takeUnless { it > 100 }
+    println("$test2 is $result2, $result3")
+
+}
+
+class TestSub {
+    private var _size: Int = 0 //幕后属性
+    val size get() = _size++
 }
 
 

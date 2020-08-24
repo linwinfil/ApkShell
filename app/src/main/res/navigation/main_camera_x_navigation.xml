@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation android:id="@+id/main_camera_x_navigation"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            app:startDestination="@id/permissionFragment"
-            tools:ignore="UnusedNavigation">
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_camera_x_navigation"
+    app:startDestination="@id/permissionFragment"
+    tools:ignore="UnusedNavigation">
 
     <fragment
         android:id="@+id/permissionFragment"
@@ -13,11 +13,11 @@
         tools:layout="@layout/fragment_permission">
         <action
             android:id="@+id/action_permissionFragment_to_cameraXFragment"
-            app:destination="@id/cameraXFragment"/>
+            app:destination="@id/cameraXFragment" />
     </fragment>
     <fragment
         android:id="@+id/cameraXFragment"
         android:name="com.maoxin.apkshell.fragment.CameraXFragment"
         android:label="fragment_camera_x"
-        tools:layout="@layout/fragment_camera_x"/>
+        tools:layout="@layout/fragment_camera_x" />
 </navigation>

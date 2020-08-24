@@ -1,9 +1,11 @@
 package com.maoxin.apkshell.activity
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
+import android.os.Debug
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.maoxin.apkshell.R
+import com.maoxin.apkshell.hook.ams.AMSHookHelper
 import com.maoxin.apkshell.ipc.client.ClientActivity
 import com.maoxin.apkshell.kotlin.example.recyclerview.MainKotlinRecyclerViewActivity
 import com.maoxin.apkshell.lifecycle.activity.ViewModelMainActivity
@@ -23,11 +26,19 @@ class MainOPKotlinActivity : AppCompatActivity() {
     private lateinit var mGridAdapter: GridAdapter
     private var mList: ArrayList<VHData> = ArrayList()
 
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase)
+
+        AMSHookHelper.hookAMS()
+        AMSHookHelper.hookActivityThread()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_op_kotlin)
 
+
+        Debug.startMethodTracing()
 
         mRecyclerView = findViewById(R.id.m_recycler_view)
         val gridLayoutManager = GridLayoutManager(this, 4)
@@ -38,6 +49,8 @@ class MainOPKotlinActivity : AppCompatActivity() {
 
         mGridAdapter = GridAdapter()
         mRecyclerView.adapter = mGridAdapter
+
+        Debug.stopMethodTracing()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

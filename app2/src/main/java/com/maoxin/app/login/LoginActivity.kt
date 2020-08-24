@@ -1,9 +1,16 @@
 package com.maoxin.app.login
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.database.Cursor
+import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.autofill.AutofillManager
 import android.widget.Button
+import android.widget.CursorAdapter
 import android.widget.EditText
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
@@ -18,6 +25,8 @@ import com.maoxin.app.data.User
 import com.maoxin.app.databinding.ActivityLoginBinding
 import com.maoxin.app.utils.CommonUtils
 import com.maoxin.app.utils.SharedPreUtils
+import java.io.File
+import java.lang.ref.WeakReference
 
 class LoginActivity : BaseViewModelActivity<LoginViewModel>() {
     companion object {
@@ -85,6 +94,16 @@ class LoginActivity : BaseViewModelActivity<LoginViewModel>() {
                     SharedPreUtils.save("username", user.name!!)
                     SharedPreUtils.save("password", user.pwd!!)
                     showToast("登录成功")
+
+                    val externalFilesDir = this@LoginActivity
+                            .getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
+                    externalFilesDir?.also { file ->
+                        if (file.exists()) {
+                            val file1 = File(file.absolutePath, "login.data")
+                            file1.createNewFile()
+                            println("login.data exist: ${file1.exists()}")
+                        }
+                    }
                 }
                 else -> {
                     showToast(it.errorMsg)
@@ -104,6 +123,29 @@ class LoginActivity : BaseViewModelActivity<LoginViewModel>() {
             }
         }
     }
+
+    private val scanMediaTask: AsyncTask<WeakReference<Context>, Void?, Void?> =
+            @SuppressLint("StaticFieldLeak")
+            object : AsyncTask<WeakReference<Context>, Void?, Void?>() {
+                override fun doInBackground(vararg params: WeakReference<Context>?): Void? {
+                    val context: Context? = params[0]?.get()
+                    context?.also {
+                        val mediaColumns = arrayOf(
+                                MediaStore.Video.Media._ID, MediaStore.Video.Media.DATA,
+                                MediaStore.Video.Media.TITLE, MediaStore.Video.Media.MIME_TYPE,
+                                MediaStore.Video.Media.DISPLAY_NAME, MediaStore.Video.Media.SIZE,
+                                MediaStore.Video.Media.DATE_ADDED, MediaStore.Video.Media.DURATION,
+                                MediaStore.Video.Media.WIDTH, MediaStore.Video.Media.HEIGHT)
+
+                        val cursor: Cursor? = it.contentResolver.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                                mediaColumns, null, null,
+                                MediaStore.Video.Media.DATE_ADDED)
+
+                    }
+                    return null
+                }
+
+            }
 
     override fun getViewModelProvider(): Class<LoginViewModel>? {
         return LoginViewModel::class.java

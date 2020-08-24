@@ -39,7 +39,8 @@ class ViewModelMainActivity : AppCompatActivity(), MainViewModel.Handlers {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val activityViewModelMainBinding: ActivityViewModelMainBinding = DataBindingUtil.setContentView<ActivityViewModelMainBinding>(this, R.layout.activity_view_model_main)
+        val activityViewModelMainBinding: ActivityViewModelMainBinding =
+                DataBindingUtil.setContentView(this, R.layout.activity_view_model_main)
         activityViewModelMainBinding.also {
             it.viewModel = MainViewModel().apply {
                 this.text = "view model 测试文本"

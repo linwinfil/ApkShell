@@ -223,6 +223,7 @@ class ClientActivity : AppCompatActivity() {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             work_isConnection = true
             println("work unbind service $service")
+            // service binder驱动
             work_interface = IWorker.Stub.asInterface(service)
         }
     }
@@ -234,7 +235,7 @@ class ClientActivity : AppCompatActivity() {
             val interfaceProxy = PersonStub.asInterfaceProxy(service)
             this@ClientActivity.personInterface = interfaceProxy
             interfaceProxy?.apply {
-                val persons = interfaceProxy.persons
+                val persons = interfaceProxy.persons//getPersons
                 println("getPersons: $persons")
             }
         }

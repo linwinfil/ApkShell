@@ -20,7 +20,8 @@ class ViewModelMain2Activity : AppCompatActivity(), MainViewModel.Handlers {
             ""
         }
 
-        val activityViewModelMainBinding: ActivityViewModelMain2Binding = DataBindingUtil.setContentView<ActivityViewModelMain2Binding>(this, R.layout.activity_view_model_main2)
+        val activityViewModelMainBinding: ActivityViewModelMain2Binding =
+                DataBindingUtil.setContentView(this, R.layout.activity_view_model_main2)
         activityViewModelMainBinding.also {
             it.viewmodel = MainViewModel().apply {
                 this.text = getText
