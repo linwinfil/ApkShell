@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity
         classSparseArray.add(new Object[]{"gl_blend", GlBlendActivity.class});
         classSparseArray.add(new Object[]{"gl_oes", GlVideoActivity.class});
         classSparseArray.add(new Object[]{"gl_shape", GlShapeActivity.class});
+        classSparseArray.add(new Object[]{"texture_video", TextureVideoActivity.class});
+        classSparseArray.add(new Object[]{"surface_video", SurfaceVideoActivity.class});
 
         Adapter adapter = new Adapter();
         recyclerView.setAdapter(adapter);

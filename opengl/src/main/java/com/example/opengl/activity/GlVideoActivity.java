@@ -15,7 +15,6 @@ import android.widget.SeekBar;
 import com.example.opengl.R;
 import com.example.opengl.gl.GSurfaceView;
 import com.example.opengl.gl.filter.OesFilter;
-import com.example.opengl.gl.utils.GlUtils;
 
 import androidx.annotation.Nullable;
 
@@ -50,7 +49,7 @@ public class GlVideoActivity extends BaseActivity
         glSurfaceView = findViewById(R.id.gl_surface_view);
 
         glSurfaceView.setEGLContextClientVersion(2);
-        filter = new OesFilter(this, GlUtils.loadShaderRawResource(this, R.raw.oes_vertex_shader), GlUtils.loadShaderRawResource(this, R.raw.oes_fragment_shader));
+        filter = new OesFilter(this);
         filter.setOnCallbackListenerAdapter(new OesFilter.OnCallbackListenerAdapter() {
             @Override
             public void onFrameAvailable(SurfaceTexture surfaceTexture)

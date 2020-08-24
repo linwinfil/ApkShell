@@ -8,6 +8,7 @@ import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.view.Surface;
 
+import com.example.opengl.R;
 import com.example.opengl.gl.utils.GlMatrixTools;
 import com.example.opengl.gl.utils.GlUtils;
 
@@ -34,6 +35,12 @@ public class OesFilter extends AFilter implements MediaPlayer.OnVideoSizeChanged
 
     private OnCallbackListenerAdapter mOnCallbackListenerAdapter;
 
+    public OesFilter(Context context) {
+        this(context,
+                GlUtils.loadShaderRawResource(context, R.raw.oes_vertex_shader),
+                GlUtils.loadShaderRawResource(context, R.raw.oes_fragment_shader));
+    }
+
     public OesFilter(Context mContext, String mVertexShader, String mFragmentShader)
     {
         super(mContext, mVertexShader, mFragmentShader);
@@ -51,6 +58,7 @@ public class OesFilter extends AFilter implements MediaPlayer.OnVideoSizeChanged
     public void onSurfaceCreatedInit(EGLConfig eglConfig)
     {
         unbindTextureId();
+        //创建oes纹理id
         mInputTextureId = GlUtils.createTextureOES();
         if (mSurfaceTexture != null)
         {
@@ -208,6 +216,8 @@ public class OesFilter extends AFilter implements MediaPlayer.OnVideoSizeChanged
                     0f, 1f, 0f      //辅助向上量
             );
 
+            //如果宽度大于高度，如果以宽度以-1到1为基准，则高度为-1 * height/width 到 1 * height/width
+            //反之亦然
             float videoWH = videoWidth * 1f / videoHeight;
             float viewWH = width * 1f / height;
             if (videoWH > viewWH) {
@@ -218,6 +228,7 @@ public class OesFilter extends AFilter implements MediaPlayer.OnVideoSizeChanged
         }
     }
 
+    //解绑之前的oes纹理
     protected void unbindTextureId()
     {
         if (mInputTextureId != GlUtils.NO_TEXTURE)

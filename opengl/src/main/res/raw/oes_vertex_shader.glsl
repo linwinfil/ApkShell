@@ -3,6 +3,7 @@ attribute vec4 vCoordinate;
 uniform mat4 vMatrix;
 uniform mat4 vTexMatrix;
 
+//和片元着色器交互
 varying vec2 aCoordinate;
 
 void main(){
