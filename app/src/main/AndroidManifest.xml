@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".activity.MainWorkManagerActivity"></activity>
+        <activity android:name=".activity.MainParseActivity" />
         <activity android:name=".activity.MainCanvasActivity" />
         <activity android:name=".activity.MainToastActivity" />
         <activity android:name=".activity.MainImageDecoderActivity" />

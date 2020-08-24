@@ -164,6 +164,9 @@ dependencies {
         kapt "com.alibaba:arouter-compiler:1.2.2"
     }
 
+    api 'com.blankj:utilcode:1.19.0'
+    api 'com.google.code.gson:gson:2.8.6'
+
 //    if (isWMRouter.toBoolean()) {
 //        //美团路由
 //        def wmrouter_version = "1.2.0"
