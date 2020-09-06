@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.maoxin.apkshell.R
+import com.maoxin.apkshell.camera.CameraXActivity
 import com.maoxin.apkshell.hook.ams.AMSHookHelper
 import com.maoxin.apkshell.ipc.client.ClientActivity
 import com.maoxin.apkshell.kotlin.example.recyclerview.MainKotlinRecyclerViewActivity
@@ -29,8 +30,8 @@ class MainOPKotlinActivity : AppCompatActivity() {
     override fun attachBaseContext(newBase: Context?) {
         super.attachBaseContext(newBase)
 
-        AMSHookHelper.hookAMS()
-        AMSHookHelper.hookActivityThread()
+        // AMSHookHelper.hookAMS()
+        // AMSHookHelper.hookActivityThread()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +76,10 @@ class MainOPKotlinActivity : AppCompatActivity() {
         mList.add(VHData("Hook Activity4Java", MainHook4JActivity::class.java))
         mList.add(VHData("Toast BadWindowToken问题", MainToastActivity::class.java))
         mList.add(VHData("Canvas 测试", MainCanvasActivity::class.java))
-        mList.add(VHData("解析", MainParseActivity::class.java));
+        mList.add(VHData("解析", MainParseActivity::class.java))
+        mList.add(VHData("PreviewView2", MainPreviewView2Activity::class.java))
+        mList.add(VHData("PreviewViewKt", MainPreviewViewKtActivity::class.java))
+        mList.add(VHData("CameraX", CameraXActivity::class.java))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             mList.add(VHData("Image Decoder", MainImageDecoderActivity::class.java.javaClass))

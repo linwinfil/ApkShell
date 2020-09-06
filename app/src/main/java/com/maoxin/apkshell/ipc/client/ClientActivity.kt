@@ -45,6 +45,7 @@ class ClientActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.btn_bind_remote_service).setOnClickListener {
             if (!isConnection) {
+                startService()
                 bindServiceConnection()
                 return@setOnClickListener
             }
@@ -118,7 +119,7 @@ class ClientActivity : AppCompatActivity() {
                         super.handleMessage(msg)
                     }
                 }
-                handler.post{
+                handler.post {
                     println("post runnable")
                 }
                 Looper.myQueue().addIdleHandler {
@@ -200,6 +201,13 @@ class ClientActivity : AppCompatActivity() {
         bindService(intent, serviceConnection, Service.BIND_AUTO_CREATE)
     }
 
+    private fun startService() {
+        val intent = Intent(this, RemoteService::class.java).apply {
+            action = "com.maoxin.apkshell.ipc.server.RemoteService"
+        }
+        startService(intent)
+    }
+
     private fun work_bindServiceConnenction() {
         val intent = Intent(this, WorkerService::class.java)
         intent.action = "com.maoxin.apkshell.ipc.server.WorkerService"
@@ -235,7 +243,7 @@ class ClientActivity : AppCompatActivity() {
             val interfaceProxy = PersonStub.asInterfaceProxy(service)
             this@ClientActivity.personInterface = interfaceProxy
             interfaceProxy?.apply {
-                val persons = interfaceProxy.persons//getPersons
+                val persons = interfaceProxy.persons //getPersons
                 println("getPersons: $persons")
             }
         }
@@ -249,6 +257,7 @@ class ClientActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         if (!this.isConnection) {
+            startService()
             bindServiceConnection()
         }
     }

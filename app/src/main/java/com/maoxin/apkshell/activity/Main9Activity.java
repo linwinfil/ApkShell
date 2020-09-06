@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
@@ -32,10 +31,6 @@ import androidx.core.content.FileProvider;
 
 public class Main9Activity extends AppCompatActivity
 {
-    public static class MyFileProvider extends FileProvider
-    {
-    }
-
     private static final int RECORD_VIDEO = 1;
     private static final int TAKE_PHOTO = 2;
     private static final int SELECT_PHOTO = 3;
@@ -55,7 +50,7 @@ public class Main9Activity extends AppCompatActivity
 
         new Handler(Looper.getMainLooper()).postDelayed(() ->
         {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, REQUEST_PERMISSION_CODE);
         }, 500);
     }
 
@@ -171,25 +166,20 @@ public class Main9Activity extends AppCompatActivity
 
     public Uri getImageOutPutMediaFileUri()
     {
-        File mediaStorageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsoluteFile();
-        if (!mediaStorageDir.exists())
-        {
-            if (!mediaStorageDir.mkdirs())
-            {
+        File externalFilesDir = this.getExternalCacheDir();
+        assert externalFilesDir != null;
+        if (!externalFilesDir.exists()) {
+            if (!externalFilesDir.mkdirs()) {
                 return null;
             }
         }
         //创建Media File
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ENGLISH).format(new Date());
-        mImgPath = mediaStorageDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg";
+        mImgPath = externalFilesDir.getAbsolutePath() + File.separator + "IMG_" + timeStamp + ".jpg";
         File mediaFile = new File(mImgPath);
-        // TODO: 2018/6/27
-        if (Build.VERSION.SDK_INT >= 24)
-        {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return FileProvider.getUriForFile(this, getApplicationInfo().packageName + ".myfileprovider", mediaFile);
-        }
-        else
-        {
+        } else {
             return Uri.fromFile(mediaFile);
         }
     }

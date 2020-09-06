@@ -1,6 +1,7 @@
 package com.maoxin.apkshell;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -24,6 +25,7 @@ public class MainRun {
         //
         // }
 
+        //计算大数
         String a = "123456789098765432112345622232323232323";
         String a2 = "1234567890987654321123456222292929999999";
         BigDecimal bigDecimal = new BigDecimal(a);
@@ -36,16 +38,83 @@ public class MainRun {
         // runLengthOfLongestSubstring("abcabcbb");
 
 
-        MLRUCache<Integer, String> cache = new MLRUCache<>();
-        cache.put(3, "a");
-        cache.put(5, "b");
-        cache.put(7, "c");
-        cache.get(5);
-        cache.put(9, "d");
-        cache.put(11, "e");
-        cache.get(3);
-        cache.put(12, "gg");
-        System.out.println(cache.toString());
+        // MLRUCache<Integer, String> cache = new MLRUCache<>();
+        // cache.put(3, "a");
+        // cache.put(5, "b");
+        // cache.put(7, "c");
+        // cache.get(5);
+        // cache.put(9, "d");
+        // cache.put(11, "e");
+        // cache.get(3);
+        // cache.put(12, "gg");
+        // System.out.println(cache.toString());
+
+
+        // 逆序数组
+        int[] arr = new int[]{1, 2, 3, 4, 5, 6};
+        runReverseArray(arr);
+        System.out.println(Arrays.toString(arr));
+
+    }
+
+
+    //使用length和charAt匹配是否包含
+    private static void runContains() {
+        String target = "adbslchjalsdasd";//target
+        String source = "sbhgjcjiaadbslchjalsdasdsashjds";//source
+        // boolean contains = source.contains(target);
+        boolean out  = false;
+
+        int target_len = target.length();
+        int source_len = source.length();
+        int max = source_len - target_len;
+
+        char first = target.charAt(0);
+        int fromIndex = 0;
+        for (int i = fromIndex; i <= max; i++) {
+            //寻找第一个char是否匹配
+            if (source.charAt(i) != first) {
+                //第一个char不匹配，则循环source下标
+                while(++i <= max && source.charAt(i) != first);
+            }
+
+            //匹配到了开头
+            if (i <= max) {
+                int j = i + 1;//source下标+1
+                int end = j + target_len -1;
+                //k：寻找target的索引，从1开始
+                for (int k = 1;
+                     j < end && source.charAt(j) == target.charAt(k);
+                     j++, k++);
+                if (j == end) {
+                    out = true;
+                    break;
+                }
+            }
+        }
+        System.out.println(out);
+    }
+
+    private static void runReflet(String[] args) {
+        if (args == null || args.length == 0) return;
+        try {
+            Class<?> aClass = Class.forName(args[0]);
+            Object o = aClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void runReverseArray(int[] arr) {
+        for (int start = 0, end = arr.length - 1; start < end; start++, end--) {
+            swap(arr, start, end);
+        }
+    }
+
+    private static void swap(int[] arr, int a, int b) {
+        int temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
     }
 
     private static class MLRUCache<K, V> extends LinkedHashMap<K, V> {

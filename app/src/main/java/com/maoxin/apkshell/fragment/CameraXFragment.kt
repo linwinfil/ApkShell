@@ -9,10 +9,7 @@ import android.view.LayoutInflater
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
-import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraX
-import androidx.camera.core.Preview
-import androidx.camera.core.PreviewConfig
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.maoxin.apkshell.R
@@ -39,7 +36,7 @@ class CameraXFragment : Fragment() {
     private lateinit var textureView: TextureView
 
 
-    private var lensFacing = CameraX.LensFacing.BACK
+    private var lensFacing = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,37 +89,4 @@ class CameraXFragment : Fragment() {
 
 
     }
-
-    private fun bindCameraXUserCase() {
-        CameraX.unbindAll()
-
-
-    }
-
-
-    private fun createPreviewUserCase(): Preview {
-        val previewConfig = createPreviewConfig()
-
-
-        return Preview(previewConfig)
-    }
-
-    private fun createPreviewConfig(): PreviewConfig {
-
-        val metrics = DisplayMetrics().apply {
-            textureView.display.getRealMetrics(this)
-        }
-        val size = Size(metrics.widthPixels, metrics.heightPixels)
-        val rational = Rational(metrics.widthPixels, metrics.heightPixels)
-        val rotation = textureView.display.rotation
-
-
-        return PreviewConfig.Builder().apply {
-            setLensFacing(lensFacing)
-            setTargetResolution(size)
-            setTargetRotation(rotation)
-            setTargetAspectRatio(AspectRatio.RATIO_16_9)
-        }.build()
-    }
-
 }

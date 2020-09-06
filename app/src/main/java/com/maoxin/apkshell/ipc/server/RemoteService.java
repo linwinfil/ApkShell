@@ -28,6 +28,25 @@ public class RemoteService extends Service {
     }
 
     @Override
+    public boolean onUnbind(Intent intent) {
+        boolean onUnbind = super.onUnbind(intent);
+        System.out.println("onUnBind, " + onUnbind);
+        return onUnbind;
+    }
+
+    @Override
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+        System.out.println("onRebind");
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        System.out.println("onStartCommand");
+        return Service.START_NOT_STICKY;
+    }
+
+    @Override
     public void onCreate() {
         super.onCreate();
 
@@ -37,6 +56,7 @@ public class RemoteService extends Service {
         person.setName("chuck");
         System.out.println(person.toString());
         persons.add(person);
+        System.out.println("onCreate");
     }
 
     private PersonStub stub = new PersonStub() {
