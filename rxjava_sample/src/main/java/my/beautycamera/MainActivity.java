@@ -6,6 +6,7 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
 
@@ -18,14 +19,15 @@ import java.util.Optional;
 
 import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableOperator;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity@@";
 
     @Override
@@ -42,13 +44,48 @@ public class MainActivity extends AppCompatActivity
         findViewById(R.id.button_add_pinned_shortcut).setOnClickListener(v -> addPinnedShortCut());
 
         findViewById(R.id.button_src_compare_test).setOnClickListener(v -> testStream());
+
+        findViewById(R.id.btn_test_rx_java).setOnClickListener(v -> testRxJava2());
+    }
+
+    void testRxJava2() {
+        Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                int num = 0;
+                for (int i = 0; i < 100; i++) {
+                    num += i;
+                }
+                emitter.onNext(num);
+                emitter.onComplete();
+            }
+        }).subscribeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe(new Observer<Integer>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Integer integer) {
+                System.out.println("is main thread:" + (Thread.currentThread() == Looper.getMainLooper().getThread()));
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     void testStream()
     {
         ArrayList<Integer> intArr = new ArrayList<>();
-        for (int i = 0; i < 100; i++)
-        {
+        for (int i = 0; i < 100; i++) {
             intArr.add(i);
         }
 
@@ -59,15 +96,11 @@ public class MainActivity extends AppCompatActivity
     void addPinnedShortCut()
     {
         ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
-        if (shortcutManager != null)
-        {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            {
-                if (shortcutManager.isRequestPinShortcutSupported())
-                {
+        if (shortcutManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (shortcutManager.isRequestPinShortcutSupported()) {
                     //添加已有的shortcut到桌面
-                    ShortcutInfo pinShortcutInfo =
-                            new ShortcutInfo.Builder(this, "goto_web").build();
+                    ShortcutInfo pinShortcutInfo = new ShortcutInfo.Builder(this, "goto_web").build();
                     Intent shortcutResultIntent = shortcutManager.createShortcutResultIntent(pinShortcutInfo);
                     PendingIntent broadcast = PendingIntent.getBroadcast(this, 0, shortcutResultIntent, 0);
                     shortcutManager.requestPinShortcut(pinShortcutInfo, broadcast.getIntentSender());
@@ -79,8 +112,7 @@ public class MainActivity extends AppCompatActivity
     void rxJavaTest()
     {
         //被观察者被观察者
-        Observable<String> observable = Observable.unsafeCreate(subscriber ->
-        {
+        Observable<String> observable = Observable.unsafeCreate(subscriber -> {
             subscriber.onNext("a");
             subscriber.onNext("b");
             subscriber.onNext("c");
@@ -89,8 +121,7 @@ public class MainActivity extends AppCompatActivity
 
 
         //观察者订阅
-        Observer<String> observer = new Observer<String>()
-        {
+        Observer<String> observer = new Observer<String>() {
             @Override
             public void onError(Throwable e)
             {
@@ -118,8 +149,7 @@ public class MainActivity extends AppCompatActivity
         };
 
         //被观察者2
-        Subscriber<String> subscriber = new Subscriber<String>()
-        {
+        Subscriber<String> subscriber = new Subscriber<String>() {
             @Override
             public void onError(Throwable e)
             {
@@ -148,15 +178,13 @@ public class MainActivity extends AppCompatActivity
 
     void rxJavaTest2(Button button)
     {
-        class Test
-        {
+        class Test {
             String title = "";
 
             ArrayList<String> subTitles = new ArrayList<>();
         }
         ArrayList<String> subTitls = new ArrayList<>();
-        for (int i = 0; i < 10; i++)
-        {
+        for (int i = 0; i < 10; i++) {
             subTitls.add("" + i);
         }
         ArrayList<Test> tests = new ArrayList<>();
@@ -181,10 +209,7 @@ public class MainActivity extends AppCompatActivity
         tests.add(test);
 
 
-        Observable.fromArray(tests.toArray())
-                .map(o -> ((Test) o).title).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<String>()
-        {
+        Observable.fromArray(tests.toArray()).map(o -> ((Test) o).title).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d)
             {
@@ -210,98 +235,87 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        Observable.fromArray(tests.toArray())
-                .flatMap(o -> Observable.fromArray(((Test) o).subTitles.toArray()))
-                .subscribe(new Observer<Object>()
-                {
-                    @Override
-                    public void onSubscribe(Disposable d)
-                    {
+        Observable.fromArray(tests.toArray()).flatMap(o -> Observable.fromArray(((Test) o).subTitles.toArray())).subscribe(new Observer<Object>() {
+            @Override
+            public void onSubscribe(Disposable d)
+            {
 
-                    }
+            }
 
-                    @Override
-                    public void onNext(Object o)
-                    {
-                        Log.d(TAG, "MainActivity --> onNext: " + o);
-                    }
+            @Override
+            public void onNext(Object o)
+            {
+                Log.d(TAG, "MainActivity --> onNext: " + o);
+            }
 
-                    @Override
-                    public void onError(Throwable e)
-                    {
+            @Override
+            public void onError(Throwable e)
+            {
 
-                    }
+            }
 
-                    @Override
-                    public void onComplete()
-                    {
+            @Override
+            public void onComplete()
+            {
 
-                    }
-                });
+            }
+        });
 
-        Observable.fromArray(tests.toArray())
-                .flatMap(o -> Observable.fromArray(((Test) o).subTitles.toArray()))
-                .lift((ObservableOperator<Integer, Object>) observer -> new Observer<Object>()
-                {
-                    @Override
-                    public void onSubscribe(Disposable d)
-                    {
-                        observer.onSubscribe(d);
-                    }
+        Observable.fromArray(tests.toArray()).flatMap(o -> Observable.fromArray(((Test) o).subTitles.toArray())).lift((ObservableOperator<Integer, Object>) observer -> new Observer<Object>() {
+            @Override
+            public void onSubscribe(Disposable d)
+            {
+                observer.onSubscribe(d);
+            }
 
-                    @Override
-                    public void onNext(Object o)
-                    {
-                        observer.onNext(Integer.parseInt((String) o));
-                    }
+            @Override
+            public void onNext(Object o)
+            {
+                observer.onNext(Integer.parseInt((String) o));
+            }
 
-                    @Override
-                    public void onError(Throwable e)
-                    {
-                        observer.onError(e);
-                    }
+            @Override
+            public void onError(Throwable e)
+            {
+                observer.onError(e);
+            }
 
-                    @Override
-                    public void onComplete()
-                    {
-                        observer.onComplete();
-                    }
-                })
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Integer>()
-                {
-                    @Override
-                    public void onSubscribe(Disposable d)
-                    {
+            @Override
+            public void onComplete()
+            {
+                observer.onComplete();
+            }
+        }).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Integer>() {
+            @Override
+            public void onSubscribe(Disposable d)
+            {
 
-                    }
+            }
 
-                    @Override
-                    public void onNext(Integer integer)
-                    {
-                        Log.d(TAG, String.format("MainActivity --> onNext: %s", integer));
-                        button.setText(integer + " @@");
-                    }
+            @Override
+            public void onNext(Integer integer)
+            {
+                Log.d(TAG, String.format("MainActivity --> onNext: %s", integer));
+                button.setText(integer + " @@");
+            }
 
-                    @Override
-                    public void onError(Throwable e)
-                    {
+            @Override
+            public void onError(Throwable e)
+            {
 
-                    }
+            }
 
-                    @Override
-                    public void onComplete()
-                    {
+            @Override
+            public void onComplete()
+            {
 
-                    }
-                });
+            }
+        });
     }
 
     void stringFormatTest()
     {
-        System.out.println(
-                Float.valueOf(String.format(Locale.CHINA, "%.2f", 16 / 9f)));
+        System.out.println(Float.valueOf(String.format(Locale.CHINA, "%.2f", 16 / 9f)));
     }
 
 }

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/layout_constraint"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_constraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="my.beautycamera.MainActivity">
@@ -14,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp"/>
+        app:layout_constraintGuide_begin="16dp" />
 
     <Button
         android:id="@+id/button_test"
@@ -25,7 +24,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="@id/guide_line_ver"
         app:layout_constraintTop_toBottomOf="@+id/button_string_fromat_test"
-        app:layout_constraintVertical_bias="0.0"/>
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/button_string_fromat_test"
@@ -33,7 +32,7 @@
         android:layout_height="wrap_content"
         android:text="String Fromat Test"
         app:layout_constraintLeft_toLeftOf="@id/guide_line_ver"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_add_pinned_shortcut"
@@ -42,7 +41,7 @@
         android:layout_marginTop="16dp"
         android:text="add_pinned_shortcut"
         app:layout_constraintStart_toStartOf="@+id/guide_line_ver"
-        app:layout_constraintTop_toBottomOf="@+id/button_test"/>
+        app:layout_constraintTop_toBottomOf="@+id/button_test" />
 
     <TextView
         android:id="@+id/textView"
@@ -52,7 +51,7 @@
         android:fontFamily="@font/source_sans_pro_bold_italic"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="@id/guide_line_ver"
-        app:layout_constraintTop_toBottomOf="@id/button_add_pinned_shortcut"/>
+        app:layout_constraintTop_toBottomOf="@id/button_add_pinned_shortcut" />
 
     <Button
         android:id="@+id/button_src_compare_test"
@@ -61,6 +60,15 @@
         android:layout_marginTop="16dp"
         android:text="src_compare_test"
         app:layout_constraintStart_toStartOf="@+id/guide_line_ver"
-        app:layout_constraintTop_toBottomOf="@+id/textView"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/btn_test_rx_java"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="rxjava测试"
+        app:layout_constraintStart_toStartOf="@+id/guide_line_ver"
+        app:layout_constraintTop_toBottomOf="@id/button_src_compare_test" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
