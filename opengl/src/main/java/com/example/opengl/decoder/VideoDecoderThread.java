@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 public class VideoDecoderThread extends Thread
 {
     final private VideoDecoder videoDecoder;
-    private boolean isRelease;
+    private volatile boolean isRelease;
 
     public VideoDecoderThread(String path, Surface surface) {
         videoDecoder = new VideoDecoder(path, surface);
@@ -24,6 +24,7 @@ public class VideoDecoderThread extends Thread
     @Override
     public void run()
     {
+        System.out.println("isRelease" + isRelease);
         while (!isRelease) {
             videoDecoder.run();
         }

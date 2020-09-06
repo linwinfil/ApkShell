@@ -84,12 +84,17 @@ public abstract class AFilter implements IFilter
         if (TextUtils.isEmpty(mVertexShader) || TextUtils.isEmpty(mFragmentShader)) {
             throw new IllegalStateException("vertex or fragment is null");
         }
+        initTexCoordinateBuffer();
+    }
 
-        FloatBuffer floatBuffer = ByteBuffer.allocateDirect(positionPoint.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer().put(positionPoint);
+    protected void initTexCoordinateBuffer() {
+        FloatBuffer floatBuffer = ByteBuffer.allocateDirect(positionPoint.length * 4)
+                .order(ByteOrder.nativeOrder()).asFloatBuffer().put(positionPoint);
         floatBuffer.position(0);
         mPositionBuffer = floatBuffer;
 
-        floatBuffer = ByteBuffer.allocateDirect(coordinatePoint.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer().put(coordinatePoint);
+        floatBuffer = ByteBuffer.allocateDirect(coordinatePoint.length * 4)
+                .order(ByteOrder.nativeOrder()).asFloatBuffer().put(coordinatePoint);
         floatBuffer.position(0);
         mCoordinateBuffer = floatBuffer;
     }

@@ -9,7 +9,6 @@ import android.os.Build;
 import android.util.Log;
 import android.view.Surface;
 
-import com.example.opengl.utils.ThreadUtils;
 import com.example.opengl.utils.Utils;
 
 import java.nio.ByteBuffer;
@@ -24,7 +23,7 @@ public class VideoDecoder implements IDecoder, Runnable
 
     private final Object obj_ready = new Object();
 
-    private static final long TIMEOUT_USEC = 10 * 1000;
+    private static final long TIMEOUT_USEC = 10000;
     private String mPath;
     private Surface mSurface;
 
@@ -42,32 +41,10 @@ public class VideoDecoder implements IDecoder, Runnable
 
     private OnVideoDecoderListener mListener;
 
-    private Runnable onPreparedRunnable = new Runnable() {
-        @Override
-        public void run()
-        {
-            if (mListener != null) {
-                mListener.onPrepared(VideoDecoder.this);
-            }
-        }
-    };
-
-    private Runnable onDrawRunnable = new Runnable() {
-        @Override
-        public void run()
-        {
-            if (mListener != null) {
-                mListener.onDraw();
-            }
-        }
-    };
-
-
     public VideoDecoder(String mPath, Surface mSurface)
     {
         this.mPath = mPath;
         this.mSurface = mSurface;
-        ThreadUtils.init();
     }
 
     public void setVideoListener(OnVideoDecoderListener mListener)
@@ -75,17 +52,9 @@ public class VideoDecoder implements IDecoder, Runnable
         this.mListener = mListener;
     }
 
-    private void runPrepared() {
-        ThreadUtils.runOnUiThread(onPreparedRunnable);
-    }
-
-    private void runDraw() {
-        ThreadUtils.runOnUiThread(onDrawRunnable);
-    }
-
     private void wait4Ready() {
         synchronized (obj_ready) {
-            if (!mReady) {
+            while (!mReady) {
                 try {
                     obj_ready.wait();
                 }
@@ -97,8 +66,10 @@ public class VideoDecoder implements IDecoder, Runnable
     }
 
     public void ready4Render() {
-        mReady = true;
-        obj_ready.notify();
+        synchronized (obj_ready) {
+            mReady = true;
+            obj_ready.notify();
+        }
     }
 
 
@@ -134,7 +105,10 @@ public class VideoDecoder implements IDecoder, Runnable
     @Override
     public void onRelease() {
         mRelease = true;
-        mListener = null;
+        if (mListener != null) {
+            mListener.onFinish();
+            mListener = null;
+        }
         if (mMediaCodec != null) {
             mMediaCodec.release();
             mMediaCodec = null;
@@ -201,7 +175,9 @@ public class VideoDecoder implements IDecoder, Runnable
                     boolean doRender = (bufferInfo.size != 0);
                     mMediaCodec.releaseOutputBuffer(outpytBufferIndex, doRender);
                     if (doRender) {
-                        runDraw();
+                        if (mListener != null) {
+                            mListener.onDraw(bufferInfo.presentationTimeUs);
+                        }
                     }
                 }
             }
@@ -238,12 +214,12 @@ public class VideoDecoder implements IDecoder, Runnable
             MediaFormat trackFormat = mMediaExtractor.getTrackFormat(i);
             String mime = trackFormat.getString(MediaFormat.KEY_MIME);
             if (mime.startsWith("video/")) {
-                trackCount = i;
+                trackIndex = i;
                 mediaFormat = trackFormat;
                 break;
             }
         }
-        if (trackCount < 0 || mediaFormat == null) {
+        if (trackIndex < 0) {
             throw new IllegalStateException("no found track in video path");
         }
         mMediaExtractor.selectTrack(trackIndex);
@@ -252,14 +228,16 @@ public class VideoDecoder implements IDecoder, Runnable
         mDuration = mediaFormat.getLong(MediaFormat.KEY_DURATION);
         mFrameRate = mediaFormat.getInteger(MediaFormat.KEY_FRAME_RATE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mRotation = mediaFormat.getInteger(MediaFormat.KEY_ROTATION);
+            try {
+                mRotation = mediaFormat.getInteger(MediaFormat.KEY_ROTATION);
+            } catch (Exception ignored) {}
         } else {
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
             try
             {
                 retriever.setDataSource(mPath);
                 String s = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
-                mRotation = Integer.valueOf(s);
+                mRotation = Integer.parseInt(s);
             }
             catch (Exception e)
             {
@@ -288,7 +266,9 @@ public class VideoDecoder implements IDecoder, Runnable
 
             mMediaCodec.configure(mediaFormat, mSurface, null, 0);
             mMediaCodec.start();
-            runPrepared();
+            if (mListener != null) {
+                mListener.onPrepared(VideoDecoder.this);
+            }
             return true;
         }
         return false;

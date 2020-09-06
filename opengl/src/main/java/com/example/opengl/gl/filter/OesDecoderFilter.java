@@ -6,6 +6,7 @@ import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.view.Surface;
 
+import com.example.opengl.gl.utils.Drawable2d;
 import com.example.opengl.gl.utils.GlMatrixTools;
 import com.example.opengl.gl.utils.GlUtils;
 
@@ -21,13 +22,20 @@ public class OesDecoderFilter extends AFilter
     private int mInputTextureId = GlUtils.NO_TEXTURE;
     private SurfaceTexture mSurfaceTexture;
     private Surface mSurface;
-    private boolean isPrepared;
+    private volatile boolean isPrepared;
 
     private float[] mSTMatrix = new float[16];
+    private Drawable2d drawable2d;
 
     public OesDecoderFilter(Context mContext, String mVertexShader, String mFragmentShader)
     {
         super(mContext, mVertexShader, mFragmentShader);
+    }
+
+    @Override
+    protected void initTexCoordinateBuffer() {
+        // super.initTexCoordinateBuffer();
+        drawable2d = new Drawable2d();
     }
 
     @Override
@@ -50,7 +58,7 @@ public class OesDecoderFilter extends AFilter
     @Override
     public void onSurfaceChangedInit(int width, int height)
     {
-
+        GLES20.glViewport(0, 0, width, height);
     }
 
     @Override
@@ -92,14 +100,16 @@ public class OesDecoderFilter extends AFilter
         //启用顶点坐标句柄
         GLES20.glEnableVertexAttribArray(mPositionHandle);
         //传入顶点坐标数据
-        GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, mPositionBuffer);
+        GLES20.glVertexAttribPointer(mPositionHandle, drawable2d.getCoordsPerVertex(),
+                GLES20.GL_FLOAT, false, drawable2d.getVertexStride(), drawable2d.getVertexArray());
 
         //启用纹理坐标句柄
         GLES20.glEnableVertexAttribArray(mCoordinateHandle);
         //传如纹理坐标数据
-        GLES20.glVertexAttribPointer(mCoordinateHandle, 2, GLES20.GL_FLOAT, false, 0 , mCoordinateBuffer);
+        GLES20.glVertexAttribPointer(mCoordinateHandle, drawable2d.getCoordsPerVertex(),
+                GLES20.GL_FLOAT, false, drawable2d.getTexCoordStride(), drawable2d.getTexCoordArray());
         //绘制模式
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, drawable2d.getVertexCount());
 
         //解绑坐标，解绑 纹理
         GLES20.glDisableVertexAttribArray(mPositionHandle);
@@ -133,7 +143,11 @@ public class OesDecoderFilter extends AFilter
         }
     }
 
-    private void setVideoSize(int videoWidth, int videoHeight)
+    public void setPrepared() {
+        isPrepared = true;
+    }
+
+    public void setVideoSize(int videoWidth, int videoHeight)
     {
         if (videoWidth > 0 && videoHeight > 0)
         {

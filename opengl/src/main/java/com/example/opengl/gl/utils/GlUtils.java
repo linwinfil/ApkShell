@@ -14,6 +14,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RawRes;
@@ -240,4 +243,19 @@ public class GlUtils
         }
         return version;
     }
+
+    private static final int SIZEOF_FLOAT = 4;
+    /**
+     * Allocates a direct float buffer, and populates it with the float array data.
+     */
+    public static FloatBuffer createFloatBuffer(float[] coords) {
+        // Allocate a direct ByteBuffer, using 4 bytes per float, and copy coords into it.
+        ByteBuffer bb = ByteBuffer.allocateDirect(coords.length * SIZEOF_FLOAT);
+        bb.order(ByteOrder.nativeOrder());
+        FloatBuffer fb = bb.asFloatBuffer();
+        fb.put(coords);
+        fb.position(0);
+        return fb;
+    }
+
 }
