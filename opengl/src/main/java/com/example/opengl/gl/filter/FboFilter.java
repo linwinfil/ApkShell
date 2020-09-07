@@ -2,10 +2,13 @@ package com.example.opengl.gl.filter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.opengl.GLES20;
+import android.opengl.GLES30;
 import android.opengl.GLUtils;
 
+import com.example.opengl.R;
+import com.example.opengl.gl.utils.Drawable2d;
 import com.example.opengl.gl.utils.GlMatrixTools;
+import com.example.opengl.gl.utils.GlUtils;
 
 import java.nio.ByteBuffer;
 
@@ -23,11 +26,6 @@ public class FboFilter extends AFilter
         void onCapture(Bitmap bitmap);
     }
 
-    protected short[] vertexPointIndex = new short[]{
-            0, 1, 2,
-            0, 2, 3
-    };
-
     //处理阈值 句柄
     protected int mProgressHandle;
 
@@ -40,13 +38,16 @@ public class FboFilter extends AFilter
 
     private float mProgress = 50f;
     private Bitmap mBitmap;
+    private Drawable2d drawable2d;
 
     private boolean isCapture = false;
 
-    public FboFilter(Context mContext, String mVertexShader, String mFragmentShader)
+    public FboFilter(Context mContext)
     {
-        super(mContext, mVertexShader, mFragmentShader);
+        super(mContext, GlUtils.loadShaderRawResource(mContext, R.raw.default_vertex_shader),
+                GlUtils.loadShaderRawResource(mContext, R.raw.color_fragment_shader));
     }
+
 
     public void setOnCaptureCallback(onCaptureCallback mOnCaptureCallback)
     {
@@ -77,6 +78,11 @@ public class FboFilter extends AFilter
     }
 
     @Override
+    protected void initTexCoordinateBuffer() {
+        drawable2d = new Drawable2d();
+    }
+
+    @Override
     public void onSurfaceCreatedInit(EGLConfig eglConfig)
     {
         unbindFrameBuffer();
@@ -85,13 +91,13 @@ public class FboFilter extends AFilter
     @Override
     public int getTextureType()
     {
-        return GLES20.GL_TEXTURE_2D;
+        return GLES30.GL_TEXTURE_2D;
     }
 
     @Override
     public void onSurfaceChangedInit(int width, int height)
     {
-        GLES20.glViewport(0, 0, width, height);
+        GLES30.glViewport(0, 0, width, height);
         //eyez <= near < far
         float near = 3.0f;
         float far = 9.0f;
@@ -115,15 +121,15 @@ public class FboFilter extends AFilter
     public int onCreateProgram(EGLConfig eglConfig)
     {
         int program = super.onCreateProgram(eglConfig);
-        mProgressHandle = GLES20.glGetUniformLocation(program, "vProgress");
+        mProgressHandle = GLES30.glGetUniformLocation(program, "vProgress");
         return program;
     }
 
     @Override
     public void onClear()
     {
-        GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1f);
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+        GLES30.glClearColor(0.5f, 0.5f, 0.5f, 1f);
+        GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT | GLES30.GL_DEPTH_BUFFER_BIT);
     }
 
     @Override
@@ -136,19 +142,8 @@ public class FboFilter extends AFilter
 
         int bw = mBitmap.getWidth();
         int bh = mBitmap.getHeight();
-
-        //创建buffer
-        createFrameBuffer();
-
-        //绑定buffer，绘制buffer的帧缓冲区域
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, mFrameBuffers[0]);
-        //创建的 frame buffer 挂载一个texture，储存颜色
-        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0, getTextureType(), mTextures[1], 0);
-        //buffer绘制视图窗口
         int viewportw = mSurfaceWidth;
         int viewporth = mSurfaceHeight;
-        GLES20.glViewport(0, 0, viewportw, viewporth);
-
         GlMatrixTools matrix = getMatrix();
         //保存相机视口的矩阵
         matrix.pushMatrix();
@@ -160,58 +155,68 @@ public class FboFilter extends AFilter
         //这里做了垂直翻转
         matrix.scale(x_scale * scale, -1 * y_scale * scale, 1f);
 
+
+        //创建buffer和纹理
+        createFrameBuffer();
+        //绑定buffer，绘制buffer的帧缓冲区域
+        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, mFrameBuffers[0]);
+        //创建的 frame buffer 挂载一个texture，用来储存颜色
+        GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER, GLES30.GL_COLOR_ATTACHMENT0, getTextureType(), mTextures[1], 0);
+        //buffer绘制视图窗口
+        GLES30.glViewport(0, 0, viewportw, viewporth);
+
         //启用程序
-        GLES20.glUseProgram(mProgramHandle);
+        GLES30.glUseProgram(mProgramHandle);
 
         // 1 ======
 
-        //绘制纹理，当前绘制到帧缓冲区域上
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glBindTexture(getTextureType(), mTextures[0]);
-        GLES20.glUniform1i(mTextureHandle, 0);
+        //将当前bitmap的纹理绘制到帧缓冲区域（frameBuffer）上
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE0);
+        GLES30.glBindTexture(getTextureType(), mTextures[0]);
+        GLES30.glUniform1i(mTextureHandle, 0);
 
         //参数赋值
-        GLES20.glUniform1f(mProgressHandle, mProgress);
+        GLES30.glUniform1f(mProgressHandle, mProgress);
 
         //给视图矩阵赋值
-        GLES20.glUniformMatrix4fv(mMatrixHandle, 1, false, mGlMatrixTools.getFinalMatrix(), 0);
-
-        GLES20.glEnableVertexAttribArray(mPositionHandle);
-        GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, mPositionBuffer);
-
-        GLES20.glEnableVertexAttribArray(mCoordinateHandle);
-        GLES20.glVertexAttribPointer(mCoordinateHandle, 2, GLES20.GL_FLOAT, false, 0 , mCoordinateBuffer);
+        GLES30.glUniformMatrix4fv(mMatrixHandle, 1, false, mGlMatrixTools.getFinalMatrix(), 0);
+        //顶点和片元
+        GLES30.glEnableVertexAttribArray(mPositionHandle);
+        GLES30.glVertexAttribPointer(mPositionHandle, drawable2d.getCoordsPerVertex(), GLES30.GL_FLOAT, false, drawable2d.getVertexStride(), drawable2d.getVertexArray());
+        GLES30.glEnableVertexAttribArray(mCoordinateHandle);
+        GLES30.glVertexAttribPointer(mCoordinateHandle, drawable2d.getCoordsPerVertex(), GLES30.GL_FLOAT, false, drawable2d.getTexCoordStride(), drawable2d.getTexCoordArray());
 
         //绘制模式
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+        GLES30.glDrawArrays(GLES30.GL_TRIANGLE_STRIP, 0, 4);
 
         //解绑坐标
-        GLES20.glDisableVertexAttribArray(mPositionHandle);
-        GLES20.glDisableVertexAttribArray(mCoordinateHandle);
+        GLES30.glDisableVertexAttribArray(mPositionHandle);
+        GLES30.glDisableVertexAttribArray(mCoordinateHandle);
+
+        //解绑frameBuffer
+        GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0);
 
         matrix.popMatrix();
 
         // 2 ======
 
-
-        //设置fbo为默认
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
         //还原视图窗口
-        GLES20.glViewport(0, 0, viewportw, viewporth);
+        GLES30.glViewport(0, 0, viewportw, viewporth);
 
         //将帧缓冲区域的纹理绘制到当前屏幕上
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
-        GLES20.glBindTexture(getTextureType(), mTextures[1]);
-        GLES20.glUniform1i(mTextureHandle, 1);
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE1);
+        GLES30.glBindTexture(getTextureType(), mTextures[1]);
+        GLES30.glUniform1i(mTextureHandle, 1);
 
-        GLES20.glUniformMatrix4fv(mMatrixHandle, 1, false, getMatrix().getOpenGLUnitMatrix(), 0);
+        GLES30.glUniformMatrix4fv(mMatrixHandle, 1, false, getMatrix().getOpenGLUnitMatrix(), 0);//这里为默认矩阵单元
 
-        GLES20.glEnableVertexAttribArray(mPositionHandle);
-        GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, mPositionBuffer);
-        GLES20.glEnableVertexAttribArray(mCoordinateHandle);
-        GLES20.glVertexAttribPointer(mCoordinateHandle, 2, GLES20.GL_FLOAT, false, 0, mCoordinateBuffer);
+        //顶点和片元
+        GLES30.glEnableVertexAttribArray(mPositionHandle);
+        GLES30.glVertexAttribPointer(mPositionHandle, drawable2d.getCoordsPerVertex(), GLES30.GL_FLOAT, false, drawable2d.getVertexStride(), drawable2d.getVertexArray());
+        GLES30.glEnableVertexAttribArray(mCoordinateHandle);
+        GLES30.glVertexAttribPointer(mCoordinateHandle, drawable2d.getCoordsPerVertex(), GLES30.GL_FLOAT, false, drawable2d.getTexCoordStride(), drawable2d.getTexCoordArray());
 
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+        GLES30.glDrawArrays(GLES30.GL_TRIANGLE_STRIP, 0, 4);
 
         if (isCapture)
         {
@@ -220,7 +225,7 @@ public class FboFilter extends AFilter
             int outh = mBitmap.getHeight();
             ByteBuffer buffer = ByteBuffer.allocate(outw * outh * 4);
             buffer.rewind();
-            GLES20.glReadPixels(0, 0, outw, outh, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, buffer);
+            GLES30.glReadPixels(0, 0, outw, outh, GLES30.GL_RGBA, GLES30.GL_UNSIGNED_BYTE, buffer);
             buffer.rewind();
 
             Bitmap bitmap = Bitmap.createBitmap(outw, outh, Bitmap.Config.ARGB_8888);
@@ -230,8 +235,8 @@ public class FboFilter extends AFilter
             if (mOnCaptureCallback != null) mOnCaptureCallback.onCapture(bitmap);
         }
 
-        GLES20.glDisableVertexAttribArray(mPositionHandle);
-        GLES20.glDisableVertexAttribArray(mCoordinateHandle);
+        GLES30.glDisableVertexAttribArray(mPositionHandle);
+        GLES30.glDisableVertexAttribArray(mCoordinateHandle);
 
         unbindFrameBuffer();
         disuseProgram();
@@ -240,39 +245,37 @@ public class FboFilter extends AFilter
     protected void createFrameBuffer()
     {
         //创建buffer
-        GLES20.glGenFramebuffers(mFrameBuffers.length, mFrameBuffers, 0);
+        GLES30.glGenFramebuffers(mFrameBuffers.length, mFrameBuffers, 0);
 
         //创建texture
-        GLES20.glGenTextures(2, mTextures, 0);
+        GLES30.glGenTextures(2, mTextures, 0);
         for (int i = 0; i < mTextures.length; i++)
         {
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mTextures[i]);
+            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, mTextures[i]);
 
             if (i == 0)
             {
                 //图像纹理
-                GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, mBitmap, 0);
+                GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_RGBA, mBitmap, 0);
             }
             else
             {
-                int width = mSurfaceWidth;
-                int height = mSurfaceHeight;
                 //frame纹理
-                GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, width, height, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, null);
+                GLES30.glTexImage2D(GLES30.GL_TEXTURE_2D, 0, GLES30.GL_RGBA, mSurfaceWidth, mSurfaceHeight, 0, GLES30.GL_RGBA, GLES30.GL_UNSIGNED_BYTE, null);
             }
 
             //设置过滤属性
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+            GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);
+            GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_LINEAR);
+            GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);
+            GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);
         }
     }
 
     protected void unbindFrameBuffer()
     {
-        GLES20.glDeleteTextures(mTextures.length, mTextures, 0);
-        GLES20.glDeleteBuffers(mFrameBuffers.length, mFrameBuffers, 0);
+        GLES30.glDeleteTextures(mTextures.length, mTextures, 0);
+        GLES30.glDeleteBuffers(mFrameBuffers.length, mFrameBuffers, 0);
     }
 
     private float handleStaticScale(int viewportW, int viewportH, int textureW, int textureH)

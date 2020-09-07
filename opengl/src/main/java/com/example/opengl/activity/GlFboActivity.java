@@ -9,7 +9,6 @@ import android.widget.SeekBar;
 import com.example.opengl.R;
 import com.example.opengl.gl.GSurfaceView;
 import com.example.opengl.gl.filter.FboFilter;
-import com.example.opengl.gl.utils.GlUtils;
 
 public class GlFboActivity extends BaseActivity implements View.OnClickListener
 {
@@ -51,13 +50,9 @@ public class GlFboActivity extends BaseActivity implements View.OnClickListener
         });
 
         glsurfaceview = findViewById(R.id.gl_surface_view);
-        glsurfaceview.setEGLContextClientVersion(2);
-        filter = new FboFilter(this,
-                GlUtils.loadShaderRawResource(this, R.raw.default_vertex_shader),
-                GlUtils.loadShaderRawResource(this, R.raw.color_fragment_shader));
-        filter.setOnCaptureCallback(bitmap -> {
-            System.out.println(bitmap.getWidth() + ", " + bitmap.getHeight());
-        });
+        glsurfaceview.setEGLContextClientVersion(3);
+        filter = new FboFilter(this);
+        filter.setOnCaptureCallback(bitmap -> System.out.println(bitmap.getWidth() + ", " + bitmap.getHeight()));
         glsurfaceview.setRenderer(filter);
         glsurfaceview.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
