@@ -79,7 +79,7 @@ class MainOPKotlinActivity : AppCompatActivity() {
         mList.add(VHData("解析", MainParseActivity::class.java))
         mList.add(VHData("PreviewView2", MainPreviewView2Activity::class.java))
         mList.add(VHData("PreviewViewKt", MainPreviewViewKtActivity::class.java))
-        mList.add(VHData("CameraX", CameraXActivity::class.java))
+        mList.add(VHData("CameraX+SurfaceView+TextureView+PreviewView", CameraXActivity::class.java))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             mList.add(VHData("Image Decoder", MainImageDecoderActivity::class.java.javaClass))
