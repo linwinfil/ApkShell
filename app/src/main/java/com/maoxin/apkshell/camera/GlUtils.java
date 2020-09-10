@@ -197,6 +197,7 @@ public class GlUtils {
         GLES30.glGetShaderiv(iShader, GLES30.GL_COMPILE_STATUS, compiled, 0);
         if (compiled[0] == 0) {
             Log.e("Load Shader Failed", "Compilation\n" + GLES30.glGetShaderInfoLog(iShader));
+            GLES30.glDeleteShader(iShader);
             return 0;
         }
         return iShader;
