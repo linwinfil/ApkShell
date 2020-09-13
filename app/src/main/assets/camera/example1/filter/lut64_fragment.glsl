@@ -11,6 +11,7 @@ layout (location = 5) uniform lowp float intensity;// 0 ~ 1.0f
 void main() {
     lowp vec4 textureColor = texture(inputImageTexture, TexCoords);
 
+    //用蓝色值计算正方形的位置，得到quad1和quad2
     mediump float blueColor = textureColor.b * 15.0;
 
     mediump vec2 quad1;
@@ -21,6 +22,7 @@ void main() {
     quad2.y = floor(ceil(blueColor) / 4.0);
     quad2.x = ceil(blueColor) - (quad2.y * 4.0);
 
+    //根据红色和绿色值就算对应位置在整个纹理的坐标，得到texPos1和texPos2
     highp vec2 texPos1;
     texPos1.x = (quad1.x * 0.25) + 0.5 / 64.0 + ((0.25 - 1.0 / 64.0) * textureColor.r);
     texPos1.y = (quad1.y * 0.25) + 0.5 / 64.0 + ((0.25 - 1.0 / 64.0) * textureColor.g);
@@ -32,6 +34,7 @@ void main() {
     lowp vec4 newColor1 = texture(curveTexture, texPos1);
     lowp vec4 newColor2 = texture(curveTexture, texPos2);
 
+    //根据texPos1和texPos2读取映射结果，再用蓝色值的小部分进行mix操作
     lowp vec4 newColor = mix(newColor1, newColor2, fract(blueColor));
     FragColor = mix(textureColor, vec4(newColor.rgb, textureColor.w), intensity);
 }

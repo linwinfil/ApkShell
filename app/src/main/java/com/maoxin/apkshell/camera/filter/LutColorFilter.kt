@@ -11,6 +11,11 @@ import kotlin.math.min
 /** LUT颜色查表
  * @author lmx
  * Created by lmx on 2020/9/9.
+ *
+ * LUT查表图中被分为8*8小格，每一小格内的Blue分量为一个定值，64个方格有64中Blue定值；
+ * 对于每一小方格，横竖方向又各自分为64个小格，以左下角为原点，横向小格的Red分量依次增加，纵向小格的Green分量依次增加
+ *
+ * @see <a href="https://zhuanlan.zhihu.com/p/115248588">LUT基准</a>
  */
 class LutColorFilter : BaseFilter() {
 
