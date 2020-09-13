@@ -21,7 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".camera.surface.CameraXSurfaceActivity"></activity>
+        <activity android:name=".camera.example1.DemoActivity"></activity>
+        <activity android:name=".camera.surface.CameraXSurfaceActivity" />
         <activity android:name=".camera.CameraXActivity" />
         <activity android:name=".activity.MainPreviewViewKtActivity" />
         <activity android:name=".activity.MainPreviewView2Activity" />

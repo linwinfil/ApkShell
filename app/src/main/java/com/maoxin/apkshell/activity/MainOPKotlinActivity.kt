@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.maoxin.apkshell.R
 import com.maoxin.apkshell.camera.CameraXActivity
+import com.maoxin.apkshell.camera.example1.DemoActivity
 import com.maoxin.apkshell.hook.ams.AMSHookHelper
 import com.maoxin.apkshell.ipc.client.ClientActivity
 import com.maoxin.apkshell.kotlin.example.recyclerview.MainKotlinRecyclerViewActivity
@@ -80,6 +81,7 @@ class MainOPKotlinActivity : AppCompatActivity() {
         mList.add(VHData("PreviewView2", MainPreviewView2Activity::class.java))
         mList.add(VHData("PreviewViewKt", MainPreviewViewKtActivity::class.java))
         mList.add(VHData("CameraX+SurfaceView+TextureView+PreviewView", CameraXActivity::class.java))
+        mList.add(VHData("CameraX镜头效果", DemoActivity::class.java))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             mList.add(VHData("Image Decoder", MainImageDecoderActivity::class.java.javaClass))

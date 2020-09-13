@@ -79,9 +79,9 @@ public class GlMatrixTools
 
     public void reset()
     {
-        mMatrixCamera = getOpenGLUnitMatrix();
-        mMatrixProjection = getOpenGLUnitMatrix();
-        mMatrixCurrent = getOpenGLUnitMatrix();
+        Matrix.setIdentityM(mMatrixCamera, 0);
+        Matrix.setIdentityM(mMatrixProjection, 0);
+        Matrix.setIdentityM(mMatrixCurrent, 0);
     }
 
     public float[] getFinalMatrix()
