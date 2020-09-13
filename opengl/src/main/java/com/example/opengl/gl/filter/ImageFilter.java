@@ -223,7 +223,8 @@ public class ImageFilter extends AFilter
         }
     }
 
-    private float handleAnimationScale(int viewportW, int viewportH, int textureW, int textureH, float currentDegree, float nextDegree, float animFactor)
+    private float handleAnimationScale(int viewportW, int viewportH, int textureW, int textureH,
+                                       float currentDegree, float nextDegree, float animFactor)
     {
         currentDegree = Math.abs(currentDegree);
         nextDegree = Math.abs(nextDegree);
@@ -237,21 +238,21 @@ public class ImageFilter extends AFilter
             textureWidth = textureWidth - textureHeight;
         }
 
-        float[] floats = handleFrameScale(viewportW, viewportH, textureWidth, textureHeight);
-        float frameSizeUS = floats[0];
-        float frameSizeVS = floats[1];
+        float[] floats = handleFrameScale(textureWidth, textureHeight);
+        float frameSizeXS = floats[0];
+        float frameSizeYS = floats[1];
 
         int tempW = viewportW;
         int tempH = viewportH;
 
-        float tempUS = tempW >= tempH ? 1f : (float) tempW / tempH;
-        float tempVS = tempH > tempW ? 1f : (float) tempH / tempW;
+        float tempXS = tempW >= tempH ? 1f : tempW * 1f / tempH;
+        float tempYS = tempH > tempW ? 1f : tempH * 1f / tempW;
 
         float currentDegreeScale;
-        if (frameSizeUS >= tempUS) {
-            currentDegreeScale = Math.min(tempUS / frameSizeUS, tempVS / frameSizeVS);
+        if (frameSizeXS >= tempXS) {
+            currentDegreeScale = Math.min(tempXS / frameSizeXS, tempYS / frameSizeYS);
         } else {
-            currentDegreeScale = Math.max(frameSizeUS / tempUS, frameSizeVS / tempVS);
+            currentDegreeScale = Math.max(frameSizeXS / tempXS, frameSizeYS / tempYS);
         }
 
         if (currentDegree != nextDegree) {
@@ -265,20 +266,20 @@ public class ImageFilter extends AFilter
                 textureWidth = textureWidth - textureHeight;
             }
 
-            floats = handleFrameScale(viewportW, viewportH, textureWidth, textureHeight);
-            frameSizeUS = floats[0];
-            frameSizeVS = floats[1];
+            floats = handleFrameScale(textureWidth, textureHeight);
+            frameSizeXS = floats[0];
+            frameSizeYS = floats[1];
 
             tempW = viewportW;
             tempH = viewportH;
-            tempUS = tempW >= tempH ? 1f : (float) tempW / tempH;
-            tempVS = tempH > tempW ? 1f : (float) tempH / tempW;
+            tempXS = tempW >= tempH ? 1f : (float) tempW / tempH;
+            tempYS = tempH > tempW ? 1f : (float) tempH / tempW;
 
             float nextDegreeScale;
-            if (frameSizeUS >= tempUS) {
-                nextDegreeScale = Math.min(tempUS / frameSizeUS, tempVS / frameSizeVS);
+            if (frameSizeXS >= tempXS) {
+                nextDegreeScale = Math.min(tempXS / frameSizeXS, tempYS / frameSizeYS);
             } else {
-                nextDegreeScale = Math.max(frameSizeUS / tempUS, frameSizeVS / tempVS);
+                nextDegreeScale = Math.max(frameSizeXS / tempXS, frameSizeYS / tempYS);
             }
 
             return currentDegreeScale + (nextDegreeScale - currentDegreeScale) * animFactor;
@@ -302,40 +303,29 @@ public class ImageFilter extends AFilter
             textureWidth = textureWidth - textureHeight;
         }
 
-        float[] floats = handleFrameScale(viewportW, viewportH, textureWidth, textureHeight);
-        float frameSizeUS = floats[0];
-        float frameSizeVS = floats[1];
+        float[] floats = handleFrameScale(textureWidth, textureHeight);
+        float frameSizeXS = floats[0];
+        float frameSizeYS = floats[1];
 
-        float viewportUS = viewportW >= viewportH ? 1f : viewportW * 1f / viewportH;
-        float viewportVS = viewportH > viewportW ? 1f : viewportH * 1f / viewportW;
+        float viewportXS = viewportW >= viewportH ? 1f : viewportW * 1f / viewportH;
+        float viewportYS = viewportH > viewportW ? 1f : viewportH * 1f / viewportW;
 
-        if (frameSizeUS >= viewportUS) {
-            return Math.min(viewportUS / frameSizeUS, viewportVS / frameSizeVS);
+        if (frameSizeXS >= viewportXS) {
+            return Math.min(viewportXS / frameSizeXS, viewportYS / frameSizeYS);
         } else {
-            return Math.max(frameSizeUS / viewportUS, frameSizeVS / viewportVS);
+            return Math.max(frameSizeXS / viewportXS, frameSizeYS / viewportYS);
         }
     }
 
 
-    private float[] handleFrameScale(int viewportW, int viewportH, int textureW, int textureH)
+    private float[] handleFrameScale(int textureW, int textureH)
     {
         //顶点坐标x轴位置
-        float frameSizeUS;
+        float frameSizeXS = textureW >= textureH ? 1f : textureW * 1f / textureH;
         //顶点坐标y轴位置
-        float frameSizeVS;
+        float frameSizeYS = textureH > textureW ? 1f : textureH * 1f / textureW;
 
-        if (textureW >= textureH)
-        {
-            frameSizeUS = 1.0f;
-            frameSizeVS = textureH * 1f / textureW;
-        }
-        else
-        {
-            frameSizeUS = textureW * 1f / textureH;
-            frameSizeVS = 1.0f;
-        }
-
-        return new float[]{frameSizeUS, frameSizeVS};
+        return new float[]{frameSizeXS, frameSizeYS};
     }
 
     @Override
