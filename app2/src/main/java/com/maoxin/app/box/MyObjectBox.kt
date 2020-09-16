@@ -1,14 +1,16 @@
 package com.maoxin.app.box
 
 import android.content.Context
+import com.maoxin.app.BuildConfig
 import com.maoxin.app.data.MyObjectBox
 import io.objectbox.BoxStore
+import io.objectbox.android.AndroidObjectBrowser
 import io.objectbox.android.ObjectBoxLiveData
 
 /** @author lmx
  * Created by lmx on 2020/8/16.
  */
-object Objectbox {
+object MyObjectBox {
     lateinit var boxStore: BoxStore
         private set
 
@@ -17,5 +19,10 @@ object Objectbox {
                 .builder()
                 .androidContext(context.applicationContext)
                 .build()
+
+        if (BuildConfig.DEBUG) {
+            val start = AndroidObjectBrowser(boxStore).start(context.applicationContext)
+            println("android object browser $start")
+        }
     }
 }

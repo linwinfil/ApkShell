@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.objectbox'
+
 
 android {
     compileSdkVersion 29
@@ -76,7 +76,9 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
 
     //objectbox
-    implementation "io.objectbox:objectbox-android:$objectboxVersion"
+//    implementation "io.objectbox:objectbox-android:$objectboxVersion"
+    implementation  "io.objectbox:objectbox-android-objectbrowser:$objectboxVersion"
     implementation "io.objectbox:objectbox-kotlin:$objectboxVersion"
     kapt "io.objectbox:objectbox-processor:$objectboxVersion"
 }
+apply plugin: 'io.objectbox'

@@ -10,7 +10,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.view.autofill.AutofillManager
 import android.widget.Button
-import android.widget.CursorAdapter
 import android.widget.EditText
 import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
@@ -18,7 +17,7 @@ import androidx.lifecycle.Observer
 import com.maoxin.app.MyApplication.Companion.showToast
 import com.maoxin.app.R
 import com.maoxin.app.base.BaseViewModelActivity
-import com.maoxin.app.box.Objectbox
+import com.maoxin.app.box.BoxDao
 import com.maoxin.app.data.LoginData
 import com.maoxin.app.data.ResponseData
 import com.maoxin.app.data.User
@@ -27,6 +26,7 @@ import com.maoxin.app.utils.CommonUtils
 import com.maoxin.app.utils.SharedPreUtils
 import java.io.File
 import java.lang.ref.WeakReference
+import kotlin.random.Random
 
 class LoginActivity : BaseViewModelActivity<LoginViewModel>() {
     companion object {
@@ -89,8 +89,8 @@ class LoginActivity : BaseViewModelActivity<LoginViewModel>() {
         Observer<ResponseData<LoginData>> {
             when (it.errorCode) {
                 0 -> {
-                    val user = User(1, viewModel.username, CommonUtils.base64Encode(viewModel.password))
-                    Objectbox.boxStore.boxFor(User::class.java).put(user)
+                    val user = User(0, java.util.Random().nextLong(), viewModel.username, CommonUtils.base64Encode(viewModel.password))
+                    BoxDao.instance.putData(User::class.java, user)
                     SharedPreUtils.save("username", user.name!!)
                     SharedPreUtils.save("password", user.pwd!!)
                     showToast("登录成功")
