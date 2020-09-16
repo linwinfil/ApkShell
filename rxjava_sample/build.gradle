@@ -45,6 +45,9 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
+    //rx permission 2，支持rxjava
+    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.3@aar'
+
     //retrofit 组件
     api 'com.squareup.retrofit2:retrofit:2.6.2'
 
