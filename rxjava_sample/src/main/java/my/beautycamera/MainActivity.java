@@ -22,9 +22,11 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableOperator;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,7 +47,73 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.button_src_compare_test).setOnClickListener(v -> testStream());
 
-        findViewById(R.id.btn_test_rx_java).setOnClickListener(v -> testRxJava2());
+        findViewById(R.id.btn_test_rx_java).setOnClickListener(v -> testRxJava());
+    }
+
+    public static class MainRun {
+        public Object object;
+
+        public MainRun() {
+        }
+
+        public MainRun(Object object) {
+            this.object = object;
+        }
+    }
+
+    private static boolean isMainThread() {
+        return Looper.getMainLooper().getThread().getId() == Thread.currentThread().getId();
+    }
+
+    public static void testRxJava() {
+
+        Observable<MainRun> objectObservable = Observable.create(new ObservableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(ObservableEmitter<Object> emitter) throws Exception {
+                System.out.println("crate subscribe:" + isMainThread());
+                Object object = new Object();
+                if (object != null) {
+                    emitter.onNext(object);
+                } else  {
+                    emitter.onError(new NullPointerException());
+                }
+            }
+        }).map(new Function<Object, MainRun>() {
+            @Override
+            public MainRun apply(Object o) throws Exception {
+                System.out.println("map apply:" + isMainThread());
+                return new MainRun(o);
+            }
+        }).onErrorResumeNext(new Function<Throwable, ObservableSource<MainRun>>() {
+            @Override
+            public ObservableSource<MainRun> apply(Throwable throwable) throws Exception {
+                System.out.println("onErrorResumeNext apply:" + isMainThread());
+                throwable.printStackTrace();
+                return Observable.just(new MainRun());
+            }
+        }).subscribeOn(Schedulers.io());
+
+        objectObservable.observeOn(Schedulers.io()).subscribe(new Observer<MainRun>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                System.out.println(d);
+            }
+
+            @Override
+            public void onNext(MainRun mainRun) {
+                System.out.println(mainRun);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onComplete() {
+                System.out.println("complete");
+            }
+        });
     }
 
     void testRxJava2() {
