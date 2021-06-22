@@ -47,6 +47,26 @@ class SampleMapV2(map: MutableMap<String, Any?>) {
     }
 }
 
+fun sampleFunInvoke() {
+    sampleFunInline({
+        println("1")
+        return
+    }, {
+        println("2")
+    }, {
+        println("3")
+        return@sampleFunInline
+    })
+}
+/**
+ * 通俗点讲，inline函数会随着编译并到代码中，noinline是单独生成一个function实例，crossinline保留了inline特性，只是控制体不会被inline所影响（return和return@xxx的区别）
+ * */
+inline fun sampleFunInline(lambda1: () -> Unit, noinline lambda2:() -> Unit, crossinline lambda3: () -> Unit) {
+    lambda1()
+    lambda2()
+    lambda3()
+}
+
 
 object DelegatesImpl {
     //实现了beforeChange和aafterChange函数
